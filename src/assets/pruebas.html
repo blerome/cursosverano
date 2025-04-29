@@ -1,0 +1,1153 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TecNM Cancún - Cursos de Verano</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600;700;800;900&family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --color-disponible: #4CAF50;
+            --color-lleno: #F44336;
+            --color-whatsapp: #25D366;
+            --color-inscripcion: #2196F3;
+            --color-detalles: #9C27B0;
+            --color-fondo: #ffffff;
+            --color-texto: #0B231E;
+            --color-filtro: rgba(90, 90, 90, 0.1);
+            --color-boton: #4facfe;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', 'Montserrat', Arial, sans-serif;
+            min-height: 100vh;
+            background-color: var(--color-fondo);
+            color: var(--color-texto);
+            overflow-x: hidden;
+            padding: 20px;
+            position: relative;
+        }
+
+        /* Efectos premium mejorados */
+        .premium-effects {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            pointer-events: none;
+            z-index: -1;
+            overflow: hidden;
+        }
+
+        /* Líneas dinámicas GRISES - MÁS VISIBLES */
+        .dynamic-line {
+            position: absolute;
+            height: 1.2px; /* Línea un poco más gruesa */
+            background: linear-gradient(90deg, 
+                transparent, 
+                rgba(90, 90, 90, 0.25) 30%,  /* Gris más oscuro y visible */
+                rgba(90, 90, 90, 0.4) 50%,   /* Centro más opaco */
+                rgba(90, 90, 90, 0.25) 70%, 
+                transparent);
+            transform-origin: left center;
+            animation: linePulse 12s infinite ease-in-out; /* Animación más lenta */
+            filter: blur(0.8px);
+            opacity: 0.7; /* Mayor opacidad base */
+        }
+
+        @keyframes linePulse {
+            0%, 100% { transform: scaleX(0.3); opacity: 0.5; } /* Más visible en los extremos */
+            50% { transform: scaleX(1.5); opacity: 0.9; } /* Máxima expansión y visibilidad */
+        }
+
+        /* Efecto de ondas grises más visibles */
+        .wave {
+            position: absolute;
+            width: 250%; /* Ondas más anchas */
+            height: 120px; /* Ondas más altas */
+            background: linear-gradient(90deg, 
+                transparent, 
+                rgba(120, 120, 120, 0.1) 20%, 
+                rgba(120, 120, 120, 0.2) 50%, /* Gris más marcado */
+                rgba(120, 120, 120, 0.1) 80%, 
+                transparent);
+            animation: waveMove 25s linear infinite; /* Animación más lenta */
+            filter: blur(6px);
+            opacity: 0.5; /* Más visibles */
+        }
+
+        @keyframes waveMove {
+            0% { transform: translateX(-60%) rotate(-1.5deg); }
+            100% { transform: translateX(10%) rotate(-1.5deg); }
+        }
+
+        /* Puntos de conexión más visibles */
+        .connection-dot {
+            position: absolute;
+            width: 8px; /* Puntos más grandes */
+            height: 8px;
+            background-color: rgba(100, 100, 100, 0.25); /* Más opacos */
+            border-radius: 50%;
+            animation: pulse 5s infinite ease-in-out;
+            box-shadow: 0 0 5px rgba(100, 100, 100, 0.3); /* Sutil sombra para destacar */
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); opacity: 0.4; }
+            50% { transform: scale(1.5); opacity: 0.7; } /* Pulso más marcado */
+        }
+
+        .main-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        h1 {
+            margin: 20px 0;
+            font-weight: 700;
+            text-align: center;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-size: 2rem;
+            background: linear-gradient(to right, #4facfe 0%, #00f2fe 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            text-shadow: 0 0 10px rgba(79, 172, 254, 0.3);
+        }
+
+        .admin-link {
+            display: block;
+            text-align: center;
+            margin: 20px 0;
+            color: #4facfe;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .admin-link:hover {
+            transform: translateY(-2px);
+            text-shadow: 0 5px 15px rgba(79, 172, 254, 0.4);
+        }
+
+        /* Filtros */
+        .filtros-container {
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 15px;
+            padding: 20px;
+            margin: 30px 0;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(0, 0, 0, 0.1);
+        }
+
+        .filtros-titulo {
+            font-size: 1.2rem;
+            margin-bottom: 15px;
+            color: #4facfe;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .filtros-titulo i {
+            transition: transform 0.3s ease;
+        }
+
+        .filtros-titulo.cerrado i {
+            transform: rotate(-90deg);
+        }
+
+        .filtros-contenido {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 15px;
+            transition: all 0.3s ease;
+            overflow: hidden;
+        }
+
+        .filtros-contenido.cerrado {
+            grid-template-rows: 0fr;
+            opacity: 0;
+            margin: 0;
+            padding: 0;
+        }
+
+        .filtro-grupo {
+            margin-bottom: 10px;
+        }
+
+        .filtro-grupo label {
+            display: block;
+            margin-bottom: 8px;
+            font-size: 0.9rem;
+            color: rgba(0, 0, 0, 0.8);
+        }
+
+        .filtro-grupo input,
+        .filtro-grupo select {
+            width: 100%;
+            padding: 10px 15px;
+            background: rgba(255, 255, 255, 0.8);
+            border: 1px solid rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            color: var(--color-texto);
+            font-family: 'Poppins', sans-serif;
+            transition: all 0.3s ease;
+        }
+
+        .filtro-grupo input:focus,
+        .filtro-grupo select:focus {
+            outline: none;
+            border-color: #4facfe;
+            box-shadow: 0 0 0 2px rgba(79, 172, 254, 0.3);
+        }
+
+        .boton-filtrar {
+            grid-column: 1 / -1;
+            background: var(--color-boton);
+            color: white;
+            border: none;
+            padding: 12px;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .boton-filtrar:hover {
+            background: #3a9ae8;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(79, 172, 254, 0.4);
+        }
+
+        .boton-filtrar:active {
+            transform: translateY(0);
+        }
+
+        .boton-limpiar {
+            background: transparent;
+            color: #4facfe;
+            border: 1px solid #4facfe;
+        }
+
+        .boton-limpiar:hover {
+            background: rgba(79, 172, 254, 0.1);
+        }
+
+        /* Cursos */
+        .cursos-section {
+            position: relative;
+        }
+
+        .cursos-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 25px;
+            margin: 40px 0;
+            width: 100%;
+            transition: all 0.3s ease;
+        }
+
+        .card {
+            position: relative;
+            height: 400px;
+            overflow: hidden;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+            border-radius: 15px;
+            background: rgba(255, 255, 255, 0.9);
+            border: 1px solid rgba(0, 0, 0, 0.1);
+            transition: all 0.5s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+        }
+
+        .card .imgBx {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+        }
+
+        .card .imgBx img {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            opacity: 0.8;
+            transition: all 0.5s ease;
+        }
+
+        .card:hover .imgBx img {
+            opacity: 0.5;
+            transform: scale(1.1);
+        }
+
+        .card .content {
+            position: absolute;
+            bottom: -200px;
+            width: 100%;
+            height: 200px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 10;
+            flex-direction: column;
+            box-shadow: 0 -10px 10px rgba(0,0,0,0.1);
+            border: 1px solid rgba(0,0,0,0.1);
+            transition: all 0.5s ease;
+            background: rgba(255, 255, 255, 0.95);
+        }
+
+        .card:hover .content {
+            bottom: 0px;
+        }
+
+        .card .content .contentBx {
+            text-align: center;
+            padding: 0 20px;
+            width: 100%;
+        }
+
+        .card .content .contentBx h3 {
+            color: var(--color-texto);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-weight: 600;
+            font-size: 16px;
+            line-height: 1.2em;
+            margin: 5px 0 10px;
+            transition: all 0.5s ease;
+            opacity: 0;
+            transform: translateY(-20px);
+        }
+
+        .card:hover .content .contentBx h3 {
+            opacity: 1;
+            transform: translateY(0px);
+            transition-delay: 0.3s;
+        }
+
+        .card .content .contentBx h3 span {
+            display: block;
+            font-size: 12px;
+            font-weight: 300;
+            text-transform: initial;
+            margin-top: 5px;
+        }
+
+        .card .content .contentBx .details {
+            display: flex;
+            justify-content: space-between;
+            margin: 10px 0;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.5s ease;
+        }
+
+        .card:hover .content .contentBx .details {
+            opacity: 1;
+            transform: translateY(0);
+            transition-delay: 0.5s;
+        }
+
+        .card .content .contentBx .details div {
+            padding: 0 10px;
+        }
+
+        .card .content .contentBx .details div strong {
+            display: block;
+            color: #4facfe;
+            margin-bottom: 3px;
+            font-size: 14px;
+        }
+
+        .card .content .sci {
+            position: relative;
+            display: flex;
+            margin-top: 10px;
+        }
+
+        .card .content .sci li {
+            list-style: none;
+            margin: 0 10px;
+            transform: translateY(40px);
+            opacity: 0;
+            transition: all 0.5s ease;
+        }
+
+        .card:hover .content .sci li {
+            transform: translateY(0px);
+            opacity: 1;
+        }
+
+        .card .content .sci li:nth-child(1) {
+            transition-delay: 0.7s;
+        }
+        .card .content .sci li:nth-child(2) {
+            transition-delay: 0.8s;
+        }
+        .card .content .sci li:nth-child(3) {
+            transition-delay: 0.9s;
+        }
+
+        .card .content .sci li a {
+            color: #fff;
+            font-size: 18px;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-radius: 50%;
+            transition: all 0.3s ease;
+            text-decoration: none;
+        }
+
+        .card .content .sci li a.whatsapp {
+            background-color: var(--color-whatsapp);
+        }
+
+        .card .content .sci li a.inscripcion {
+            background-color: var(--color-inscripcion);
+        }
+
+        .card .content .sci li a.detalles {
+            background-color: var(--color-detalles);
+        }
+
+        .card .content .sci li a:hover {
+            transform: scale(1.3);
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .badge {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            z-index: 11;
+            transition: all 0.3s ease;
+        }
+
+        .badge.disponible {
+            background: var(--color-disponible);
+        }
+
+        .badge.lleno {
+            background: var(--color-lleno);
+        }
+
+        /* Paginación */
+        .paginacion {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 30px 0;
+            gap: 10px;
+        }
+
+        .boton-paginacion {
+            background: rgba(0, 0, 0, 0.1);
+            color: var(--color-texto);
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 600;
+        }
+
+        .boton-paginacion:hover {
+            background: var(--color-boton);
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        .boton-paginacion.active {
+            background: var(--color-boton);
+            color: white;
+            box-shadow: 0 0 10px rgba(79, 172, 254, 0.5);
+        }
+
+        .boton-paginacion.disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .boton-paginacion.disabled:hover {
+            background: rgba(0, 0, 0, 0.1);
+            color: var(--color-texto);
+            transform: none;
+        }
+
+        .contador-cursos {
+            text-align: center;
+            margin-bottom: 20px;
+            color: rgba(0, 0, 0, 0.7);
+            font-size: 0.9rem;
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 100;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 30px;
+            border-radius: 15px;
+            width: 90%;
+            max-width: 600px;
+            max-height: 80vh;
+            overflow-y: auto;
+            border: 1px solid rgba(0, 0, 0, 0.1);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+            position: relative;
+            color: var(--color-texto);
+        }
+
+        .close-modal {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            font-size: 24px;
+            color: var(--color-texto);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .close-modal:hover {
+            transform: rotate(90deg);
+            color: #4facfe;
+        }
+
+        .inscritos-list {
+            margin-top: 20px;
+            background: rgba(0, 0, 0, 0.05);
+            padding: 15px;
+            border-radius: 10px;
+        }
+
+        .inscritos-list h3 {
+            color: #4facfe;
+            margin-bottom: 10px;
+            font-size: 18px;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+            padding-bottom: 5px;
+        }
+
+        .inscritos-list ul {
+            list-style: none;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+
+        .inscritos-list li {
+            padding: 8px;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .inscritos-list li:hover {
+            background: rgba(79, 172, 254, 0.1);
+        }
+
+        /* Mensaje sin resultados */
+        .sin-resultados {
+            grid-column: 1 / -1;
+            text-align: center;
+            padding: 40px;
+            color: rgba(0, 0, 0, 0.5);
+            font-size: 1.1rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .cursos-grid {
+                grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+                gap: 15px;
+            }
+            
+            h1 {
+                font-size: 1.5rem;
+            }
+            
+            .card {
+                height: 380px;
+            }
+            
+            .card .content {
+                height: 180px;
+                bottom: -180px;
+            }
+
+            .filtros-contenido {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .cursos-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .card .content .contentBx h3 {
+                font-size: 14px;
+            }
+            
+            .card .content .sci li a {
+                width: 35px;
+                height: 35px;
+                font-size: 16px;
+            }
+
+            .paginacion {
+                flex-wrap: wrap;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Efectos premium con líneas grises -->
+    <div class="premium-effects" id="premiumEffects"></div>
+
+    <div class="main-container">
+        <h1>Cursos de Verano 2023</h1>
+        <a href="admin.html" class="admin-link">Acceso Administrativo <i class="fas fa-arrow-right"></i></a>
+
+        <!-- Filtros de búsqueda -->
+        <div class="filtros-container">
+            <div class="filtros-titulo" id="toggleFiltros">
+                <span><i class="fas fa-filter"></i> Filtros de Búsqueda</span>
+                <i class="fas fa-chevron-down"></i>
+            </div>
+            <div class="filtros-contenido" id="filtrosContenido">
+                <div class="filtro-grupo">
+                    <label for="busqueda"><i class="fas fa-search"></i> Buscar por nombre</label>
+                    <input type="text" id="busqueda" placeholder="Ej: Inteligencia Artificial">
+                </div>
+                <div class="filtro-grupo">
+                    <label for="carrera"><i class="fas fa-graduation-cap"></i> Carrera</label>
+                    <select id="carrera">
+                        <option value="">Todas las carreras</option>
+                        <option value="Sistemas">Ing. Sistemas Computacionales</option>
+                        <option value="Informatica">Ing. Informática</option>
+                        <option value="Software">Ing. Software</option>
+                        <option value="TICs">Ing. TICs</option>
+                        <option value="Industrial">Ing. Industrial</option>
+                    </select>
+                </div>
+                <div class="filtro-grupo">
+                    <label for="disponibilidad"><i class="fas fa-users"></i> Disponibilidad</label>
+                    <select id="disponibilidad">
+                        <option value="">Todos los cursos</option>
+                        <option value="disponible">Solo disponibles</option>
+                        <option value="lleno">Solo llenos</option>
+                    </select>
+                </div>
+                <div class="filtro-grupo">
+                    <label for="creditos"><i class="fas fa-star"></i> Créditos</label>
+                    <select id="creditos">
+                        <option value="">Todos los créditos</option>
+                        <option value="4">4 créditos</option>
+                        <option value="6">6 créditos</option>
+                        <option value="8">8 créditos</option>
+                        <option value="10">10 créditos</option>
+                    </select>
+                </div>
+                <button class="boton-filtrar" id="aplicarFiltros">
+                    <i class="fas fa-filter"></i> Aplicar Filtros
+                </button>
+                <button class="boton-filtrar boton-limpiar" id="limpiarFiltros">
+                    <i class="fas fa-broom"></i> Limpiar Filtros
+                </button>
+            </div>
+        </div>
+
+        <!-- Contador de cursos -->
+        <div class="contador-cursos" id="contadorCursos">
+            Mostrando <span id="cursosMostrados">0</span> de <span id="cursosTotales">0</span> cursos
+        </div>
+
+        <!-- Grid de cursos -->
+        <div class="cursos-section">
+            <div class="cursos-grid" id="cursosContainer">
+                <!-- Los cursos se cargarán dinámicamente -->
+            </div>
+
+            <!-- Paginación -->
+            <div class="paginacion" id="paginacionContainer">
+                <!-- Los botones de paginación se generarán dinámicamente -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de Detalles -->
+    <div class="modal" id="detallesModal">
+        <div class="modal-content">
+            <span class="close-modal" id="closeDetalles">&times;</span>
+            <h2 id="modalTitulo">Detalles del Curso</h2>
+            <div id="modalContenido"></div>
+            <div class="inscritos-list">
+                <h3>Estudiantes Inscritos</h3>
+                <ul id="listaInscritos"></ul>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Datos de ejemplo con más cursos y más información
+        const carreras = {
+            "Sistemas": "Ing. Sistemas Computacionales",
+            "Informatica": "Ing. Informática",
+            "Software": "Ing. Software",
+            "TICs": "Ing. TICs",
+            "Industrial": "Ing. Industrial"
+        };
+
+        // Cargar cursos desde localStorage o usar datos de ejemplo
+        function cargarCursos() {
+            const cursosGuardados = localStorage.getItem('cursosVerano');
+            if (cursosGuardados) {
+                return JSON.parse(cursosGuardados);
+            } else {
+                // Generar 12 cursos de ejemplo con más variedad
+                const cursosEjemplo = [];
+                const nombresCursos = [
+                    "Inteligencia Artificial Avanzada",
+                    "Desarrollo Web Full Stack",
+                    "Machine Learning con Python",
+                    "Ciberseguridad Ética",
+                    "Desarrollo de Apps Móviles",
+                    "Big Data y Análisis de Datos",
+                    "Blockchain y Criptomonedas",
+                    "Internet de las Cosas (IoT)",
+                    "Realidad Virtual y Aumentada",
+                    "Cloud Computing con AWS",
+                    "DevOps y CI/CD",
+                    "Diseño UX/UI Avanzado"
+                ];
+                
+                const imagenes = [
+                    "https://images.unsplash.com/photo-1522202176988-66273c2fd55f?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80",
+                    "https://images.unsplash.com/photo-1551434678-e076c223a692?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80",
+                    "https://images.unsplash.com/photo-1515879218367-8466d910aaa4?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80",
+                    "https://images.unsplash.com/photo-1563986768609-322da13575f3?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80",
+                    "https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80",
+                    "https://images.unsplash.com/photo-1551288049-bebda4e38f71?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80",
+                    "https://images.unsplash.com/photo-1621570072951-f8b6d0b796ca?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80",
+                    "https://images.unsplash.com/photo-1507146153580-69a1fe6d8aa1?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80",
+                    "https://images.unsplash.com/photo-1593508512255-86ab42a8e620?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80",
+                    "https://images.unsplash.com/photo-1544197150-b99a580bb7a8?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80",
+                    "https://images.unsplash.com/photo-1573164713988-8665fc963095?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80",
+                    "https://images.unsplash.com/photo-1541462608143-67571c6738dd?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80"
+                ];
+                
+                const creditos = [4, 6, 8, 10];
+                const carrerasKeys = Object.keys(carreras);
+                
+                for (let i = 0; i < 12; i++) {
+                    const carreraRandom = carrerasKeys[Math.floor(Math.random() * carrerasKeys.length)];
+                    const creditosRandom = creditos[Math.floor(Math.random() * creditos.length)];
+                    const cupoRandom = Math.floor(Math.random() * 10) + 15; // Entre 15 y 25
+                    const inscritosRandom = Math.floor(Math.random() * cupoRandom);
+                    
+                    cursosEjemplo.push({
+                        id: i + 1,
+                        nombre: nombresCursos[i],
+                        clave: `TEC-${carreraRandom.substring(0, 3).toUpperCase()}-${100 + i}`,
+                        horario: i % 2 === 0 ? "Lun-Vie 9:00-12:00" : "Lun-Vie 13:00-16:00",
+                        creditos: creditosRandom,
+                        imagen: imagenes[i],
+                        whatsapp: `https://chat.whatsapp.com/ejemplo${i + 1}`,
+                        cupo: cupoRandom,
+                        inscritos: inscritosRandom,
+                        carrera: carreraRandom,
+                        descripcion: `Curso avanzado de ${nombresCursos[i]} para estudiantes de ${carreras[carreraRandom]}. Este curso cubre los fundamentos y técnicas avanzadas en el área. Ideal para estudiantes que buscan especializarse en esta tecnología emergente.`
+                    });
+                }
+                
+                localStorage.setItem('cursosVerano', JSON.stringify(cursosEjemplo));
+                return cursosEjemplo;
+            }
+        }
+
+        // Variables globales para filtros y paginación
+        let cursosFiltrados = [];
+        let cursosPorPagina = 6;
+        let paginaActual = 1;
+
+        // Renderizar cursos con paginación
+        function renderCursos(filtrados = false) {
+            const cursos = filtrados ? cursosFiltrados : cargarCursos();
+            const container = document.getElementById('cursosContainer');
+            container.innerHTML = '';
+            
+            // Actualizar contador
+            document.getElementById('cursosMostrados').textContent = cursos.length;
+            document.getElementById('cursosTotales').textContent = cargarCursos().length;
+
+            if (cursos.length === 0) {
+                container.innerHTML = '<div class="sin-resultados"><i class="fas fa-search" style="font-size: 2rem; margin-bottom: 15px;"></i><p>No se encontraron cursos con los filtros aplicados</p></div>';
+                document.getElementById('paginacionContainer').innerHTML = '';
+                return;
+            }
+
+            // Calcular índices para la paginación
+            const inicio = (paginaActual - 1) * cursosPorPagina;
+            const fin = inicio + cursosPorPagina;
+            const cursosPagina = cursos.slice(inicio, fin);
+
+            // Renderizar cursos de la página actual
+            cursosPagina.forEach(curso => {
+                const disponible = curso.inscritos < curso.cupo;
+                const porcentaje = Math.round((curso.inscritos / curso.cupo) * 100);
+
+                const card = document.createElement('div');
+                card.className = 'card';
+                card.innerHTML = `
+                    <div class="imgBx">
+                        <img src="${curso.imagen}" alt="${curso.nombre}">
+                    </div>
+                    <div class="badge ${disponible ? 'disponible' : 'lleno'}">
+                        ${disponible ? 'Disponible' : 'Lleno'} (${porcentaje}%)
+                    </div>
+                    <div class="content">
+                        <div class="contentBx">
+                            <h3>Grupo V${curso.id.toString().padStart(2, '0')}<br><span>${curso.nombre}</span></h3>
+                            <div class="details">
+                                <div>
+                                    <strong>Clave</strong>
+                                    <span>${curso.clave}</span>
+                                </div>
+                                <div>
+                                    <strong>Horario</strong>
+                                    <span>${curso.horario}</span>
+                                </div>
+                                <div>
+                                    <strong>Créditos</strong>
+                                    <span>${curso.creditos}</span>
+                                </div>
+                            </div>
+                        </div>
+                        <ul class="sci">
+                            <li>
+                                <a href="${curso.whatsapp}" class="whatsapp" target="_blank">
+                                    <i class="fab fa-whatsapp"></i>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#" class="inscripcion" onclick="inscribirCurso(${curso.id})">
+                                    <i class="fas fa-user-plus"></i>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#" class="detalles" onclick="mostrarDetalles(${curso.id})">
+                                    <i class="fas fa-info-circle"></i>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+
+            // Renderizar paginación
+            renderPaginacion(cursos.length);
+        }
+
+        // Renderizar controles de paginación
+        function renderPaginacion(totalCursos) {
+            const totalPaginas = Math.ceil(totalCursos / cursosPorPagina);
+            const paginacionContainer = document.getElementById('paginacionContainer');
+            paginacionContainer.innerHTML = '';
+
+            if (totalPaginas <= 1) return;
+
+            // Botón Anterior
+            const btnAnterior = document.createElement('button');
+            btnAnterior.className = 'boton-paginacion';
+            btnAnterior.innerHTML = '<i class="fas fa-chevron-left"></i>';
+            btnAnterior.disabled = paginaActual === 1;
+            if (btnAnterior.disabled) btnAnterior.classList.add('disabled');
+            btnAnterior.addEventListener('click', () => {
+                if (paginaActual > 1) {
+                    paginaActual--;
+                    renderCursos(true);
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                }
+            });
+            paginacionContainer.appendChild(btnAnterior);
+
+            // Botones de página
+            for (let i = 1; i <= totalPaginas; i++) {
+                const btnPagina = document.createElement('button');
+                btnPagina.className = 'boton-paginacion';
+                if (i === paginaActual) btnPagina.classList.add('active');
+                btnPagina.textContent = i;
+                btnPagina.addEventListener('click', () => {
+                    paginaActual = i;
+                    renderCursos(true);
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                });
+                paginacionContainer.appendChild(btnPagina);
+            }
+
+            // Botón Siguiente
+            const btnSiguiente = document.createElement('button');
+            btnSiguiente.className = 'boton-paginacion';
+            btnSiguiente.innerHTML = '<i class="fas fa-chevron-right"></i>';
+            btnSiguiente.disabled = paginaActual === totalPaginas;
+            if (btnSiguiente.disabled) btnSiguiente.classList.add('disabled');
+            btnSiguiente.addEventListener('click', () => {
+                if (paginaActual < totalPaginas) {
+                    paginaActual++;
+                    renderCursos(true);
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                }
+            });
+            paginacionContainer.appendChild(btnSiguiente);
+        }
+
+        // Filtrar cursos
+        function filtrarCursos() {
+            const busqueda = document.getElementById('busqueda').value.toLowerCase();
+            const carrera = document.getElementById('carrera').value;
+            const disponibilidad = document.getElementById('disponibilidad').value;
+            const creditos = document.getElementById('creditos').value;
+            
+            const cursos = cargarCursos();
+            cursosFiltrados = cursos.filter(curso => {
+                // Filtro por búsqueda
+                if (busqueda && !curso.nombre.toLowerCase().includes(busqueda)) {
+                    return false;
+                }
+                
+                // Filtro por carrera
+                if (carrera && curso.carrera !== carrera) {
+                    return false;
+                }
+                
+                // Filtro por disponibilidad
+                if (disponibilidad === 'disponible' && curso.inscritos >= curso.cupo) {
+                    return false;
+                }
+                if (disponibilidad === 'lleno' && curso.inscritos < curso.cupo) {
+                    return false;
+                }
+                
+                // Filtro por créditos
+                if (creditos && curso.creditos !== parseInt(creditos)) {
+                    return false;
+                }
+                
+                return true;
+            });
+            
+            paginaActual = 1; // Resetear a la primera página
+            renderCursos(true);
+        }
+
+        // Limpiar filtros
+        function limpiarFiltros() {
+            document.getElementById('busqueda').value = '';
+            document.getElementById('carrera').value = '';
+            document.getElementById('disponibilidad').value = '';
+            document.getElementById('creditos').value = '';
+            
+            cursosFiltrados = [];
+            paginaActual = 1;
+            renderCursos();
+        }
+
+        // Inscribir a curso
+        function inscribirCurso(cursoId) {
+            const cursos = cargarCursos();
+            const curso = cursos.find(c => c.id === cursoId);
+            
+            if (!curso) return;
+            
+            if (curso.inscritos >= curso.cupo) {
+                alert('Lo sentimos, este curso ya está lleno.');
+                return;
+            }
+            
+            const nombre = prompt(`Inscripción al curso: ${curso.nombre}\nIngresa tu nombre completo:`);
+            
+            if (nombre) {
+                curso.inscritos++;
+                localStorage.setItem('cursosVerano', JSON.stringify(cursos));
+                
+                // Si hay filtros aplicados, actualizarlos
+                if (cursosFiltrados.length > 0) {
+                    const cursoFiltrado = cursosFiltrados.find(c => c.id === cursoId);
+                    if (cursoFiltrado) cursoFiltrado.inscritos++;
+                }
+                
+                renderCursos(cursosFiltrados.length > 0);
+                alert(`¡Inscripción exitosa, ${nombre}!\nCurso: ${curso.nombre}\nHorario: ${curso.horario}`);
+            }
+        }
+
+        // Mostrar detalles del curso
+        function mostrarDetalles(cursoId) {
+            const cursos = cargarCursos();
+            const curso = cursos.find(c => c.id === cursoId);
+            if (!curso) return;
+            
+            document.getElementById('modalTitulo').textContent = curso.nombre;
+            
+            const contenido = `
+                <p><strong>Carrera:</strong> ${carreras[curso.carrera] || 'General'}</p>
+                <p><strong>Clave:</strong> ${curso.clave}</p>
+                <p><strong>Horario:</strong> ${curso.horario}</p>
+                <p><strong>Créditos:</strong> ${curso.creditos}</p>
+                <p><strong>Cupo:</strong> ${curso.inscritos}/${curso.cupo} (${Math.round((curso.inscritos / curso.cupo) * 100)}%)</p>
+                <p><strong>Grupo WhatsApp:</strong> <a href="${curso.whatsapp}" target="_blank">Enlace al grupo</a></p>
+                <p><strong>Descripción:</strong> ${curso.descripcion}</p>
+            `;
+            
+            document.getElementById('modalContenido').innerHTML = contenido;
+            
+            // Generar lista de estudiantes ficticios
+            const listaInscritos = document.getElementById('listaInscritos');
+            listaInscritos.innerHTML = '';
+            
+            if (curso.inscritos > 0) {
+                for (let i = 1; i <= curso.inscritos; i++) {
+                    const li = document.createElement('li');
+                    li.textContent = `Estudiante ${i} (ejemplo${i}@mail.com)`;
+                    listaInscritos.appendChild(li);
+                }
+            } else {
+                const li = document.createElement('li');
+                li.textContent = 'No hay estudiantes inscritos aún';
+                listaInscritos.appendChild(li);
+            }
+            
+            document.getElementById('detallesModal').style.display = 'flex';
+        }
+
+        // Cerrar modal
+        document.getElementById('closeDetalles').addEventListener('click', function() {
+            document.getElementById('detallesModal').style.display = 'none';
+        });
+
+        // Cerrar modal al hacer clic fuera
+        window.addEventListener('click', function(event) {
+            if (event.target === document.getElementById('detallesModal')) {
+                document.getElementById('detallesModal').style.display = 'none';
+            }
+        });
+
+        // Inicializar efectos y cursos
+        document.addEventListener('DOMContentLoaded', function() {
+            // Efectos visuales con líneas grises
+            const container = document.getElementById('premiumEffects');
+            
+            // Crear líneas dinámicas grises (más visibles y numerosas)
+            for (let i = 0; i < 15; i++) { // Más líneas
+                const line = document.createElement('div');
+                line.classList.add('dynamic-line');
+                
+                line.style.top = `${Math.random() * 100}%`;
+                line.style.left = `${Math.random() * 100}%`;
+                line.style.width = `${Math.random() * 500 + 200}px`; // Líneas más largas
+                
+                // Ángulos más variados
+                const angle = Math.random() * 180 - 90; // Entre -90 y 90 grados
+                line.style.transform = `rotate(${angle}deg)`;
+                
+                // Animación más lenta y visible
+                line.style.animationDuration = `${Math.random() * 15 + 10}s`;
+                line.style.animationDelay = `${Math.random() * 8}s`;
+                
+                container.appendChild(line);
+            }
+
+            // Crear ondas grises (más visibles)
+            for (let i = 0; i < 3; i++) { // Una onda adicional
+                const wave = document.createElement('div');
+                wave.classList.add('wave');
+                wave.style.top = `${15 + (i * 30)}%`; // Posiciones estratégicas
+                wave.style.animationDuration = `${30 + (i * 5)}s`; // Más lentas
+                wave.style.animationDelay = `${i * 3}s`; // Desfase para no sincronizarse
+                container.appendChild(wave);
+            }
+
+            // Puntos de conexión estratégicos (más visibles)
+            const positions = [
+                [15, 20], [75, 15], [40, 65], 
+                [85, 55], [10, 80], [60, 35], 
+                [25, 25], [90, 70], [50, 50],
+                [30, 75], [70, 30], [20, 45]
+            ];
+            
+            positions.forEach((pos, index) => {
+                const dot = document.createElement('div');
+                dot.classList.add('connection-dot');
+                dot.style.left = `${pos[0]}%`;
+                dot.style.top = `${pos[1]}%`;
+                dot.style.animationDuration = `${5 + (index % 3)}s`; // Variación en duración
+                dot.style.animationDelay = `${Math.random() * 4}s`;
+                container.appendChild(dot);
+            });
+
+            // Configurar eventos de filtros
+            document.getElementById('aplicarFiltros').addEventListener('click', filtrarCursos);
+            document.getElementById('limpiarFiltros').addEventListener('click', limpiarFiltros);
+            
+            // Toggle para mostrar/ocultar filtros
+            document.getElementById('toggleFiltros').addEventListener('click', function() {
+                const contenido = document.getElementById('filtrosContenido');
+                const titulo = document.getElementById('toggleFiltros');
+                
+                contenido.classList.toggle('cerrado');
+                titulo.classList.toggle('cerrado');
+            });
+
+            // Cargar cursos iniciales
+            renderCursos();
+        });
+    </script>
+</body>
+</html>

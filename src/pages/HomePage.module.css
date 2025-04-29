@@ -1,0 +1,80 @@
+
+  
+  h1 {
+    margin: 20px 0;
+    font-weight: 700;
+    text-align: center;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    font-size: 2rem;
+    background: linear-gradient(to right, #4facfe 0%, #00f2fe 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    text-shadow: 0 0 10px rgba(79, 172, 254, 0.3);
+  }
+  
+  .coursesGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 25px;
+    margin: 40px 0;
+    width: 100%;
+  }
+  
+  .sinResultados {
+    grid-column: 1 / -1;
+    text-align: center;
+    padding: 40px;
+    color: rgba(0, 0, 0, 0.5);
+    font-size: 1.1rem;
+  }
+  
+  .inscritosList {
+    margin-top: 20px;
+    background: rgba(0, 0, 0, 0.05);
+    padding: 15px;
+    border-radius: 10px;
+  }
+  
+  .inscritosList h3 {
+    color: #4facfe;
+    margin-bottom: 10px;
+    font-size: 18px;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+    padding-bottom: 5px;
+  }
+  
+  .inscritosList ul {
+    list-style: none;
+    max-height: 200px;
+    overflow-y: auto;
+    padding: 0;
+  }
+  
+  .inscritosList li {
+    padding: 8px;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+  }
+  
+  .inscritosList li:hover {
+    background: rgba(79, 172, 254, 0.1);
+  }
+  
+  @media (max-width: 768px) {
+    .coursesGrid {
+      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+      gap: 15px;
+    }
+    
+    h1 {
+      font-size: 1.5rem;
+    }
+  }
+  
+  @media (max-width: 480px) {
+    .coursesGrid {
+      grid-template-columns: 1fr;
+    }
+  }

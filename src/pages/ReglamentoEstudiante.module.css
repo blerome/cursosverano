@@ -1,0 +1,197 @@
+.container {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    overflow-x: hidden;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  }
+  
+  .page {
+    height: 300vh;
+  }
+  
+  .content {
+    position: fixed;
+    top: 0;
+    left: 0;
+    display: flex;
+    width: 300%;
+    height: 100vh;
+  }
+  
+  .contentSection {
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+    box-sizing: border-box;
+    transition: background-color 0.5s ease;
+  }
+  
+  .contentSection:nth-child(1) {
+    background-color: transparent;
+    color: #212529;
+  }
+  
+  .contentSection:nth-child(2) {
+    background-color: transparent;
+    color: #212529;
+  }
+  
+  .contentSection:nth-child(3) {
+    background-color: transparent;
+    color: #212529;
+  }
+  
+  .contentSection > div {
+    text-align: center;
+    max-width: 800px;
+    padding: 2rem;
+    background-color: rgba(255, 255, 255, 0.9);
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+  
+  .contentSection > div:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
+  }
+  
+  h1 {
+    color: #2b2d42;
+    font-size: 2.5rem;
+    margin-bottom: 1.5rem;
+    font-weight: 700;
+  }
+  
+  h2 {
+    color: #4a4e69;
+    font-size: 1.8rem;
+    margin-bottom: 1rem;
+    font-weight: 600;
+  }
+  
+  .justified {
+    color: #495057;
+    font-size: 1.2rem;
+    line-height: 1.6;
+    text-align: justify;
+    margin-bottom: 2rem;
+  }
+  
+  .arrowAnimated {
+    font-size: 3rem;
+    animation: float 1.5s infinite ease-in-out;
+    color: #2b2d42;
+    margin-top: 2rem;
+    cursor: pointer;
+  }
+  
+  .animationContainer {
+    position: fixed;
+    right: 5%;
+    bottom: 10%;
+    width: 30%;
+    height: 40vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 10;
+  }
+  
+  .tucan {
+    height: 20vh;
+    transform-origin: center;
+    overflow: visible;
+  }
+  
+  /* Elementos del tucán */
+  .wing {
+    fill: #afafaf;
+  }
+  
+  .body {
+    fill: #333E48;
+  }
+  
+  .eye {
+    fill: #2D3740;
+  }
+  
+  .beak {
+    fill: #ED9900;
+  }
+  
+  .beak:nth-of-type(2) {
+    fill: #333E48;
+  }
+  
+  .beak:nth-of-type(3) {
+    fill: #000000;
+  }
+  
+  .feet {
+    fill: #FFB648;
+  }
+  
+  .perch {
+    fill: #B36F0F;
+  }
+  
+  @keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(20px); }
+  }
+  
+  /* Efectos de transición entre secciones */
+  .contentSection {
+    scroll-snap-align: start;
+  }
+  
+  /* Responsive design */
+  @media (max-width: 768px) {
+    .contentSection > div {
+      max-width: 90%;
+      padding: 1.5rem;
+    }
+    
+    h1 {
+      font-size: 2rem;
+    }
+    
+    h2 {
+      font-size: 1.5rem;
+    }
+    
+    .justified {
+      font-size: 1rem;
+    }
+    
+    .animationContainer {
+      width: 50%;
+      right: 0;
+      bottom: 5%;
+    }
+    
+    .tucan {
+      height: 15vh;
+    }
+  }
+  
+  @media (max-width: 480px) {
+    .contentSection > div {
+      max-width: 95%;
+      padding: 1rem;
+    }
+    
+    h1 {
+      font-size: 1.8rem;
+    }
+    
+    .animationContainer {
+      display: none;
+    }
+  }

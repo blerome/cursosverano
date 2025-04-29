@@ -1,0 +1,330 @@
+.adminContainer {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 2rem;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  }
+  
+  .header {
+    margin-bottom: 2.5rem;
+    text-align: center;
+  }
+  .readOnlyInput {
+    background-color: #f5f5f5;
+    cursor: not-allowed;
+    border: 1px solid #ddd;
+  }
+  
+  .loadingContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 200px;
+  }
+  
+  .loadingContainer p {
+    margin-top: 1rem;
+    color: #666;
+  }
+  
+  .header h1 {
+    font-size: 2.2rem;
+    color: #2c3e50;
+    margin-bottom: 0.5rem;
+  }
+  
+  .subtitle {
+    color: #7f8c8d;
+    font-size: 1.1rem;
+    margin-bottom: 1.5rem;
+  }
+  
+  .backButton {
+    display: inline-flex;
+    align-items: center;
+    color: #3498db;
+    text-decoration: none;
+    margin-bottom: 1rem;
+    font-weight: 500;
+    position: absolute;
+    left: 2rem;
+    top: 2rem;
+  }
+  
+  .backButton svg {
+    margin-right: 0.5rem;
+  }
+  
+  .courseForm {
+    display: flex;
+    flex-direction: column;
+    gap: 2.5rem;
+  }
+  
+  .formSection {
+    background: white;
+    padding: 1.5rem 2rem;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+    border: 1px solid #eaeaea;
+  }
+  
+  .sectionTitle {
+    font-size: 1.3rem;
+    color: #2c3e50;
+    margin-bottom: 1.5rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 2px solid #f0f0f0;
+  }
+  
+  .sectionLabel {
+    display: block;
+    margin-bottom: 1rem;
+    font-weight: 600;
+    color: #34495e;
+    font-size: 1rem;
+  }
+  
+  .radioGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 0.8rem;
+    margin-bottom: 1.5rem;
+  }
+  
+  .radioOption {
+    display: flex;
+    align-items: center;
+  }
+  
+  .radioInput {
+    appearance: none;
+    width: 18px;
+    height: 18px;
+    border: 2px solid #bdc3c7;
+    border-radius: 50%;
+    margin-right: 0.7rem;
+    cursor: pointer;
+    position: relative;
+    transition: all 0.2s;
+  }
+  
+  .radioInput:checked {
+    border-color: #3498db;
+    background-color: #3498db;
+    box-shadow: inset 0 0 0 3px white;
+  }
+  
+  .radioLabel {
+    cursor: pointer;
+    color: #34495e;
+    font-size: 0.95rem;
+    user-select: none;
+  }
+  
+  .formGroup {
+    margin-bottom: 1.5rem;
+  }
+  
+  .inputLabel {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 500;
+    color: #34495e;
+    font-size: 0.95rem;
+  }
+  
+  .required {
+    color: #e74c3c;
+  }
+  
+  .formInput, .formSelect, .formTextarea {
+    width: 100%;
+    padding: 0.8rem 1rem;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    font-size: 0.95rem;
+    transition: border 0.2s, box-shadow 0.2s;
+    background-color: #f9f9f9;
+  }
+  
+  .formInput:focus, .formSelect:focus, .formTextarea:focus {
+    outline: none;
+    border-color: #3498db;
+    box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
+    background-color: white;
+  }
+  
+  .formTextarea {
+    min-height: 120px;
+    resize: vertical;
+  }
+  
+  .selectWrapper {
+    position: relative;
+  }
+  
+  .formRow {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1.5rem;
+  }
+  
+  .previewContainer {
+    margin: 1.5rem 0;
+  }
+  
+  .previewHeader {
+    margin-bottom: 0.8rem;
+  }
+  
+  .previewImage {
+    width: 100%;
+    max-height: 250px;
+    object-fit: contain;
+    border-radius: 6px;
+    border: 1px solid #eee;
+  }
+  
+  .formActions {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 1rem;
+  }
+  
+  .submitButton {
+    background: #3498db;
+    color: white;
+    border: none;
+    padding: 1rem 2.5rem;
+    border-radius: 6px;
+    font-size: 1rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.7rem;
+    box-shadow: 0 2px 5px rgba(52, 152, 219, 0.3);
+  }
+  
+  .submitButton:hover {
+    background: #2980b9;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(52, 152, 219, 0.3);
+  }
+  
+  .submitButton:disabled {
+    background: #bdc3c7;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+  }
+  
+  .buttonLoading {
+    display: flex;
+    align-items: center;
+    gap: 0.7rem;
+  }
+  
+  .spinner {
+    width: 16px;
+    height: 16px;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    border-radius: 50%;
+    border-top-color: white;
+    animation: spin 1s ease-in-out infinite;
+  }
+  
+  @keyframes spin {
+    to { transform: rotate(360deg); }
+  }
+  
+  .successMessage {
+    margin-top: 1.5rem;
+    padding: 1rem 1.5rem;
+    background: #2ecc71;
+    color: white;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    font-weight: 500;
+    animation: fadeIn 0.3s;
+  }
+  
+  .checkmark {
+    width: 20px;
+    height: 20px;
+  }
+  
+  .checkmarkCircle {
+    stroke-dasharray: 166;
+    stroke-dashoffset: 166;
+    stroke-width: 2;
+    stroke-miterlimit: 10;
+    stroke: white;
+    fill: none;
+    animation: stroke 0.6s cubic-bezier(0.65, 0, 0.45, 1) forwards;
+  }
+  
+  .checkmarkCheck {
+    transform-origin: 50% 50%;
+    stroke-dasharray: 48;
+    stroke-dashoffset: 48;
+    stroke: white;
+    animation: stroke 0.3s cubic-bezier(0.65, 0, 0.45, 1) 0.8s forwards;
+  }
+  
+  @keyframes stroke {
+    100% {
+      stroke-dashoffset: 0;
+    }
+  }
+  
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  
+  /* Responsive Design */
+  @media (max-width: 768px) {
+    .adminContainer {
+      padding: 1.5rem;
+    }
+    
+    .header h1 {
+      font-size: 1.8rem;
+      margin-top: 2rem;
+    }
+    
+    .backButton {
+      position: static;
+      margin-bottom: 1.5rem;
+    }
+    
+    .radioGrid {
+      grid-template-columns: 1fr 1fr;
+    }
+    
+    .formRow {
+      grid-template-columns: 1fr;
+    }
+    
+    .formSection {
+      padding: 1.2rem;
+    }
+  }
+  
+  @media (max-width: 480px) {
+    .radioGrid {
+      grid-template-columns: 1fr;
+    }
+    
+    .submitButton {
+      width: 100%;
+      justify-content: center;
+    }
+  }

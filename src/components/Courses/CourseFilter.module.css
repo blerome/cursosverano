@@ -1,0 +1,67 @@
+
+  
+  .filtrosTitulo {
+    font-size: 1.2rem;
+    margin-bottom: 15px;
+    color: #4facfe;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    cursor: pointer;
+  }
+  
+  .filtrosTitulo i {
+    transition: transform 0.3s ease;
+  }
+  
+  .filtrosContenido {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 15px;
+    transition: all 0.3s ease;
+    overflow: hidden;
+  }
+  
+  .filtrosContenido.cerrado {
+    grid-template-rows: 0fr;
+    opacity: 0;
+    margin: 0;
+    padding: 0;
+    height: 0;
+  }
+  
+  .filtroGrupo {
+    margin-bottom: 10px;
+  }
+  
+  .filtroGrupo label {
+    display: block;
+    margin-bottom: 8px;
+    font-size: 0.9rem;
+    color: rgba(0, 0, 0, 0.8);
+  }
+  
+  .filtroGrupo input,
+  .filtroGrupo select {
+    width: 100%;
+    padding: 10px 15px;
+  
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    color: #0B231E;
+    font-family: 'Poppins', sans-serif;
+    transition: all 0.3s ease;
+  }
+  
+  .filtroGrupo input:focus,
+  .filtroGrupo select:focus {
+    outline: none;
+    border-color: #4facfe;
+    box-shadow: 0 0 0 2px rgba(79, 172, 254, 0.3);
+  }
+  
+  @media (max-width: 768px) {
+    .filtrosContenido {
+      grid-template-columns: 1fr;
+    }
+  }

@@ -1,0 +1,20 @@
+{
+  "extends": "./tsconfig.json",  // Hereda la configuración base
+  "compilerOptions": {
+    "module": "ESNext",
+    "esModuleInterop": true,
+    "moduleResolution": "node",  // Cambia de "bundler" a "node" para ts-node
+    "target": "ES2022",
+    "strict": true,
+    "skipLibCheck": true
+  },
+  "ts-node": {
+    "esm": true,
+    "experimentalSpecifierResolution": "node"
+  },
+  "include": [
+    "src/**/*.ts",       // Incluye todos tus archivos TypeScript
+    "scripts/**/*.ts",   // Incluye tus scripts
+    "vite.config.ts"     // Mantén la configuración de Vite
+  ]
+}

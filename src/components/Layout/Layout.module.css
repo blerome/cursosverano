@@ -1,0 +1,12 @@
+.layout {
+  position: relative;
+  min-height: 100vh;
+  background-color: transparent; /* Cambiado de white a transparent */
+  color: #0B231E;
+}
+
+.content {
+  position: relative;
+  z-index: 1;
+  padding: 20px;
+}
