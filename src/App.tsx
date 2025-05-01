@@ -4,6 +4,7 @@ import Layout from './components/Layout/Layout';
 import HomePage from './pages/HomePage';
 import AdminPage from './pages/AdminPage'; 
 import ReglamentoEstudiante from './pages/ReglamentoEstudiante';
+import ReglamentoGeneral from './pages/ReglamentoGeneral';
 import { CoursesProvider } from './context/CoursesContext';
 import './App.css';
 
@@ -17,6 +18,7 @@ const App: React.FC = () => {
             <Route path="/home" element={<HomePage />} />
             <Route path="/admin" element={<AdminPage />} />
             <Route path="/Reglamento-Estudiante" element={<ReglamentoEstudiante />} />
+            <Route path="/Reglamento-General" element={<ReglamentoGeneral />} />
           </Routes>
         </Layout>
       </CoursesProvider>

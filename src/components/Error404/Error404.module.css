@@ -1,0 +1,98 @@
+.appShell {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  background-color: transparent;
+  color: #110a0a;
+  padding: 2rem;
+  font-family: 'Roboto Mono', monospace;
+}
+
+.container {
+  display: inline-grid;
+  grid-gap: 0 1rem;
+  grid-template-columns: auto 1fr;
+  grid-template-rows: auto auto;
+  text-align: center;
+}
+
+.errorCode {
+  align-self: end;
+  font-size: 3rem;
+  margin: 0;
+  color: #1a1414;
+  position: relative;
+  min-width: 120px;
+  min-height: 1.2em;
+}
+
+.errorMessage {
+  font-size: 1.5rem;
+  margin: 0;
+  color: #1a1414;
+  position: relative;
+  min-width: 240px;
+  min-height: 1.2em;
+}
+
+.returnLink {
+  grid-column: span 2;
+  grid-row: -1;
+  text-align: center;
+  margin: 2rem auto;
+  color:  #1a1414;
+  text-decoration: none;
+  font-size: 1.2rem;
+  transition: color 0.3s ease;
+}
+
+.returnLink:hover {
+  color: #557dff;
+}
+
+/* Tamaño pequeño para móvil (por defecto) */
+.errorImage {
+  width: 100px;
+  height: 100px;
+  object-fit: contain;
+  grid-column: 1;
+  grid-row: 1 / span 2;
+  align-self: center;
+  justify-self: center;
+  transition: transform 0.3s ease;
+}
+
+.errorImage:hover {
+  transform: scale(1.05);
+}
+
+/* Media query para escritorio (tamaño grande) */
+@media (min-width: 768px) {
+  .errorImage {
+    width: 200px;
+    height: 200px;
+  }
+
+  .errorCode {
+    font-size: 6rem;
+    min-width: 240px;
+  }
+  
+  .errorMessage {
+    font-size: 3rem;
+    min-width: 480px;
+  }
+  
+  .returnLink {
+    font-size: 1.5rem;
+  }
+}
+
+/* Media query para pantallas muy grandes */
+@media (min-width: 1200px) {
+  .errorImage {
+    width: 250px;
+    height: 250px;
+  }
+}

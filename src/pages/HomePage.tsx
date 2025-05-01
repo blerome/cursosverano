@@ -5,6 +5,7 @@ import CourseFilter from '../components/Courses/CourseFilter';
 import CoursePagination from '../components/Courses/CoursePagination';
 import Modal from '../components/UI/Modal';
 import styles from './HomePage.module.css';
+import Error404 from '../components/Error404/Error404';
 
 const HomePage: React.FC = () => {
   const { filteredCourses, enrollStudent } = useCourses();
@@ -33,10 +34,10 @@ const HomePage: React.FC = () => {
 
   return (
     <div className={styles.homeContainer}>
-      <h1>Cursos de Verano 2023</h1>
+      <h1>Cursos de Verano Instituto Tecnologico de cancun</h1>
       
       <CourseFilter />
-      
+      <Error404 />
       <div className={styles.coursesGrid}>
         {currentCourses.length > 0 ? (
           currentCourses.map(course => (
