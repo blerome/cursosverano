@@ -2,16 +2,25 @@
 
 export interface Course {
     id: number;
-    nombre: string;
+    idSubject: number;
+    name: string;
     clave: string;
-    horario: string;
-    creditos: number;
-    imagen: string;
-    whatsapp: string;
-    cupo: number;
-    inscritos: number;
-    carrera: string;
-    descripcion: string;
+    schedule: Schedule[];
+    credits: number;
+    maxStudents: number | null;
+    status: string | null ;
+    enrolled: number;
+    careers: string[];
+    description: string | null;
+  }
+  export interface Schedule {
+    day: string;
+    startTime: string;
+    endTime: string;
+  }
+
+  export interface Days {
+    name: string;
   }
   
   export type Carrera = 'Sistemas' | 'Informatica' | 'Software' | 'TICs' | 'Industrial';
