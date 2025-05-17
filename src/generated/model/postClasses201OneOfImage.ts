@@ -6,4 +6,4 @@
  * OpenAPI spec version: 1.0
  */
 
-export type UserO1Role = null | string;
+export type PostClasses201OneOfImage = null | string;

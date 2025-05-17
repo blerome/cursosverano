@@ -4,6 +4,7 @@ import { Course } from '../../types/courseTypes';
 export function mapApiClassToCourse(apiClass: GetClasses200DataItem): Course {
   return {
     id: apiClass.id_class,
+    image: apiClass.image,
     idSubject: apiClass.id_subject,
     name: apiClass.Subjects.name,
     clave: apiClass.Subjects.clave,

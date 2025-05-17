@@ -6,8 +6,4 @@
  * OpenAPI spec version: 1.0
  */
 
-export interface CreateScheduleDtoO2 {
-  dayId: number;
-  startTime: string;
-  endTime: string;
-}
+export type GetClasses200DataItemImage = null | string;

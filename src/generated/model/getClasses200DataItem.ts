@@ -9,6 +9,7 @@ import type { GetClasses200DataItemSchedulesItem } from './getClasses200DataItem
 import type { GetClasses200DataItemDescription } from './getClasses200DataItemDescription';
 import type { GetClasses200DataItemStatus } from './getClasses200DataItemStatus';
 import type { GetClasses200DataItemMaxStudents } from './getClasses200DataItemMaxStudents';
+import type { GetClasses200DataItemImage } from './getClasses200DataItemImage';
 import type { GetClasses200DataItemSubjects } from './getClasses200DataItemSubjects';
 import type { _GetClasses200DataItemCount } from './_getClasses200DataItemCount';
 
@@ -19,6 +20,7 @@ export type GetClasses200DataItem = {
   id_class: number;
   max_students: GetClasses200DataItemMaxStudents;
   id_subject: number;
+  image: GetClasses200DataItemImage;
   Subjects: GetClasses200DataItemSubjects;
   _count: _GetClasses200DataItemCount;
 };
