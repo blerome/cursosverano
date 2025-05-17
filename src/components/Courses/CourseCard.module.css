@@ -1,3 +1,4 @@
+/* Estilos base para la tarjeta contenedora */
 .card {
     position: relative;
     height: 400px;
@@ -7,23 +8,26 @@
     background: rgba(255, 255, 255, 0.9);
     border: 1px solid rgba(0, 0, 0, 0.1);
     transition: all 0.5s ease;
-  }
-  
-  .card:hover {
+}
+
+/* Efectos al pasar el mouse sobre la tarjeta */
+.card:hover {
     transform: translateY(-10px);
     box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
-  }
-  
-  .imgBx {
+}
+
+/* Contenedor para la imagen de fondo */
+.imgBx {
     position: absolute;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
     overflow: hidden;
-  }
-  
-  .imgBx img {
+}
+
+/* Estilos para la imagen dentro del contenedor */
+.imgBx img {
     position: absolute;
     top: 0;
     left: 0;
@@ -32,18 +36,20 @@
     object-fit: cover;
     opacity: 0.8;
     transition: all 0.5s ease;
-  }
-  
-  .card:hover .imgBx img {
+}
+
+/* Efectos para la imagen al hacer hover */
+.card:hover .imgBx img {
     opacity: 0.5;
     transform: scale(1.1);
-  }
-  
-  .content {
+}
+
+/* Panel de contenido que se desliza hacia arriba */
+.content {
     position: absolute;
-    bottom: -200px;
+    bottom: -300px;
     width: 100%;
-    height: 200px;
+    height: 300px;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -53,138 +59,110 @@
     border: 1px solid rgba(0,0,0,0.1);
     transition: all 0.5s ease;
     background: rgba(255, 255, 255, 0.95);
-  }
-  
-  .card:hover .content {
+    padding: 15px;
+    box-sizing: border-box;
+}
+
+/* Muestra completamente el panel de contenido al hacer hover */
+.card:hover .content {
     bottom: 0px;
-  }
-  
-  .contentBx {
+}
+
+/* Contenedor principal del contenido */
+.contentBx {
     text-align: center;
-    padding: 0 20px;
     width: 100%;
-  }
-  
-  .contentBx h3 {
-    color: #0B231E;
+}
+
+/* Estilos para el título principal */
+.contentBx h3 {
+    color: var(--color-texto);
     text-transform: uppercase;
     letter-spacing: 2px;
     font-weight: 600;
     font-size: 16px;
     line-height: 1.2em;
-    margin: 5px 0 10px;
+    margin: 0 0 10px;
     transition: all 0.5s ease;
     opacity: 0;
     transform: translateY(-20px);
-  }
-  
-  .card:hover .contentBx h3 {
-    opacity: 1;
-    transform: translateY(0px);
-    transition-delay: 0.3s;
-  }
-  
-  .contentBx h3 span {
+}
+
+/* Estilos para el subtítulo */
+.contentBx h3 span {
     display: block;
-    font-size: 12px;
-    font-weight: 300;
+    font-size: 14px;
+    font-weight: 500;
     text-transform: initial;
     margin-top: 5px;
-  }
-  
-  .details {
+}
+
+/* Contenedor para información básica */
+.basicInfo {
     display: flex;
-    justify-content: space-between;
-    margin: 10px 0;
+    flex-direction: column;
+    gap: 5px;
+    margin-bottom: 10px;
+    font-size: 14px;
+    opacity: 0;
+    transform: translateY(50px);
+    transition: all 0.5s ease;
+}
+
+/* Estilos para cada línea de información básica */
+.basicInfo div {
+    display: flex;
+    justify-content: center;
+    gap: 5px;
+}
+
+/* Estilos para la información de carrera */
+.careerInfo {
+    margin-bottom: 10px;
+    font-size: 14px;
     opacity: 0;
     transform: translateY(20px);
     transition: all 0.5s ease;
-  }
-  
-  .card:hover .details {
+}
+
+/* Estilos para el estado del curso */
+.statusInfo {
+    margin-bottom: 10px;
+    font-size: 14px;
+    font-weight: 500;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: all 0.5s ease;
+}
+
+/* Efectos de aparición para todos los elementos de contenido */
+.card:hover .contentBx h3,
+.card:hover .basicInfo,
+.card:hover .careerInfo,
+.card:hover .statusInfo {
     opacity: 1;
     transform: translateY(0);
+}
+
+/* Retrasos en las animaciones para efecto escalonado */
+.card:hover .contentBx h3 {
+    transition-delay: 0.3s;
+}
+
+.card:hover .basicInfo {
+    transition-delay: 0.4s;
+}
+
+.card:hover .careerInfo {
     transition-delay: 0.5s;
-  }
-  
-  .details div {
-    padding: 0 10px;
-  }
-  
-  .details div strong {
-    display: block;
-    color: #4facfe;
-    margin-bottom: 3px;
-    font-size: 14px;
-  }
-  
-  .sci {
-    position: relative;
-    display: flex;
-    margin-top: 10px;
-    list-style: none;
-    padding: 0;
-  }
-  
-  .sci li {
-    margin: 0 10px;
-    transform: translateY(40px);
-    opacity: 0;
-    transition: all 0.5s ease;
-  }
-  
-  .card:hover .sci li {
-    transform: translateY(0px);
-    opacity: 1;
-  }
-  
-  .sci li:nth-child(1) {
-    transition-delay: 0.7s;
-  }
-  .sci li:nth-child(2) {
-    transition-delay: 0.8s;
-  }
-  .sci li:nth-child(3) {
-    transition-delay: 0.9s;
-  }
-  
-  .sci li a,
-  .sci li button {
-    color: #fff;
-    font-size: 18px;
-    width: 40px;
-    height: 40px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    border-radius: 50%;
-    transition: all 0.3s ease;
-    text-decoration: none;
-    border: none;
-    cursor: pointer;
-    padding: 0;
-    background: none;
-  }
-  
-  .sci li a:hover,
-  .sci li button:hover {
-    transform: scale(1.3);
-    box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
-  }
-  
-  .whatsapp {
-    background-color: #25D366;
-  }
-  
-  .inscripcion {
-    background-color: #2196F3;
-  }
-  
-  .detalles {
-    background-color: #9C27B0;
-  }
-  
-  .badge {
+}
+
+.card:hover .statusInfo {
+    transition-delay: 0.6s;
+}
+
+/* Estilos para el badge de estado */
+.badge {
     position: absolute;
     top: 20px;
     right: 20px;
@@ -196,12 +174,49 @@
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
     z-index: 11;
     transition: all 0.3s ease;
-  }
-  
-  .disponible {
-    background: #4CAF50;
-  }
-  
-  .lleno {
-    background: #F44336;
-  }
+}
+
+/* Variante para estado "disponible" */
+.badge.disponible {
+    background-color: var(--color-disponible, #4CAF50);
+}
+
+/* Variante para estado "lleno" */
+.badge.lleno {
+    background-color: var(--color-lleno, #F44336);
+}
+
+/* Media queries para diseño responsive */
+@media (max-width: 768px) {
+    .card {
+        height: 380px;
+    }
+    
+    .content {
+        height: 200px;
+        bottom: -200px;
+    }
+}
+
+@media (max-width: 480px) {
+    .contentBx h3 {
+        font-size: 14px;
+    }
+    
+    .basicInfo, .careerInfo, .statusInfo {
+        font-size: 12px;
+    }
+}
+
+/* NUEVOS ESTILOS PARA LA SOLUCIÓN */
+.content-visible {
+    bottom: 0px !important;
+}
+
+.content-visible .contentBx h3,
+.content-visible .basicInfo,
+.content-visible .careerInfo,
+.content-visible .statusInfo {
+    opacity: 1 !important;
+    transform: translateY(0) !important;
+}

@@ -5,9 +5,10 @@ import { mapApiClassToCourse } from "./mapApiClassToCourse";
 import { Course } from "../../types/courseTypes";
 
 interface CourseListProps {
-  onEnroll: (id: number) => void;
-  onViewDetails: (course: any) => void;
+  onEnroll: (id: number, studentData: { numeroControl: string; telefono: string }) => Promise<void>;
+  onViewDetails: (course: Course) => void;
 }
+
 
 const CourseList: React.FC<CourseListProps> = ({onEnroll, onViewDetails}) => {
   const { data, isLoading, error } = useGetClasses();
