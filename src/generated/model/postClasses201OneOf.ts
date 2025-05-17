@@ -14,6 +14,7 @@ import type { PostClasses201OneOfUpdatedAt } from './postClasses201OneOfUpdatedA
 import type { PostClasses201OneOfDeletedAt } from './postClasses201OneOfDeletedAt';
 import type { PostClasses201OneOfStatus } from './postClasses201OneOfStatus';
 import type { PostClasses201OneOfMaxStudents } from './postClasses201OneOfMaxStudents';
+import type { PostClasses201OneOfImage } from './postClasses201OneOfImage';
 
 export type PostClasses201OneOf = {
   Schedules: PostClasses201OneOfSchedulesItem[];
@@ -27,4 +28,5 @@ export type PostClasses201OneOf = {
   id_class: number;
   max_students: PostClasses201OneOfMaxStudents;
   id_subject: number;
+  image: PostClasses201OneOfImage;
 };

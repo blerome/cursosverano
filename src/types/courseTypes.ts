@@ -2,6 +2,7 @@
 
 export interface Course {
     id: number;
+    image: string | null;
     idSubject: number;
     name: string;
     clave: string;
