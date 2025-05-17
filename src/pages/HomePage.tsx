@@ -4,7 +4,6 @@ import CourseFilter from '../components/Courses/CourseFilter';
 import CoursePagination from '../components/Courses/CoursePagination';
 import Modal from '../components/UI/Modal';
 import styles from './HomePage.module.css';
-import Error404 from '../components/Error404/Error404';
 import CourseList from '../components/Courses/CourseList';
 import { Course } from '../types/courseTypes';
 
@@ -20,12 +19,15 @@ const HomePage: React.FC = () => {
     setShowModal(true);
   };
 
-  const handleEnroll = (courseId: number) => {
-    const name = prompt('Ingresa tu nombre completo: ');
-    if (name) {
-      alert(`¡Inscripción exitosa, ${name}!`);
-    }
-  };
+  //inscripcion
+ const handleEnroll = async (courseId: number, studentData: { numeroControl: string; telefono: string }) => {
+  try {
+    await enrollStudent(courseId, studentData); // Asegúrate que tu context también acepte studentData
+    alert('Inscripción exitosa');
+  } catch (error) {
+    console.error('Error:', error);
+  }
+};
 
   // Calcular cursos actuales
   const indexOfLastCourse = currentPage * coursesPerPage;
@@ -39,9 +41,10 @@ const HomePage: React.FC = () => {
     <div className={styles.homeContainer}>
       <h1>Cursos de Verano Instituto Tecnologico de cancun</h1>
       <CourseFilter />
-      <Error404 />
       <div className={styles.coursesGrid}>
-        <CourseList onEnroll={handleEnroll} onViewDetails={handleViewDetails} />
+        <CourseList  
+        onViewDetails={handleViewDetails} 
+         onEnroll={handleEnroll}/>
       </div>
 
       <CoursePagination
