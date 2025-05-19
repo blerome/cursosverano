@@ -1,5 +1,6 @@
 import { Navigate, Outlet } from 'react-router-dom';
 import { useMsal } from '@azure/msal-react';
+import Layout from '../Layout/Layout';
 
 export const PublicRoute = () => {
   const { accounts } = useMsal();
@@ -9,5 +10,9 @@ export const PublicRoute = () => {
     return <Navigate to="/admin" replace />;
   }
 
-  return <Outlet />;
+  return (
+    <Layout>
+      <Outlet />
+    </Layout>
+  );
 };
