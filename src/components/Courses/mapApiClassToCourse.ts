@@ -1,22 +1,43 @@
-import { GetClasses200DataItem } from '../../generated/model';
+import { ClassResponseDto } from '../../generated/model';
 import { Course } from '../../types/courseTypes';
 
-export function mapApiClassToCourse(apiClass: GetClasses200DataItem): Course {
+export function mapApiClassToCourse(apiClass: ClassResponseDto): Course {
   return {
-    id: apiClass.id_class,
-    idSubject: apiClass.id_subject,
-    name: apiClass.Subjects.name,
-    clave: apiClass.Subjects.clave,
-    credits: apiClass.Subjects.credits,
-    schedule: apiClass.Schedules.map((s) => ({
-      day: s.Days.name,
-      startTime: s.start_time,
-      endTime: s.end_time,
-    })),
+    classId: apiClass.id_class,
+    subjectId: apiClass.id_subject,
+    image: apiClass.image,
     status: apiClass.status,
     maxStudents: apiClass.max_students,
-    enrolled: apiClass._count.Students_Classes,
-    careers: apiClass.Subjects.Careers_Subjects.map((cs) => cs.Careers.name),
+    enrolled: apiClass.enrrolled,
     description: apiClass.description,
+    Subject: {
+      subjectId: apiClass.Subjects.id_subject,
+      clave: apiClass.Subjects.clave,
+      name: apiClass.Subjects.name,
+      credits: apiClass.Subjects.credits,
+      Careers: apiClass.Subjects.Careers.map((career) => ({
+        careerId: career.id_career,
+        name: career.name
+        })),
+    },
+    Schedules: apiClass.Schedules.map((s) => ({
+      scheduleId: s.id_schedule,
+      dayId: s.id_day,
+      startTime: s.start_time,
+      endTime: s.end_time,
+      Day: {
+        dayId: s.Days.id_day,
+        name: s.Days.name, 
+      },
+      Classroom: {
+        classroomId: s.Classrooms?.id_classroom ?? null,
+        name: s.Classrooms?.name ?? null,
+        Building: {
+          buildingId: s.Classrooms?.Buildings?.id_building ?? null,
+          name: s.Classrooms?.Buildings?.name ?? null,
+          sieKey: s.Classrooms?.Buildings?.sie_key ?? null
+        }
+      }
+    })),
   };
 }

@@ -22,7 +22,7 @@ const HomePage: React.FC = () => {
   //inscripcion
  const handleEnroll = async (courseId: number, studentData: { numeroControl: string; telefono: string }) => {
   try {
-    await enrollStudent(courseId, studentData); // Asegúrate que tu context también acepte studentData
+    await enrollStudent(courseId); // Asegúrate que tu context también acepte studentData
     alert('Inscripción exitosa');
   } catch (error) {
     console.error('Error:', error);
@@ -57,25 +57,25 @@ const HomePage: React.FC = () => {
       <Modal
         isOpen={showModal}
         onClose={() => setShowModal(false)}
-        title={selectedCourse?.name || 'Detalles del Curso'}
+        title={selectedCourse?.Subject.name || 'Detalles del Curso'}
       >
         {selectedCourse && (
           <>
             <p>
               <strong>Carrera(s): </strong>{' '}
-              <p>{selectedCourse.careers.join(' ')}</p>
+              <p>{selectedCourse.Subject.Careers.join(' ')}</p>
             </p>
             <p>
               <strong>Clave: </strong>{' '}
-              {selectedCourse.clave}
+              {selectedCourse.Subject.clave}
             </p>
             <p>
               <strong>Horario: </strong>{' '}
-              {selectedCourse.schedule[0].startTime} - {' '} {selectedCourse.schedule[0].endTime}
+              {selectedCourse.Schedules[0].startTime} - {' '} {selectedCourse.Schedules[0].endTime}
             </p>
             <p>
               <strong>Créditos: </strong>
-              {selectedCourse.credits}
+              {selectedCourse.Subject.credits}
             </p>
             <p>
               <strong>Cupo:</strong> {' '}

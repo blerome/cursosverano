@@ -27,17 +27,15 @@ import type {
 import type {
   CreateClassDto,
   EnrollStudentClassDto,
-  GetClasses200,
   GetClassesParams,
-  GetClassesSubjectId200,
-  PostClasses201,
+  PaginatedResponseDtoClassResponseDto,
   PostClassesEnrollStudent202Item0,
-  PostClassesEnrollStudent202Item1
+  PostClassesEnrollStudent202Item1,
+  ResponseDtoCreatedClassResponseDto
 } from '../../model';
 
 import getClassesMutator from '../../../api/http/axios.mutator';
 import postClassesMutator from '../../../api/http/axios.mutator';
-import getClassesSubjectIdMutator from '../../../api/http/axios.mutator';
 import postClassesEnrollStudentMutator from '../../../api/http/axios.mutator';
 
 
@@ -49,7 +47,7 @@ export const getClasses = (
 ) => {
       
       
-      return getClassesMutator<GetClasses200>(
+      return getClassesMutator<PaginatedResponseDtoClassResponseDto>(
       {url: `/classes`, method: 'GET',
         params, signal
     },
@@ -131,7 +129,7 @@ export const postClasses = (
 ) => {
       
       
-      return postClassesMutator<PostClasses201>(
+      return postClassesMutator<ResponseDtoCreatedClassResponseDto>(
       {url: `/classes`, method: 'POST',
       headers: {'Content-Type': 'application/json', },
       data: createClassDto, signal
@@ -183,94 +181,7 @@ const {mutation: mutationOptions} = options ?
 
       return useMutation(mutationOptions , queryClient);
     }
-    /**
- * @deprecated
- */
-export const getClassesSubjectId = (
-    subjectId: number,
- signal?: AbortSignal
-) => {
-      
-      
-      return getClassesSubjectIdMutator<GetClassesSubjectId200>(
-      {url: `/classes/${subjectId}`, method: 'GET', signal
-    },
-      );
-    }
-  
-
-export const getGetClassesSubjectIdQueryKey = (subjectId: number,) => {
-    return [`/classes/${subjectId}`] as const;
-    }
-
-    
-export const getGetClassesSubjectIdQueryOptions = <TData = Awaited<ReturnType<typeof getClassesSubjectId>>, TError = unknown>(subjectId: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getClassesSubjectId>>, TError, TData>>, }
-) => {
-
-const {query: queryOptions} = options ?? {};
-
-  const queryKey =  queryOptions?.queryKey ?? getGetClassesSubjectIdQueryKey(subjectId);
-
-  
-
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getClassesSubjectId>>> = ({ signal }) => getClassesSubjectId(subjectId, signal);
-
-      
-
-      
-
-   return  { queryKey, queryFn, enabled: !!(subjectId), ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getClassesSubjectId>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
-}
-
-export type GetClassesSubjectIdQueryResult = NonNullable<Awaited<ReturnType<typeof getClassesSubjectId>>>
-export type GetClassesSubjectIdQueryError = unknown
-
-
-export function useGetClassesSubjectId<TData = Awaited<ReturnType<typeof getClassesSubjectId>>, TError = unknown>(
- subjectId: number, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getClassesSubjectId>>, TError, TData>> & Pick<
-        DefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getClassesSubjectId>>,
-          TError,
-          Awaited<ReturnType<typeof getClassesSubjectId>>
-        > , 'initialData'
-      >, }
- , queryClient?: QueryClient
-  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetClassesSubjectId<TData = Awaited<ReturnType<typeof getClassesSubjectId>>, TError = unknown>(
- subjectId: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getClassesSubjectId>>, TError, TData>> & Pick<
-        UndefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getClassesSubjectId>>,
-          TError,
-          Awaited<ReturnType<typeof getClassesSubjectId>>
-        > , 'initialData'
-      >, }
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetClassesSubjectId<TData = Awaited<ReturnType<typeof getClassesSubjectId>>, TError = unknown>(
- subjectId: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getClassesSubjectId>>, TError, TData>>, }
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-/**
- * @deprecated
- */
-
-export function useGetClassesSubjectId<TData = Awaited<ReturnType<typeof getClassesSubjectId>>, TError = unknown>(
- subjectId: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getClassesSubjectId>>, TError, TData>>, }
- , queryClient?: QueryClient 
- ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
-
-  const queryOptions = getGetClassesSubjectIdQueryOptions(subjectId,options)
-
-  const query = useQuery(queryOptions , queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
-
-  query.queryKey = queryOptions.queryKey ;
-
-  return query;
-}
-
-
-
-export const postClassesEnrollStudent = (
+    export const postClassesEnrollStudent = (
     enrollStudentClassDto: EnrollStudentClassDto,
  signal?: AbortSignal
 ) => {

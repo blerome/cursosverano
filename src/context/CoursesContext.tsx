@@ -19,15 +19,15 @@ export const CoursesProvider: React.FC<{ children: ReactNode }> = ({ children })
   const enrollStudent = (courseId: number) => {
     setCourses(prevCourses =>
       prevCourses.map(course =>
-        course.id === courseId && course.inscritos < course.cupo
-          ? { ...course, inscritos: course.inscritos + 1 }
+        course.classId === courseId && course.enrolled < course.maxStudents
+          ? { ...course, inscritos: course.enrolled + 1 }
           : course
       )
     );
     setFilteredCourses(prevCourses =>
       prevCourses.map(course =>
-        course.id === courseId && course.inscritos < course.cupo
-          ? { ...course, inscritos: course.inscritos + 1 }
+        course.classId === courseId && course.enrolled < course.maxStudents
+          ? { ...course, inscritos: course.enrolled + 1 }
           : course
       )
     );

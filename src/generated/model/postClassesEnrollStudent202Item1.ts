@@ -10,7 +10,6 @@ import type { PostClassesEnrollStudent202Item1UpdatedAt } from './postClassesEnr
 import type { PostClassesEnrollStudent202Item1DeletedAt } from './postClassesEnrollStudent202Item1DeletedAt';
 import type { PostClassesEnrollStudent202Item1IdCareer } from './postClassesEnrollStudent202Item1IdCareer';
 import type { PostClassesEnrollStudent202Item1ControlNumber } from './postClassesEnrollStudent202Item1ControlNumber';
-import type { PostClassesEnrollStudent202Item1GroupLeader } from './postClassesEnrollStudent202Item1GroupLeader';
 import type { PostClassesEnrollStudent202Item1Phone } from './postClassesEnrollStudent202Item1Phone';
 
 export type PostClassesEnrollStudent202Item1 = {
@@ -21,6 +20,5 @@ export type PostClassesEnrollStudent202Item1 = {
   id_career: PostClassesEnrollStudent202Item1IdCareer;
   id_student: number;
   control_number: PostClassesEnrollStudent202Item1ControlNumber;
-  group_leader: PostClassesEnrollStudent202Item1GroupLeader;
   phone: PostClassesEnrollStudent202Item1Phone;
 };

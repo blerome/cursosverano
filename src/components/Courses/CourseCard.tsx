@@ -36,7 +36,7 @@ const CourseCard: React.FC<CourseCardProps> = ({
   // Función para manejar la inscripción desde el modal
   const handleEnrollSubmit = async (studentData: { numeroControl: string; telefono: string }) => {
     try {
-      await onEnroll(course.id, studentData);
+      await onEnroll(course.classId, studentData);
       setShowModal(false);
     } catch (error) {
       console.error('Error en la inscripción:', error);
@@ -50,7 +50,7 @@ const CourseCard: React.FC<CourseCardProps> = ({
         <div className={styles.imgBx}>
           <img
             src={'https://images.unsplash.com/photo-1515879218367-8466d910aaa4?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80'}
-            alt={course.name}
+            alt={course.Subject.name}
           />
         </div>
 
@@ -64,27 +64,27 @@ const CourseCard: React.FC<CourseCardProps> = ({
           <div className={styles.contentBx}>
             {/* Encabezado con grupo y nombre del curso */}
             <h3>
-              Grupo V{course.id.toString().padStart(2, '0')}
+              Grupo V{course.classId.toString().padStart(2, '0')}
               <br />
-              <span>{course.name}</span>
+              <span>{course.Subject.name}</span>
             </h3>
             
             {/* Sección de información básica reorganizada */}
             <div className={styles.basicInfo}>
               <div>
-                {course.clave} {/* Clave del curso (sin etiqueta strong) */}
+                {course.Subject.clave} {/* Clave del curso (sin etiqueta strong) */}
               </div>
               <div>
-                <strong>Horario:</strong> {course.schedule[0].startTime} - {course.schedule[0].endTime}
+                <strong>Horario:</strong> {course.Schedules[0].startTime} - {course.Schedules[0].endTime}
               </div>
               <div>
-                <strong>Créditos:</strong> {course.credits}
+                <strong>Créditos:</strong> {course.Subject.credits}
               </div>
             </div>
             
             {/* Sección de carrera separada */}
             <div className={styles.careerInfo}>
-              <strong>Carrera/s:</strong> {course.careers}
+              <strong>Carrera/s:</strong> {course.Subject.Careers.join(' ')}
             </div>
             
             {/* Estado del curso en sección aparte */}
@@ -104,8 +104,8 @@ const CourseCard: React.FC<CourseCardProps> = ({
       {/* Modal de inscripción (nuevo) */}
       {showModal && (
         <ModalInscripcion
-          cursoId={course.id}
-          nombreCurso={course.name}
+          cursoId={course.classId}
+          nombreCurso={course.Subject.name}
           onClose={() => setShowModal(false)}
           onInscribir={handleEnrollSubmit}
         />

@@ -16,4 +16,5 @@ export type PostClassesEnrollStudent202Item0 = {
   id_class: number;
   id_student_class: number;
   id_student: number;
+  group_leader: boolean;
 };

@@ -1,26 +1,52 @@
 // src/types/courseTypes.ts
 
 export interface Course {
-    id: number;
+    classId: number;
     image: string | null;
-    idSubject: number;
-    name: string;
-    clave: string;
-    schedule: Schedule[];
-    credits: number;
-    maxStudents: number | null;
+    subjectId: number;
+    maxStudents: number;
     status: string | null ;
     enrolled: number;
-    careers: string[];
     description: string | null;
+    Subject: Subject;
+    Schedules: Schedule[];
   }
   export interface Schedule {
-    day: string;
+    scheduleId: number;
+    dayId: number;
     startTime: string;
     endTime: string;
+    Day: Day;
+    Classroom: Classroom | null;
   }
 
-  export interface Days {
+  export interface Subject {
+    subjectId: number;
+    clave: string;
+    name: string;
+    credits: number;
+    Careers: Career[];
+  }
+
+  export interface Classroom {
+    classroomId: number | null;
+    name: string | null;
+    Building: Building | null;
+  }
+
+  export interface Building {
+    buildingId: number | null;
+    name: string | null;
+    sieKey: string | null;
+  }
+
+  export interface Career {
+    careerId: number;
+    name: string;
+  }
+
+  export interface Day {
+    dayId: number;
     name: string;
   }
   
