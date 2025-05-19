@@ -119,9 +119,7 @@ const MenuPrincipal: React.FC = () => {
             <li onClick={closeAll}>
               <LoginButton />
             </li>
-             <li onClick={closeAll}>
-              <LogoutButton/>
-            </li>
+            
           </ul>
         </div>
       </nav>
@@ -132,3 +130,4 @@ const MenuPrincipal: React.FC = () => {
 };
 
 export default MenuPrincipal;
+
