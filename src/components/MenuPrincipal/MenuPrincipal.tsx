@@ -4,13 +4,14 @@ import { FaHome, FaGraduationCap, FaUniversity, FaLaptopCode, FaUserPlus } from 
 import RegulationDropdown from './RegulationDropdown';
 import PlatformsDropdown from './PlatformsDropdown';
 import HamburgerIcon from './HamburgerIcon';
-import LoginForm from '../LoginComponent/LoginForm';
+import { LoginButton } from '../../auth/LoginButton';
+import { LogoutButton } from '../../auth/LogoutButton';
 
 const MenuPrincipal: React.FC = () => {
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
   const [isMobile, setIsMobile] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
-  const [showLoginForm, setShowLoginForm] = useState(false);
+  // Eliminamos el estado showLoginButton ya que no usaremos el modal
 
   useEffect(() => {
     const handleResize = () => {
@@ -47,14 +48,7 @@ const MenuPrincipal: React.FC = () => {
     setMenuOpen(false);
   };
 
-  const handleLoginClick = () => {
-    setShowLoginForm(true);
-    closeAll();
-  };
-
-  const closeLoginForm = () => {
-    setShowLoginForm(false);
-  };
+  // Eliminamos handleLoginClick ya que el LoginButton manejará su propia lógica
 
   return (
     <>
@@ -121,26 +115,18 @@ const MenuPrincipal: React.FC = () => {
               )}
             </li>
             
-            <li onClick={handleLoginClick}>
-              <a href="#">
-                <FaUserPlus className={styles.icon} /> 
-                <span>Registro/Acceder</span>
-              </a>
+            {/* Cambiamos el ítem de login por el componente LoginButton directamente */}
+            <li onClick={closeAll}>
+              <LoginButton />
+            </li>
+             <li onClick={closeAll}>
+              <LogoutButton/>
             </li>
           </ul>
         </div>
       </nav>
 
-      {showLoginForm && (
-        <div className={styles.modalOverlay}>
-          <div className={styles.modalContent}>
-            <button className={styles.closeButton} onClick={closeLoginForm}>
-              &times;
-            </button>
-            <LoginForm onClose={closeLoginForm} />
-          </div>
-        </div>
-      )}
+      {/* Eliminamos el modal de login ya que no lo necesitamos más */}
     </>
   );
 };
