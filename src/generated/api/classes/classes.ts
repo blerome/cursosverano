@@ -28,6 +28,8 @@ import type {
   CreateClassDto,
   EnrollStudentClassDto,
   GetClassesParams,
+  GetClassesStudent200Item,
+  GetClassesStudentParams,
   PaginatedResponseDtoClassResponseDto,
   PostClassesEnrollStudent202Item0,
   PostClassesEnrollStudent202Item1,
@@ -36,6 +38,7 @@ import type {
 
 import getClassesMutator from '../../../api/http/axios.mutator';
 import postClassesMutator from '../../../api/http/axios.mutator';
+import getClassesStudentMutator from '../../../api/http/axios.mutator';
 import postClassesEnrollStudentMutator from '../../../api/http/axios.mutator';
 
 
@@ -181,7 +184,89 @@ const {mutation: mutationOptions} = options ?
 
       return useMutation(mutationOptions , queryClient);
     }
-    export const postClassesEnrollStudent = (
+    export const getClassesStudent = (
+    params: GetClassesStudentParams,
+ signal?: AbortSignal
+) => {
+      
+      
+      return getClassesStudentMutator<GetClassesStudent200Item[]>(
+      {url: `/classes/student`, method: 'GET',
+        params, signal
+    },
+      );
+    }
+  
+
+export const getGetClassesStudentQueryKey = (params: GetClassesStudentParams,) => {
+    return [`/classes/student`, ...(params ? [params]: [])] as const;
+    }
+
+    
+export const getGetClassesStudentQueryOptions = <TData = Awaited<ReturnType<typeof getClassesStudent>>, TError = unknown>(params: GetClassesStudentParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getClassesStudent>>, TError, TData>>, }
+) => {
+
+const {query: queryOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetClassesStudentQueryKey(params);
+
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getClassesStudent>>> = ({ signal }) => getClassesStudent(params, signal);
+
+      
+
+      
+
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getClassesStudent>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetClassesStudentQueryResult = NonNullable<Awaited<ReturnType<typeof getClassesStudent>>>
+export type GetClassesStudentQueryError = unknown
+
+
+export function useGetClassesStudent<TData = Awaited<ReturnType<typeof getClassesStudent>>, TError = unknown>(
+ params: GetClassesStudentParams, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getClassesStudent>>, TError, TData>> & Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getClassesStudent>>,
+          TError,
+          Awaited<ReturnType<typeof getClassesStudent>>
+        > , 'initialData'
+      >, }
+ , queryClient?: QueryClient
+  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetClassesStudent<TData = Awaited<ReturnType<typeof getClassesStudent>>, TError = unknown>(
+ params: GetClassesStudentParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getClassesStudent>>, TError, TData>> & Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getClassesStudent>>,
+          TError,
+          Awaited<ReturnType<typeof getClassesStudent>>
+        > , 'initialData'
+      >, }
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetClassesStudent<TData = Awaited<ReturnType<typeof getClassesStudent>>, TError = unknown>(
+ params: GetClassesStudentParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getClassesStudent>>, TError, TData>>, }
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+
+export function useGetClassesStudent<TData = Awaited<ReturnType<typeof getClassesStudent>>, TError = unknown>(
+ params: GetClassesStudentParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getClassesStudent>>, TError, TData>>, }
+ , queryClient?: QueryClient 
+ ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+
+  const queryOptions = getGetClassesStudentQueryOptions(params,options)
+
+  const query = useQuery(queryOptions , queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
+}
+
+
+
+export const postClassesEnrollStudent = (
     enrollStudentClassDto: EnrollStudentClassDto,
  signal?: AbortSignal
 ) => {

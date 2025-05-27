@@ -2,7 +2,7 @@ import React from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useMsal } from '@azure/msal-react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faSignOutAlt, faPlus, faUsers, faCalendar, faUser } from '@fortawesome/free-solid-svg-icons';
+import { faSignOutAlt, faUsers, faCalendar, faUser, faTachometerAlt, faProjectDiagram } from '@fortawesome/free-solid-svg-icons';
 import styles from './AdminPage.module.css';
 
 interface AdminPageProps {
@@ -22,12 +22,12 @@ const AdminPage: React.FC<AdminPageProps> = ({ children }) => {
   };
 
   const handleNavigation = (path: string) => {
-    navigate(path);
+    navigate(`/admin/${path}`);
   };
 
   const isActive = (path: string) => {
     return location.pathname === `/admin/${path}` || 
-           (location.pathname === '/admin' && path === 'new-project');
+           (location.pathname === '/admin' && path === 'dashboard');
   };
 
   return (
@@ -40,11 +40,19 @@ const AdminPage: React.FC<AdminPageProps> = ({ children }) => {
       {/* Sidebar con nuevo estilo */}
       <ul className={styles.menu}>
         <button
+          className={`${styles.menuItem} ${isActive('dashboard') ? styles.active : ''}`}
+          onClick={() => handleNavigation('dashboard')}
+        >
+          <FontAwesomeIcon icon={faTachometerAlt} className={styles.menuIcon} />
+          <span className={styles.menuText}>Dashboard</span>
+        </button>
+        
+        <button
           className={`${styles.menuItem} ${isActive('new-project') ? styles.active : ''}`}
           onClick={() => handleNavigation('new-project')}
         >
-          <FontAwesomeIcon icon={faPlus} className={styles.menuIcon} />
-          <span className={styles.menuText}>Crear Curso</span>
+          <FontAwesomeIcon icon={faProjectDiagram} className={styles.menuIcon} />
+          <span className={styles.menuText}>Nuevo Proyecto</span>
         </button>
         
         <button
@@ -61,14 +69,6 @@ const AdminPage: React.FC<AdminPageProps> = ({ children }) => {
         >
           <FontAwesomeIcon icon={faCalendar} className={styles.menuIcon} />
           <span className={styles.menuText}>Calendario</span>
-        </button>
-        
-        <button
-          className={`${styles.menuItem} ${isActive('user-profile') ? styles.active : ''}`}
-          onClick={() => handleNavigation('user-profile')}
-        >
-          <FontAwesomeIcon icon={faUser} className={styles.menuIcon} />
-          <span className={styles.menuText}>Perfil</span>
         </button>
 
         <button 

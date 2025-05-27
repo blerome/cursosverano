@@ -13,8 +13,8 @@ export type PostClassesEnrollStudent202Item0 = {
   created_at: PostClassesEnrollStudent202Item0CreatedAt;
   updated_at: PostClassesEnrollStudent202Item0UpdatedAt;
   deleted_at: PostClassesEnrollStudent202Item0DeletedAt;
+  id_student: number;
   id_class: number;
   id_student_class: number;
-  id_student: number;
   group_leader: boolean;
 };

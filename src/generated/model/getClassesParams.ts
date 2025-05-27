@@ -9,8 +9,10 @@
 export type GetClassesParams = {
 subjectId?: number;
 career?: string;
+careerId?: number;
+studentId?: number;
 clave?: string;
-status?: 'pendiente';
+status?: 'pendiente' | 'aprobado' | 'rechazado';
 credits?: number;
 page?: number;
 pageSize?: number;

@@ -11,7 +11,6 @@ const MenuPrincipal: React.FC = () => {
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
   const [isMobile, setIsMobile] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
-  // Eliminamos el estado showLoginButton ya que no usaremos el modal
 
   useEffect(() => {
     const handleResize = () => {
@@ -47,8 +46,6 @@ const MenuPrincipal: React.FC = () => {
     setActiveDropdown(null);
     setMenuOpen(false);
   };
-
-  // Eliminamos handleLoginClick ya que el LoginButton manejará su propia lógica
 
   return (
     <>
@@ -110,12 +107,10 @@ const MenuPrincipal: React.FC = () => {
               {activeDropdown === 'platforms' && (
                 <PlatformsDropdown 
                   isMobile={isMobile}
-                  onCloseDropdown={closeAll}
                 />
               )}
             </li>
             
-            {/* Cambiamos el ítem de login por el componente LoginButton directamente */}
             <li onClick={closeAll}>
               <LoginButton />
             </li>
@@ -123,8 +118,6 @@ const MenuPrincipal: React.FC = () => {
           </ul>
         </div>
       </nav>
-
-      {/* Eliminamos el modal de login ya que no lo necesitamos más */}
     </>
   );
 };

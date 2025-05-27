@@ -1,0 +1,494 @@
+/* Profile.module.css */
+.profileContainer {
+  padding: 2rem;
+  max-width: 800px;
+  margin: 0 auto;
+  min-height: 100vh;
+  background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+}
+
+.profileCard {
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 20px;
+  padding: 2rem;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.profileHeader {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+  padding-bottom: 1.5rem;
+  border-bottom: 2px solid #e9ecef;
+}
+
+.avatar {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 2rem;
+  font-weight: bold;
+  text-transform: uppercase;
+  box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
+}
+
+.profileTitle {
+  margin: 0;
+  color: #2c3e50;
+  font-size: 2.5rem;
+  font-weight: 700;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+/* Mensajes de éxito y error */
+.successMessage {
+  background: rgba(40, 167, 69, 0.1);
+  border: 1px solid rgba(40, 167, 69, 0.3);
+  color: #155724;
+  padding: 1rem;
+  border-radius: 8px;
+  margin-bottom: 1.5rem;
+  font-weight: 500;
+}
+
+.errorMessage {
+  background: rgba(220, 53, 69, 0.1);
+  border: 1px solid rgba(220, 53, 69, 0.3);
+  color: #721c24;
+  padding: 1rem;
+  border-radius: 8px;
+  margin-bottom: 1.5rem;
+  font-weight: 500;
+}
+
+.profileInfo {
+  display: grid;
+  gap: 2rem;
+}
+
+/* Secciones de información */
+.infoSection {
+  background: rgba(248, 249, 250, 0.5);
+  border-radius: 15px;
+  padding: 1.5rem;
+  border: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.sectionTitle {
+  margin: 0 0 1.5rem 0;
+  color: #2c3e50;
+  font-size: 1.5rem;
+  font-weight: 600;
+  border-bottom: 2px solid #667eea;
+  padding-bottom: 0.5rem;
+}
+
+.sectionHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+}
+
+.infoRow {
+  display: grid;
+  grid-template-columns: 200px 1fr;
+  gap: 1rem;
+  align-items: center;
+  padding: 1rem;
+  background: rgba(255, 255, 255, 0.8);
+  border-radius: 12px;
+  border-left: 4px solid #667eea;
+  transition: all 0.3s ease;
+  margin-bottom: 1rem;
+}
+
+.infoRow:hover {
+  background: rgba(102, 126, 234, 0.05);
+  transform: translateX(5px);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+.label {
+  font-weight: 600;
+  color: #495057;
+  font-size: 1rem;
+}
+
+.value {
+  color: #2c3e50;
+  font-size: 1.1rem;
+  font-weight: 500;
+  word-break: break-word;
+}
+
+/* Botones */
+.editButton {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+}
+
+.editButton:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+}
+
+/* Formulario de estudiante */
+.studentForm {
+  display: grid;
+  gap: 1.5rem;
+}
+
+.formRow {
+  display: grid;
+  grid-template-columns: 200px 1fr;
+  gap: 1rem;
+  align-items: center;
+}
+
+.formLabel {
+  font-weight: 600;
+  color: #495057;
+  font-size: 1rem;
+}
+
+.formInput,
+.formSelect {
+  padding: 0.75rem;
+  border: 2px solid #e9ecef;
+  border-radius: 8px;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+  background: white;
+}
+
+.formInput:focus,
+.formSelect:focus {
+  outline: none;
+  border-color: #667eea;
+  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+}
+
+.formActions {
+  display: flex;
+  gap: 1rem;
+  justify-content: flex-end;
+  margin-top: 1rem;
+}
+
+.saveButton {
+  background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+  color: white;
+  border: none;
+  padding: 0.75rem 2rem;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(40, 167, 69, 0.3);
+}
+
+.saveButton:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(40, 167, 69, 0.4);
+}
+
+.saveButton:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.cancelButton {
+  background: #6c757d;
+  color: white;
+  border: none;
+  padding: 0.75rem 2rem;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.cancelButton:hover {
+  background: #5a6268;
+  transform: translateY(-2px);
+}
+
+/* Información del estudiante */
+.studentInfo {
+  padding: 1.5rem;
+  background: rgba(102, 126, 234, 0.05);
+  border-radius: 12px;
+  border: 1px solid rgba(102, 126, 234, 0.1);
+}
+
+.infoText {
+  margin: 0;
+  color: #495057;
+  font-size: 1rem;
+  line-height: 1.6;
+}
+
+/* ✅ Nuevos estilos para el estado de estudiante */
+.studentStatus {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.statusBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+  color: white;
+  padding: 0.75rem 1.5rem;
+  border-radius: 25px;
+  font-weight: 600;
+  font-size: 1rem;
+  box-shadow: 0 4px 15px rgba(40, 167, 69, 0.3);
+  align-self: flex-start;
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0% {
+    box-shadow: 0 4px 15px rgba(40, 167, 69, 0.3);
+  }
+  50% {
+    box-shadow: 0 6px 20px rgba(40, 167, 69, 0.5);
+  }
+  100% {
+    box-shadow: 0 4px 15px rgba(40, 167, 69, 0.3);
+  }
+}
+
+/* ✅ Estilos para el contenedor del teléfono */
+.phoneInputContainer {
+  display: flex;
+  gap: 0;
+  border: 2px solid #e9ecef;
+  border-radius: 8px;
+  overflow: hidden;
+  background: white;
+  transition: all 0.3s ease;
+}
+
+.phoneInputContainer:focus-within {
+  border-color: #667eea;
+  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+}
+
+/* ✅ Selector de código de país */
+.countryCodeSelect {
+  background: #f8f9fa;
+  border: none;
+  padding: 0.75rem 0.5rem;
+  color: #495057;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  min-width: 140px;
+  max-width: 180px;
+  outline: none;
+  border-right: 1px solid #e9ecef;
+}
+
+.countryCodeSelect:focus {
+  background: #e9ecef;
+}
+
+.countryCodeSelect option {
+  background: white;
+  color: #495057;
+  padding: 8px;
+}
+
+/* ✅ Input del número de teléfono */
+.phoneInput {
+  flex: 1;
+  background: white;
+  border: none;
+  padding: 0.75rem;
+  color: #495057;
+  font-size: 1rem;
+  outline: none;
+  min-width: 0;
+}
+
+.phoneInput::placeholder {
+  color: #6c757d;
+}
+
+.phoneInput:focus {
+  background: #f8f9fa;
+}
+
+/* ✅ Texto de ayuda para el teléfono */
+.phoneHelp {
+  display: block;
+  margin-top: 4px;
+  color: #6c757d;
+  font-size: 12px;
+  font-style: italic;
+  grid-column: 2;
+}
+
+/* Estados de carga y error */
+.loadingContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 50vh;
+  gap: 1rem;
+}
+
+.spinner {
+  width: 50px;
+  height: 50px;
+  border: 4px solid #f3f3f3;
+  border-top: 4px solid #667eea;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.errorContainer {
+  text-align: center;
+  padding: 2rem;
+  color: #dc3545;
+  background: rgba(220, 53, 69, 0.1);
+  border-radius: 12px;
+  border: 1px solid rgba(220, 53, 69, 0.2);
+}
+
+.errorContainer h2 {
+  margin-bottom: 1rem;
+  color: #dc3545;
+}
+
+/* Sección de debug */
+.debugSection {
+  margin-top: 2rem;
+  padding: 1rem;
+  background: rgba(248, 249, 250, 0.5);
+  border-radius: 8px;
+  border: 1px solid #dee2e6;
+}
+
+.debugSection summary {
+  cursor: pointer;
+  font-weight: 600;
+  color: #6c757d;
+  padding: 0.5rem;
+}
+
+.debugSection summary:hover {
+  color: #495057;
+}
+
+.debugData {
+  margin-top: 1rem;
+  padding: 1rem;
+  background: #f8f9fa;
+  border-radius: 6px;
+  font-size: 0.9rem;
+  color: #495057;
+  overflow-x: auto;
+  border: 1px solid #e9ecef;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .profileContainer {
+    padding: 1rem;
+  }
+  
+  .profileCard {
+    padding: 1.5rem;
+  }
+  
+  .profileHeader {
+    flex-direction: column;
+    text-align: center;
+    gap: 1rem;
+  }
+  
+  .profileTitle {
+    font-size: 2rem;
+  }
+  
+  .sectionHeader {
+    flex-direction: column;
+    gap: 1rem;
+    align-items: stretch;
+  }
+  
+  .infoRow,
+  .formRow {
+    grid-template-columns: 1fr;
+    gap: 0.5rem;
+  }
+  
+  .label,
+  .formLabel {
+    font-size: 0.9rem;
+  }
+  
+  .value {
+    font-size: 1rem;
+  }
+  
+  .formActions {
+    flex-direction: column;
+  }
+  
+  .saveButton,
+  .cancelButton {
+    width: 100%;
+  }
+
+  /* ✅ Responsive para el teléfono */
+  .phoneInputContainer {
+    flex-direction: column;
+  }
+  
+  .countryCodeSelect {
+    border-right: none;
+    border-bottom: 1px solid #e9ecef;
+    min-width: auto;
+    max-width: none;
+  }
+  
+  .phoneInput {
+    min-width: auto;
+  }
+
+  .phoneHelp {
+    grid-column: 1;
+  }
+} 

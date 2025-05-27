@@ -8,17 +8,17 @@
 import type { PostClassesEnrollStudent202Item1CreatedAt } from './postClassesEnrollStudent202Item1CreatedAt';
 import type { PostClassesEnrollStudent202Item1UpdatedAt } from './postClassesEnrollStudent202Item1UpdatedAt';
 import type { PostClassesEnrollStudent202Item1DeletedAt } from './postClassesEnrollStudent202Item1DeletedAt';
-import type { PostClassesEnrollStudent202Item1IdCareer } from './postClassesEnrollStudent202Item1IdCareer';
 import type { PostClassesEnrollStudent202Item1ControlNumber } from './postClassesEnrollStudent202Item1ControlNumber';
 import type { PostClassesEnrollStudent202Item1Phone } from './postClassesEnrollStudent202Item1Phone';
+import type { PostClassesEnrollStudent202Item1IdCareer } from './postClassesEnrollStudent202Item1IdCareer';
 
 export type PostClassesEnrollStudent202Item1 = {
   id_user: number;
   created_at: PostClassesEnrollStudent202Item1CreatedAt;
   updated_at: PostClassesEnrollStudent202Item1UpdatedAt;
   deleted_at: PostClassesEnrollStudent202Item1DeletedAt;
-  id_career: PostClassesEnrollStudent202Item1IdCareer;
   id_student: number;
   control_number: PostClassesEnrollStudent202Item1ControlNumber;
   phone: PostClassesEnrollStudent202Item1Phone;
+  id_career: PostClassesEnrollStudent202Item1IdCareer;
 };

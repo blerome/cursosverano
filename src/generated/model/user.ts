@@ -6,14 +6,18 @@
  * OpenAPI spec version: 1.0
  */
 import type { UserMaternalSurname } from './userMaternalSurname';
+import type { UserIdRole } from './userIdRole';
 import type { UserRole } from './userRole';
+import type { UserType } from './userType';
 
 export interface User {
   name: string;
   paternal_surname: string;
   maternal_surname: UserMaternalSurname;
   email: string;
+  oid: string;
   id_user: number;
-  password: string;
-  role: UserRole;
+  id_role?: UserIdRole;
+  role?: UserRole;
+  userType?: UserType;
 }

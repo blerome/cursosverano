@@ -1,4 +1,7 @@
 import axios from 'axios';
+import { msalInstance } from '../../auth/msalConfig';
+import { loginRequest } from '../../auth/msalConfig';
+import { AuthError } from '@azure/msal-browser';
 
 const axiosInstance = axios.create({
   baseURL: 'http://localhost:3000',
@@ -8,12 +11,21 @@ const axiosInstance = axios.create({
 });
 
 axiosInstance.interceptors.request.use(
-  (config) => {
-    const token = localStorage.getItem('token');
-    if (token) {
-      config.headers.Authorization = `Bearer ${token}`;
+  async (config) => {
+    const accounts= msalInstance.getAllAccounts();
+    if (accounts.length > 0) {
+      try {
+        const response = await msalInstance.acquireTokenSilent({
+          ...loginRequest,
+          account: accounts[0],
+        });
+        config.headers.Authorization = `Bearer ${response.accessToken}`;
+      } catch (error) {
+        throw new AuthError('Error al obtener token MSAL')
+      }
+      return config;
     }
-    return config;
+    throw new AuthError('Error al obtener token MSAL')
   },
   (error) => Promise.reject(error)
 );
