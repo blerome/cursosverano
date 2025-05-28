@@ -6,7 +6,6 @@ import {
   Navigate,
 } from 'react-router-dom';
 import HomePage from './pages/HomePage';
-import AdminPage from './pages/AdminPage';
 import ReglamentoEstudiante from './pages/ReglamentoEstudiante';
 import ReglamentoGeneral from './pages/ReglamentoGeneral';
 import { PrivateRoute } from './components/privateroutes/PrivateRoute';
@@ -14,6 +13,7 @@ import { AdminRoute } from './components/privateroutes/AdminRoute';
 import { PublicRoute } from './components/privateroutes/PublicRoute';
 import NewProject from './pages/admin/NewProjectPage/NewProjectPage';
 import CreateClassPage from './pages/admin/CreateClassPage';
+import AdminDashboard from './pages/admin/AdminDashboard';
 import Profile from './pages/users/Profile';
 import ClassesPage from './pages/classes/ClassesPage';
 import DiagnosticPage from './pages/DiagnosticPage';
@@ -46,11 +46,11 @@ const App: React.FC = () => {
             <Route path="/diagnostic" element={<DiagnosticPage />} />
           </Route>
 
-          {/* 👇 Rutas de admin - USAN AdminPage COMO LAYOUT */}
+          {/* 👇 Rutas de admin - USAN SU PROPIO LAYOUT INTERNO */}
           <Route element={<AdminRoute />}>
             <Route path="/admin">
               <Route index element={<Navigate to="/admin/dashboard" replace />} />
-              <Route path="dashboard" element={<div>Dashboard Admin</div>} />
+              <Route path="dashboard" element={<AdminDashboard />} />
               <Route path="new-project" element={<NewProject />} />
             </Route>
           </Route>

@@ -1,6 +1,5 @@
 import { Navigate, Outlet } from 'react-router-dom';
 import { useMsal } from '@azure/msal-react';
-import AdminPage from '../../pages/AdminPage';
 
 export const AdminRoute = () => {
   const { accounts, inProgress } = useMsal();
@@ -15,10 +14,6 @@ export const AdminRoute = () => {
     return <Navigate to="/" replace />;
   }
 
-  // Usuario autenticado - muestra el AdminPage como layout
-  return (
-    <AdminPage>
-      <Outlet />
-    </AdminPage>
-  );
+  // Usuario autenticado - renderiza directamente el contenido sin layout wrapper
+  return <Outlet />;
 }; 
