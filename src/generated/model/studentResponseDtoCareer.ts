@@ -5,8 +5,6 @@
  * ITCancún summer API
  * OpenAPI spec version: 1.0
  */
+import type { CareerResponseDto } from './careerResponseDto';
 
-export interface GetRolesResponseDto {
-  id_role?: number;
-  name?: string;
-}
+export type StudentResponseDtoCareer = null | CareerResponseDto;

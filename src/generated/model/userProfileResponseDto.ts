@@ -6,6 +6,7 @@
  * OpenAPI spec version: 1.0
  */
 import type { UserProfileResponseDtoMaternalSurname } from './userProfileResponseDtoMaternalSurname';
+import type { UserProfileResponseDtoRole } from './userProfileResponseDtoRole';
 
 export interface UserProfileResponseDto {
   id_user: number;
@@ -14,4 +15,5 @@ export interface UserProfileResponseDto {
   paternal_surname: string;
   maternal_surname: UserProfileResponseDtoMaternalSurname;
   oid: string;
+  role: UserProfileResponseDtoRole;
 }

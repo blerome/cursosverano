@@ -32,7 +32,7 @@ const ClassCard: React.FC<ClassCardProps> = ({
   const enrolled = classData.enrrolled || 0;
   const maxStudents = classData.max_students || 0;
   const available = enrolled < maxStudents;
-  const percentage = maxStudents > 0 ? Math.round((enrolled / maxStudents) * 100) : 0;
+  const percentage = maxStudents > 0 ? Math.abs(Math.round(((enrolled / maxStudents) * 100) -100)) : 0;
 
   // Determinar estado visual
   const getStatusInfo = () => {

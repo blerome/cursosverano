@@ -6,7 +6,7 @@
  * OpenAPI spec version: 1.0
  */
 
-export interface GetRolesResponseDto {
-  id_role?: number;
-  name?: string;
-}
+export type GetClassesIdStudentsParams = {
+page?: number;
+pagesize?: number;
+};

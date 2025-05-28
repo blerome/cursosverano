@@ -9,7 +9,6 @@ import HomePage from './pages/HomePage';
 import AdminPage from './pages/AdminPage';
 import ReglamentoEstudiante from './pages/ReglamentoEstudiante';
 import ReglamentoGeneral from './pages/ReglamentoGeneral';
-import { CoursesProvider } from './context/CoursesContext';
 import { PrivateRoute } from './components/privateroutes/PrivateRoute';
 import { AdminRoute } from './components/privateroutes/AdminRoute';
 import { PublicRoute } from './components/privateroutes/PublicRoute';
@@ -18,12 +17,13 @@ import CreateClassPage from './pages/admin/CreateClassPage';
 import Profile from './pages/users/Profile';
 import ClassesPage from './pages/classes/ClassesPage';
 import DiagnosticPage from './pages/DiagnosticPage';
+import MyCoursesPage from './pages/courses/MyCoursesPage';
+import ClassStudentsPage from './pages/courses/ClassStudentsPage';
 import './App.css';
 
 const App: React.FC = () => {
   return (
     <Router>
-      <CoursesProvider>
         <Routes>
           {/* 👇 Rutas públicas - MANEJAN SU PROPIO LAYOUT DENTRO DE PublicRoute */}
           <Route element={<PublicRoute />}>
@@ -41,7 +41,8 @@ const App: React.FC = () => {
             <Route path="/profile" element={<Profile />} />
             <Route path="/classes" element={<ClassesPage />} />
             <Route path="/create-class" element={<CreateClassPage />} />
-            <Route path="/my-courses" element={<div>Mis Cursos - En desarrollo</div>} />
+            <Route path="/my-courses" element={<MyCoursesPage />} />
+            <Route path="/my-courses/class/:classId/students" element={<ClassStudentsPage />} />
             <Route path="/diagnostic" element={<DiagnosticPage />} />
           </Route>
 
@@ -57,7 +58,6 @@ const App: React.FC = () => {
           {/* Redirección para rutas no encontradas */}
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
-      </CoursesProvider>
     </Router>
   );
 };

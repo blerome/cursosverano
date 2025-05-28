@@ -6,7 +6,4 @@
  * OpenAPI spec version: 1.0
  */
 
-export interface GetRolesResponseDto {
-  id_role?: number;
-  name?: string;
-}
+export type StudentResponseDtoPhone = null | string;

@@ -27,10 +27,12 @@ import type {
 import type {
   CreateClassDto,
   EnrollStudentClassDto,
+  GetClassesIdStudentsParams,
   GetClassesParams,
   GetClassesStudent200Item,
   GetClassesStudentParams,
   PaginatedResponseDtoClassResponseDto,
+  PaginatedResponseDtoGetStudentByClassResponseDto,
   PostClassesEnrollStudent202Item0,
   PostClassesEnrollStudent202Item1,
   ResponseDtoCreatedClassResponseDto
@@ -40,6 +42,7 @@ import getClassesMutator from '../../../api/http/axios.mutator';
 import postClassesMutator from '../../../api/http/axios.mutator';
 import getClassesStudentMutator from '../../../api/http/axios.mutator';
 import postClassesEnrollStudentMutator from '../../../api/http/axios.mutator';
+import getClassesIdStudentsMutator from '../../../api/http/axios.mutator';
 
 
 
@@ -50,7 +53,7 @@ export const getClasses = (
 ) => {
       
       
-      return getClassesMutator<PaginatedResponseDtoClassResponseDto>(
+      return getClassesMutator(
       {url: `/classes`, method: 'GET',
         params, signal
     },
@@ -132,7 +135,7 @@ export const postClasses = (
 ) => {
       
       
-      return postClassesMutator<ResponseDtoCreatedClassResponseDto>(
+      return postClassesMutator(
       {url: `/classes`, method: 'POST',
       headers: {'Content-Type': 'application/json', },
       data: createClassDto, signal
@@ -190,7 +193,7 @@ const {mutation: mutationOptions} = options ?
 ) => {
       
       
-      return getClassesStudentMutator<GetClassesStudent200Item[]>(
+      return getClassesStudentMutator(
       {url: `/classes/student`, method: 'GET',
         params, signal
     },
@@ -272,7 +275,7 @@ export const postClassesEnrollStudent = (
 ) => {
       
       
-      return postClassesEnrollStudentMutator<[PostClassesEnrollStudent202Item0, PostClassesEnrollStudent202Item1]>(
+      return postClassesEnrollStudentMutator(
       {url: `/classes/enrollStudent`, method: 'POST',
       headers: {'Content-Type': 'application/json', },
       data: enrollStudentClassDto, signal
@@ -324,4 +327,92 @@ const {mutation: mutationOptions} = options ?
 
       return useMutation(mutationOptions , queryClient);
     }
+    export const getClassesIdStudents = (
+    id: number,
+    params?: GetClassesIdStudentsParams,
+ signal?: AbortSignal
+) => {
+      
+      
+      return getClassesIdStudentsMutator(
+      {url: `/classes/${id}/students`, method: 'GET',
+        params, signal
+    },
+      );
+    }
+  
+
+export const getGetClassesIdStudentsQueryKey = (id: number,
+    params?: GetClassesIdStudentsParams,) => {
+    return [`/classes/${id}/students`, ...(params ? [params]: [])] as const;
+    }
+
     
+export const getGetClassesIdStudentsQueryOptions = <TData = Awaited<ReturnType<typeof getClassesIdStudents>>, TError = unknown>(id: number,
+    params?: GetClassesIdStudentsParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getClassesIdStudents>>, TError, TData>>, }
+) => {
+
+const {query: queryOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetClassesIdStudentsQueryKey(id,params);
+
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getClassesIdStudents>>> = ({ signal }) => getClassesIdStudents(id,params, signal);
+
+      
+
+      
+
+   return  { queryKey, queryFn, enabled: !!(id), ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getClassesIdStudents>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetClassesIdStudentsQueryResult = NonNullable<Awaited<ReturnType<typeof getClassesIdStudents>>>
+export type GetClassesIdStudentsQueryError = unknown
+
+
+export function useGetClassesIdStudents<TData = Awaited<ReturnType<typeof getClassesIdStudents>>, TError = unknown>(
+ id: number,
+    params: undefined |  GetClassesIdStudentsParams, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getClassesIdStudents>>, TError, TData>> & Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getClassesIdStudents>>,
+          TError,
+          Awaited<ReturnType<typeof getClassesIdStudents>>
+        > , 'initialData'
+      >, }
+ , queryClient?: QueryClient
+  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetClassesIdStudents<TData = Awaited<ReturnType<typeof getClassesIdStudents>>, TError = unknown>(
+ id: number,
+    params?: GetClassesIdStudentsParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getClassesIdStudents>>, TError, TData>> & Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getClassesIdStudents>>,
+          TError,
+          Awaited<ReturnType<typeof getClassesIdStudents>>
+        > , 'initialData'
+      >, }
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetClassesIdStudents<TData = Awaited<ReturnType<typeof getClassesIdStudents>>, TError = unknown>(
+ id: number,
+    params?: GetClassesIdStudentsParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getClassesIdStudents>>, TError, TData>>, }
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+
+export function useGetClassesIdStudents<TData = Awaited<ReturnType<typeof getClassesIdStudents>>, TError = unknown>(
+ id: number,
+    params?: GetClassesIdStudentsParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getClassesIdStudents>>, TError, TData>>, }
+ , queryClient?: QueryClient 
+ ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+
+  const queryOptions = getGetClassesIdStudentsQueryOptions(id,params,options)
+
+  const query = useQuery(queryOptions , queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
+}
+
+
+

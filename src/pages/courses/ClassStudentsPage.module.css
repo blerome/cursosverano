@@ -1,0 +1,662 @@
+/* Variables CSS */
+:root {
+  --primary-color: #667eea;
+  --secondary-color: #764ba2;
+  --success-color: #2ed573;
+  --warning-color: #ffa502;
+  --danger-color: #ff6b6b;
+  --info-color: #3742fa;
+  --dark-color: #2f3542;
+  --light-color: #f1f2f6;
+  --white: #ffffff;
+  --gray-100: #f8f9fa;
+  --gray-200: #e9ecef;
+  --gray-300: #dee2e6;
+  --gray-400: #ced4da;
+  --gray-500: #adb5bd;
+  --gray-600: #6c757d;
+  --gray-700: #495057;
+  --gray-800: #343a40;
+  --gray-900: #212529;
+  
+  --gradient-primary: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+  --gradient-success: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+  --gradient-warning: linear-gradient(135deg, #ffeaa7 0%, #fab1a0 100%);
+  --gradient-danger: linear-gradient(135deg, #fd79a8 0%, #e84393 100%);
+  
+  --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.1);
+  --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.1);
+  --shadow-lg: 0 8px 25px rgba(0, 0, 0, 0.15);
+  --shadow-xl: 0 15px 35px rgba(0, 0, 0, 0.2);
+  
+  --border-radius: 12px;
+  --border-radius-sm: 8px;
+  --border-radius-lg: 16px;
+  
+  --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-fast: all 0.15s ease;
+}
+
+/* Container principal */
+.classStudentsContainer {
+  min-height: 100vh;
+  padding: 2rem 1rem;
+}
+
+/* Header de la página */
+.pageHeader {
+  background: var(--white);
+  border-radius: var(--border-radius-lg);
+  box-shadow: var(--shadow-md);
+  margin: 0 auto 2rem auto;
+  max-width: 1400px;
+  overflow: hidden;
+}
+
+.headerContent {
+  background: var(--gradient-primary);
+  color: var(--white);
+  padding: 2rem;
+}
+
+.headerTop {
+  margin-bottom: 1.5rem;
+}
+
+.backButton {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.5rem;
+  background: rgba(255, 255, 255, 0.2);
+  color: var(--white);
+  border: none;
+  border-radius: var(--border-radius-sm);
+  font-weight: 500;
+  cursor: pointer;
+  transition: var(--transition);
+  backdrop-filter: blur(10px);
+}
+
+.backButton:hover {
+  background: rgba(255, 255, 255, 0.3);
+  transform: translateY(-2px);
+}
+
+.classInfo {
+  text-align: center;
+}
+
+.pageTitle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  font-size: 2.5rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+}
+
+.classDetails {
+  margin-top: 1rem;
+}
+
+.className {
+  font-size: 1.8rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+  opacity: 0.95;
+}
+
+.classMetadata {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.classCode,
+.classCredits,
+.classCapacity {
+  background: rgba(255, 255, 255, 0.2);
+  padding: 0.5rem 1rem;
+  border-radius: 20px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  backdrop-filter: blur(10px);
+}
+
+/* Sección de estadísticas */
+.statsSection {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 1rem;
+  padding: 1.5rem 2rem;
+  background: var(--white);
+}
+
+.statCard {
+  text-align: center;
+  padding: 1rem;
+  background: var(--gray-100);
+  border-radius: var(--border-radius-sm);
+  border-left: 4px solid var(--primary-color);
+}
+
+.statNumber {
+  font-size: 2rem;
+  font-weight: 800;
+  color: var(--primary-color);
+  margin-bottom: 0.25rem;
+}
+
+.statLabel {
+  font-size: 0.9rem;
+  color: var(--gray-600);
+  font-weight: 500;
+}
+
+/* Sección de controles */
+.controlsSection {
+  background: var(--white);
+  border-radius: var(--border-radius-lg);
+  box-shadow: var(--shadow-md);
+  padding: 1.5rem;
+  margin: 0 auto 2rem auto;
+  max-width: 1400px;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.searchContainer {
+  position: relative;
+  flex: 1;
+}
+
+.searchIcon {
+  position: absolute;
+  left: 1rem;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--gray-500);
+  font-size: 1.1rem;
+  z-index: 1;
+}
+
+.searchInput {
+  width: 100%;
+  padding: 1rem 1rem 1rem 3rem;
+  border: 2px solid var(--gray-200);
+  border-radius: var(--border-radius);
+  font-size: 1rem;
+  transition: var(--transition);
+  background: var(--white);
+  box-sizing: border-box;
+}
+
+.searchInput:focus {
+  outline: none;
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+}
+
+.filtersContainer {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.filterButton {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1rem;
+  background: var(--gray-200);
+  color: var(--gray-700);
+  border: none;
+  border-radius: var(--border-radius-sm);
+  font-weight: 500;
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.filterButton:hover {
+  background: var(--gray-300);
+}
+
+.filterButton.active {
+  background: var(--primary-color);
+  color: var(--white);
+}
+
+.sortButtons {
+  display: flex;
+  gap: 0.5rem;
+  margin-left: auto;
+}
+
+.sortButton {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1rem;
+  background: var(--gray-200);
+  color: var(--gray-700);
+  border: none;
+  border-radius: var(--border-radius-sm);
+  font-weight: 500;
+  cursor: pointer;
+  transition: var(--transition);
+  font-size: 0.9rem;
+}
+
+.sortButton:hover {
+  background: var(--gray-300);
+}
+
+.sortButton.active {
+  background: var(--secondary-color);
+  color: var(--white);
+}
+
+/* Estados de carga y error */
+.loadingContainer,
+.errorContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 4rem 2rem;
+  text-align: center;
+  background: var(--white);
+  border-radius: var(--border-radius-lg);
+  box-shadow: var(--shadow-md);
+  margin: 2rem auto;
+  max-width: 600px;
+}
+
+.spinner {
+  font-size: 2rem;
+  color: var(--primary-color);
+  margin-bottom: 1rem;
+}
+
+.errorIcon {
+  font-size: 3rem;
+  color: var(--danger-color);
+  margin-bottom: 1rem;
+}
+
+.errorContainer h2 {
+  color: var(--dark-color);
+  margin-bottom: 1rem;
+}
+
+.errorContainer p {
+  color: var(--gray-600);
+  margin-bottom: 1.5rem;
+}
+
+.retryButton {
+  padding: 0.75rem 1.5rem;
+  background: var(--primary-color);
+  color: var(--white);
+  border: none;
+  border-radius: var(--border-radius-sm);
+  font-weight: 500;
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.retryButton:hover {
+  background: var(--secondary-color);
+  transform: translateY(-2px);
+}
+
+/* Sección de estudiantes */
+.studentsSection {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0;
+}
+
+.emptyState {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 4rem 2rem;
+  text-align: center;
+  background: var(--white);
+  border-radius: var(--border-radius-lg);
+  box-shadow: var(--shadow-md);
+}
+
+.emptyIcon {
+  font-size: 4rem;
+  color: var(--gray-400);
+  margin-bottom: 1.5rem;
+}
+
+.emptyState h3 {
+  color: var(--dark-color);
+  margin-bottom: 1rem;
+  font-size: 1.5rem;
+}
+
+.emptyState p {
+  color: var(--gray-600);
+  max-width: 400px;
+}
+
+/* Grid de estudiantes */
+.studentsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+  gap: 1.5rem;
+}
+
+.studentCard {
+  background: var(--white);
+  border-radius: var(--border-radius);
+  box-shadow: var(--shadow-md);
+  overflow: hidden;
+  transition: var(--transition);
+  border: 1px solid var(--gray-200);
+}
+
+.studentCard:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-lg);
+  border-color: var(--primary-color);
+}
+
+.studentHeader {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1.5rem;
+  background: var(--gray-50);
+  border-bottom: 1px solid var(--gray-200);
+}
+
+.studentAvatar {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background: var(--gradient-primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  color: var(--white);
+  flex-shrink: 0;
+}
+
+.leaderIcon {
+  color: var(--warning-color);
+  background: var(--gradient-warning);
+}
+
+.studentIcon {
+  color: var(--white);
+}
+
+.studentName {
+  flex: 1;
+}
+
+.studentName h3 {
+  margin: 0 0 0.5rem 0;
+  color: var(--dark-color);
+  font-size: 1.2rem;
+  font-weight: 600;
+  line-height: 1.3;
+}
+
+.leaderBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  background: var(--gradient-warning);
+  color: var(--dark-color);
+  padding: 0.25rem 0.75rem;
+  border-radius: 15px;
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+/* Detalles del estudiante */
+.studentDetails {
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.studentDetail {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+}
+
+.detailIcon {
+  color: var(--primary-color);
+  font-size: 1.1rem;
+  margin-top: 0.25rem;
+  flex-shrink: 0;
+}
+
+.detailContent {
+  flex: 1;
+  min-width: 0;
+}
+
+.detailLabel {
+  display: block;
+  font-size: 0.85rem;
+  color: var(--gray-500);
+  font-weight: 500;
+  margin-bottom: 0.25rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.detailValue {
+  display: block;
+  color: var(--dark-color);
+  font-weight: 500;
+  word-break: break-word;
+}
+
+/* Acciones del estudiante */
+.studentActions {
+  display: flex;
+  gap: 0.5rem;
+  padding: 0 1.5rem 1.5rem;
+  justify-content: flex-end;
+}
+
+.actionButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  background: var(--gray-200);
+  color: var(--gray-600);
+  border-radius: 50%;
+  text-decoration: none;
+  transition: var(--transition);
+}
+
+.actionButton:hover {
+  background: var(--primary-color);
+  color: var(--white);
+  transform: translateY(-2px);
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+  .classStudentsContainer {
+    padding: 1rem 0.75rem;
+  }
+  
+  .pageHeader {
+    margin-bottom: 1.5rem;
+  }
+  
+  .headerContent {
+    padding: 1.5rem;
+  }
+  
+  .pageTitle {
+    font-size: 2rem;
+  }
+  
+  .statsSection {
+    padding: 1rem 1.5rem;
+  }
+  
+  .studentsGrid {
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 1rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .classStudentsContainer {
+    padding: 1rem 0.5rem;
+  }
+  
+  .pageTitle {
+    font-size: 1.8rem;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  
+  .className {
+    font-size: 1.5rem;
+  }
+  
+  .classMetadata {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  
+  .statsSection {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0.75rem;
+  }
+  
+  .controlsSection {
+    padding: 1rem;
+  }
+  
+  .filtersContainer {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  
+  .sortButtons {
+    margin-left: 0;
+    justify-content: center;
+  }
+  
+  .studentsGrid {
+    grid-template-columns: 1fr;
+  }
+  
+  .studentHeader {
+    padding: 1rem;
+  }
+  
+  .studentDetails {
+    padding: 1rem;
+  }
+  
+  .studentActions {
+    padding: 0 1rem 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .classStudentsContainer {
+    padding: 0.5rem 0.25rem;
+  }
+  
+  .headerContent {
+    padding: 1rem;
+  }
+  
+  .statsSection {
+    grid-template-columns: 1fr;
+    padding: 1rem;
+  }
+  
+  .studentAvatar {
+    width: 50px;
+    height: 50px;
+    font-size: 1.2rem;
+  }
+  
+  .studentName h3 {
+    font-size: 1.1rem;
+  }
+  
+  .sortButtons {
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+  
+  .sortButton {
+    justify-content: center;
+  }
+}
+
+/* Animaciones */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.studentCard {
+  animation: fadeInUp 0.5s ease-out;
+}
+
+.studentCard:nth-child(1) { animation-delay: 0.05s; }
+.studentCard:nth-child(2) { animation-delay: 0.1s; }
+.studentCard:nth-child(3) { animation-delay: 0.15s; }
+.studentCard:nth-child(4) { animation-delay: 0.2s; }
+.studentCard:nth-child(5) { animation-delay: 0.25s; }
+.studentCard:nth-child(6) { animation-delay: 0.3s; }
+.studentCard:nth-child(7) { animation-delay: 0.35s; }
+.studentCard:nth-child(8) { animation-delay: 0.4s; }
+
+/* Estados de hover mejorados */
+.studentCard:hover .studentAvatar {
+  transform: scale(1.05);
+}
+
+.studentCard:hover .actionButton {
+  background: var(--gray-300);
+}
+
+/* Efectos de focus para accesibilidad */
+.searchInput:focus,
+.filterButton:focus,
+.sortButton:focus,
+.actionButton:focus,
+.backButton:focus,
+.retryButton:focus {
+  outline: 2px solid var(--primary-color);
+  outline-offset: 2px;
+} 
