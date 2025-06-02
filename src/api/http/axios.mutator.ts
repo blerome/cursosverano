@@ -1,4 +1,4 @@
-import { AxiosRequestConfig } from 'axios';
+import { AxiosRequestConfig, AxiosResponse } from 'axios';
 import { axiosInstance } from './axios.config';
 
 interface MutatorParams extends AxiosRequestConfig {
@@ -6,12 +6,12 @@ interface MutatorParams extends AxiosRequestConfig {
   method: string;
 }
 
-export const axiosMutator = ({ url, method, ...config }: MutatorParams) => {
+export const axiosMutator = <T = any>({ url, method, ...config }: MutatorParams): Promise<AxiosResponse<T>> => {
   return axiosInstance({
     url,
     method,
     ...config,
-  });
+  }) as Promise<AxiosResponse<T>>;
 };
 
 export default axiosMutator;

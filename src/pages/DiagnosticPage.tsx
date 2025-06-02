@@ -1,103 +1,125 @@
-import React, { useState } from 'react';
-import { useAllCareersAndSubjects } from '../hooks/useAllCareersAndSubjects';
-import { useGetAuthProfile } from '../generated/api/auth/auth';
-import { useGetStudents } from '../generated/api/students/students';
-import { useMsal } from '@azure/msal-react';
+import React from 'react';
+import { useAuth } from '../contexts/AuthContext';
 import styles from './DiagnosticPage.module.css';
 
 const DiagnosticPage: React.FC = () => {
-  const { accounts } = useMsal();
-  const { data: profileData, isLoading: profileLoading, error: profileError } = useGetAuthProfile();
-  const userData = profileData?.data;
-
-  const { 
-    data: studentsData, 
-    isLoading: studentsLoading, 
-    error: studentsError 
-  } = useGetStudents(
-    { userId: userData?.id_user || 0 },
-    {
-      query: {
-        enabled: !!userData?.id_user,
-        retry: false,
-      },
-    }
-  );
-
-  const { 
-    careers, 
-    subjects: allSubjects,
-    isLoading: careersAndSubjectsLoading, 
-    careersError, 
-    subjectsError 
-  } = useAllCareersAndSubjects();
+  const { user, userType, isAuthenticated } = useAuth();
 
   return (
-    <div style={{ padding: '20px', fontFamily: 'Arial, sans-serif' }}>
-      <h1>Página de Diagnóstico</h1>
-      
-      <div style={{ marginBottom: '20px', padding: '15px', border: '1px solid #ccc', borderRadius: '5px' }}>
-        <h2>🔐 Autenticación MSAL</h2>
-        <p><strong>Cuentas conectadas:</strong> {accounts?.length || 0}</p>
-        {accounts && accounts.length > 0 && (
-          <p><strong>Usuario actual:</strong> {accounts[0].username}</p>
-        )}
-      </div>
+    <div className={styles.diagnosticContainer}>
+      <div className={styles.diagnosticCard}>
+        <h1 className={styles.title}>Página de Diagnóstico</h1>
+        <p className={styles.subtitle}>Información del sistema y estado de la aplicación</p>
 
-      <div style={{ marginBottom: '20px', padding: '15px', border: '1px solid #ccc', borderRadius: '5px' }}>
-        <h2>👤 Perfil de Usuario</h2>
-        <p><strong>Estado:</strong> {profileLoading ? '⏳ Cargando...' : profileError ? '❌ Error' : '✅ Cargado'}</p>
-        {profileError && <p style={{ color: 'red' }}><strong>Error:</strong> {JSON.stringify(profileError)}</p>}
-        {userData && (
-          <div>
-            <p><strong>ID:</strong> {userData.id_user}</p>
-            <p><strong>Nombre:</strong> {userData.name}</p>
-            <p><strong>Email:</strong> {userData.email}</p>
+        <div className={styles.section}>
+          <h2 className={styles.sectionTitle}>Estado de Autenticación</h2>
+          <div className={styles.infoGrid}>
+            <div className={styles.infoItem}>
+              <span className={styles.label}>¿Autenticado?:</span>
+              <span className={`${styles.value} ${isAuthenticated ? styles.success : styles.error}`}>
+                {isAuthenticated ? '✅ Sí' : '❌ No'}
+              </span>
+            </div>
+            <div className={styles.infoItem}>
+              <span className={styles.label}>Tipo de Usuario:</span>
+              <span className={styles.value}>
+                {userType || 'No definido'}
+              </span>
+            </div>
+            <div className={styles.infoItem}>
+              <span className={styles.label}>Nombre de Usuario:</span>
+              <span className={styles.value}>
+                {user?.name || 'No disponible'}
+              </span>
+            </div>
+            <div className={styles.infoItem}>
+              <span className={styles.label}>Email:</span>
+              <span className={styles.value}>
+                {user?.email || 'No disponible'}
+              </span>
+            </div>
+          </div>
+        </div>
+
+        {user?.type === 'student' && (
+          <div className={styles.section}>
+            <h2 className={styles.sectionTitle}>Información de Estudiante</h2>
+            <div className={styles.infoGrid}>
+              <div className={styles.infoItem}>
+                <span className={styles.label}>ID de Usuario:</span>
+                <span className={styles.value}>{user.id_user}</span>
+              </div>
+              <div className={styles.infoItem}>
+                <span className={styles.label}>Apellidos:</span>
+                <span className={styles.value}>
+                  {user.paternal_surname} {user.maternal_surname}
+                </span>
+              </div>
+              <div className={styles.infoItem}>
+                <span className={styles.label}>OID (Microsoft):</span>
+                <span className={styles.value}>{user.oid}</span>
+              </div>
+              {user.studentData && (
+                <>
+                  <div className={styles.infoItem}>
+                    <span className={styles.label}>Número de Control:</span>
+                    <span className={styles.value}>{user.studentData.control_number}</span>
+                  </div>
+                  <div className={styles.infoItem}>
+                    <span className={styles.label}>Carrera:</span>
+                    <span className={styles.value}>{user.studentData.career}</span>
+                  </div>
+                  <div className={styles.infoItem}>
+                    <span className={styles.label}>Teléfono:</span>
+                    <span className={styles.value}>{user.studentData.phone}</span>
+                  </div>
+                </>
+              )}
+            </div>
           </div>
         )}
-      </div>
 
-      <div style={{ marginBottom: '20px', padding: '15px', border: '1px solid #ccc', borderRadius: '5px' }}>
-        <h2>🎓 Datos de Estudiante</h2>
-        <p><strong>Estado:</strong> {studentsLoading ? '⏳ Cargando...' : studentsError ? '❌ Error (normal si no es estudiante)' : '✅ Cargado'}</p>
-        {studentsError && <p style={{ color: 'orange' }}><strong>Error:</strong> {JSON.stringify(studentsError)}</p>}
-        {studentsData?.data && (
-          <div>
-            <p><strong>ID Estudiante:</strong> {studentsData.data.id_student}</p>
-            <p><strong>Número de Control:</strong> {studentsData.data.control_number}</p>
-            <p><strong>Carrera:</strong> {studentsData.data.career}</p>
-            <p><strong>ID Carrera:</strong> {studentsData.data.id_career}</p>
+        {user?.type === 'staff' && (
+          <div className={styles.section}>
+            <h2 className={styles.sectionTitle}>Información de Personal</h2>
+            <div className={styles.infoGrid}>
+              <div className={styles.infoItem}>
+                <span className={styles.label}>ID:</span>
+                <span className={styles.value}>{user.id}</span>
+              </div>
+              <div className={styles.infoItem}>
+                <span className={styles.label}>Rol:</span>
+                <span className={styles.value}>{user.role}</span>
+              </div>
+              <div className={styles.infoItem}>
+                <span className={styles.label}>Estado:</span>
+                <span className={`${styles.value} ${user.isActive ? styles.success : styles.error}`}>
+                  {user.isActive ? '✅ Activo' : '❌ Inactivo'}
+                </span>
+              </div>
+            </div>
           </div>
         )}
-      </div>
 
-      <div style={{ marginBottom: '20px', padding: '15px', border: '1px solid #ccc', borderRadius: '5px' }}>
-        <h2>🏫 Carreras</h2>
-        <p><strong>Estado:</strong> {careersAndSubjectsLoading ? '⏳ Cargando...' : careersError ? '❌ Error' : '✅ Cargado'}</p>
-        {careersError && <p style={{ color: 'red' }}><strong>Error:</strong> {JSON.stringify(careersError)}</p>}
-        {careers && careers.length > 0 && (
-          <p><strong>Carreras disponibles:</strong> {careers.length}</p>
-        )}
-      </div>
-
-      <div style={{ marginBottom: '20px', padding: '15px', border: '1px solid #ccc', borderRadius: '5px' }}>
-        <h2>📚 Materias</h2>
-        <p><strong>Estado:</strong> {careersAndSubjectsLoading ? '⏳ Cargando...' : subjectsError ? '❌ Error' : '✅ Cargado'}</p>
-        {subjectsError && <p style={{ color: 'red' }}><strong>Error:</strong> {JSON.stringify(subjectsError)}</p>}
-        {allSubjects && allSubjects.length > 0 && (
-          <p><strong>Materias disponibles:</strong> {allSubjects.length}</p>
-        )}
-      </div>
-
-      <div style={{ marginTop: '30px', padding: '15px', backgroundColor: '#f0f0f0', borderRadius: '5px' }}>
-        <h3>📋 Resumen del Estado</h3>
-        <ul>
-          <li>Autenticación: {accounts && accounts.length > 0 ? '✅ OK' : '❌ No autenticado'}</li>
-          <li>Perfil: {userData ? '✅ OK' : '❌ No cargado'}</li>
-          <li>Estudiante: {studentsData?.data ? '✅ Registrado' : '⚠️ No registrado como estudiante'}</li>
-          <li>Carreras: {careers.length > 0 ? '✅ OK' : '❌ No cargadas'}</li>
-          <li>Materias: {allSubjects.length > 0 ? '✅ OK' : '❌ No cargadas'}</li>
-        </ul>
+        <div className={styles.section}>
+          <h2 className={styles.sectionTitle}>Información del Sistema</h2>
+          <div className={styles.infoGrid}>
+            <div className={styles.infoItem}>
+              <span className={styles.label}>Versión de React:</span>
+              <span className={styles.value}>{React.version}</span>
+            </div>
+            <div className={styles.infoItem}>
+              <span className={styles.label}>Timestamp:</span>
+              <span className={styles.value}>{new Date().toLocaleString()}</span>
+            </div>
+            <div className={styles.infoItem}>
+              <span className={styles.label}>User Agent:</span>
+              <span className={styles.value} title={navigator.userAgent}>
+                {navigator.userAgent.substring(0, 50)}...
+              </span>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   );

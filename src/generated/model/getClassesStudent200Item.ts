@@ -5,17 +5,17 @@
  * ITCancún summer API
  * OpenAPI spec version: 1.0
  */
+import type { GetClassesStudent200ItemSubjects } from './getClassesStudent200ItemSubjects';
 import type { GetClassesStudent200ItemDescription } from './getClassesStudent200ItemDescription';
 import type { GetClassesStudent200ItemStatus } from './getClassesStudent200ItemStatus';
 import type { GetClassesStudent200ItemImage } from './getClassesStudent200ItemImage';
-import type { GetClassesStudent200ItemSubjects } from './getClassesStudent200ItemSubjects';
 
 export type GetClassesStudent200Item = {
+  id_subject: number;
+  Subjects: GetClassesStudent200ItemSubjects;
   description: GetClassesStudent200ItemDescription;
   status: GetClassesStudent200ItemStatus;
   id_class: number;
   max_students: number;
   image: GetClassesStudent200ItemImage;
-  id_subject: number;
-  Subjects: GetClassesStudent200ItemSubjects;
 };

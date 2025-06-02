@@ -1,16 +1,22 @@
 import React, { useState, useEffect } from 'react';
 import styles from './MenuPrincipal.module.css';
-import { FaHome, FaGraduationCap, FaUniversity, FaLaptopCode, FaUserPlus } from 'react-icons/fa';
+import { FaHome, FaGraduationCap, FaUniversity, FaLaptopCode, FaUserPlus, FaUserGraduate, FaChalkboardTeacher } from 'react-icons/fa';
 import RegulationDropdown from './RegulationDropdown';
 import PlatformsDropdown from './PlatformsDropdown';
 import HamburgerIcon from './HamburgerIcon';
 import { LoginButton } from '../../auth/LoginButton';
 import { LogoutButton } from '../../auth/LogoutButton';
+import { useMsal } from '@azure/msal-react';
+import { Link } from 'react-router-dom';
 
 const MenuPrincipal: React.FC = () => {
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
   const [isMobile, setIsMobile] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
+  
+  // Detectar si el usuario está autenticado
+  const { accounts } = useMsal();
+  const isAuthenticated = accounts.length > 0;
 
   useEffect(() => {
     const handleResize = () => {
@@ -111,8 +117,19 @@ const MenuPrincipal: React.FC = () => {
               )}
             </li>
             
+            {/* Botón del Portal del Estudiante - Solo visible si está autenticado */}
+            {isAuthenticated && (
+              <li onClick={closeAll} className={styles.studentPortalItem}>
+                <Link to="/profile" className={styles.studentPortalLink}>
+                  <FaUserGraduate className={styles.icon} /> 
+                  <span>Portal Estudiante</span>
+                  <div className={styles.portalBadge}></div>
+                </Link>
+              </li>
+            )}
+            
             <li onClick={closeAll}>
-              <LoginButton />
+              {isAuthenticated ? <LogoutButton /> : <LoginButton />}
             </li>
             
           </ul>

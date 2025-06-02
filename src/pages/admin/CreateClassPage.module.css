@@ -15,120 +15,141 @@
   box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
   padding: 2.5rem;
   width: 100%;
-  max-width: 900px;
+  max-width: 1000px;
   margin-top: 2rem;
 }
 
 /* Header */
-.header {
+.createClassHeader {
   text-align: center;
-  margin-bottom: 2rem;
+  margin-bottom: 3rem;
 }
 
-.title {
+.headerIcon {
+  font-size: 3rem;
+  color: #667eea;
+  margin-bottom: 1rem;
+}
+
+.createClassTitle {
   font-size: 2.5rem;
   font-weight: 700;
   background: linear-gradient(135deg, #667eea, #764ba2);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
-  margin-bottom: 0.5rem;
+  margin: 0 0 0.5rem 0;
 }
 
-.subtitle {
+.createClassSubtitle {
   color: #666;
   font-size: 1.1rem;
   margin: 0;
+}
+
+/* Formulario */
+.createClassForm {
+  display: flex;
+  flex-direction: column;
+  gap: 2.5rem;
 }
 
 /* Información del estudiante */
 .studentInfo {
   background: linear-gradient(135deg, #f8f9ff, #e8f0ff);
   border-radius: 15px;
-  padding: 1.5rem;
-  margin-bottom: 2rem;
+  padding: 2rem;
   border: 1px solid rgba(102, 126, 234, 0.1);
 }
 
-.studentInfo h3 {
+.sectionTitle {
   color: #333;
-  margin-bottom: 1rem;
-  font-size: 1.3rem;
+  margin: 0 0 1.5rem 0;
+  font-size: 1.4rem;
   font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  border-bottom: 2px solid rgba(102, 126, 234, 0.2);
+  padding-bottom: 0.75rem;
 }
 
-.infoGrid {
+.sectionTitle svg {
+  color: #667eea;
+  font-size: 1.2rem;
+}
+
+.studentDetails {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  gap: 1rem;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.5rem;
 }
 
-.infoItem {
+.studentDetailItem {
   display: flex;
   flex-direction: column;
-  gap: 0.3rem;
+  gap: 0.5rem;
 }
 
-.infoItem label {
+.detailLabel {
   font-weight: 600;
   color: #555;
   font-size: 0.9rem;
 }
 
-.infoItem span {
+.detailValue {
   color: #333;
   font-size: 1rem;
-  padding: 0.5rem;
+  padding: 0.75rem;
   background: rgba(255, 255, 255, 0.8);
   border-radius: 8px;
   border: 1px solid rgba(102, 126, 234, 0.2);
 }
 
-/* Formulario */
-.classForm {
-  display: flex;
-  flex-direction: column;
-  gap: 2rem;
-}
-
+/* Secciones del formulario */
 .formSection {
   background: rgba(248, 249, 255, 0.5);
   border-radius: 15px;
-  padding: 1.5rem;
+  padding: 2rem;
   border: 1px solid rgba(102, 126, 234, 0.1);
 }
 
-.formSection h3 {
-  color: #333;
-  margin-bottom: 1.5rem;
-  font-size: 1.3rem;
-  font-weight: 600;
-  border-bottom: 2px solid rgba(102, 126, 234, 0.2);
-  padding-bottom: 0.5rem;
-}
-
-.formRow {
+/* Grupos de formulario */
+.formGroup {
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
-  margin-bottom: 1.5rem;
+  gap: 0.75rem;
+  margin-bottom: 2rem;
+}
+
+.formGroup:last-child {
+  margin-bottom: 0;
 }
 
 .formLabel {
   font-weight: 600;
   color: #333;
   font-size: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.required {
+  color: #e74c3c;
+  font-weight: 700;
 }
 
 .formInput,
 .formSelect,
 .formTextarea {
-  padding: 0.75rem 1rem;
+  padding: 1rem;
   border: 2px solid rgba(102, 126, 234, 0.2);
   border-radius: 10px;
   font-size: 1rem;
   transition: all 0.3s ease;
   background: rgba(255, 255, 255, 0.9);
+  font-family: inherit;
 }
 
 .formInput:focus,
@@ -148,38 +169,37 @@
 
 .formTextarea {
   resize: vertical;
-  min-height: 80px;
+  min-height: 100px;
+  line-height: 1.5;
 }
 
-.helpText {
+.formHint {
   color: #666;
   font-size: 0.85rem;
-  font-style: italic;
-  margin-top: 0.25rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
 }
 
-/* Horarios */
-.timeRow {
+.formHint svg {
+  color: #667eea;
+  font-size: 0.9rem;
+}
+
+/* Horarios - CORREGIDO PARA MOSTRAR EN FILA */
+.timeInputs {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 1.5rem;
-}
-
-.timeGroup {
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
+  gap: 2rem;
+  margin-bottom: 2rem;
 }
 
 /* Días de la semana */
-.daysSection {
-  margin-top: 1rem;
-}
-
-.daysGrid {
+.daysSelector {
   display: grid;
   grid-template-columns: repeat(7, 1fr);
-  gap: 0.5rem;
+  gap: 0.75rem;
   margin: 1rem 0;
 }
 
@@ -194,21 +214,23 @@
   background: rgba(255, 255, 255, 0.9);
   cursor: pointer;
   transition: all 0.3s ease;
-  min-height: 80px;
+  min-height: 85px;
+  font-family: inherit;
 }
 
 .dayButton:hover {
   border-color: #667eea;
   background: rgba(102, 126, 234, 0.05);
   transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.2);
 }
 
-.dayButton.selected {
-  background: linear-gradient(135deg, #667eea, #764ba2);
+.dayButton.daySelected {
   border-color: #667eea;
+  background: linear-gradient(135deg, #667eea, #764ba2);
   color: white;
   transform: translateY(-2px);
-  box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3);
+  box-shadow: 0 6px 20px rgba(102, 126, 234, 0.3);
 }
 
 .dayShort {
@@ -219,6 +241,7 @@
 
 .dayFull {
   font-size: 0.8rem;
+  font-weight: 500;
   opacity: 0.8;
 }
 
@@ -227,30 +250,41 @@
   display: flex;
   justify-content: center;
   margin-top: 2rem;
+  padding-top: 2rem;
+  border-top: 2px solid rgba(102, 126, 234, 0.1);
 }
 
 .submitButton {
   background: linear-gradient(135deg, #667eea, #764ba2);
   color: white;
   border: none;
-  padding: 1rem 3rem;
-  border-radius: 50px;
+  padding: 1.25rem 3rem;
+  border-radius: 12px;
   font-size: 1.1rem;
   font-weight: 600;
   cursor: pointer;
   transition: all 0.3s ease;
-  box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3);
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-family: inherit;
+  min-width: 200px;
+  justify-content: center;
 }
 
 .submitButton:hover:not(:disabled) {
-  transform: translateY(-2px);
-  box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+  transform: translateY(-3px);
+  box-shadow: 0 10px 25px rgba(102, 126, 234, 0.4);
 }
 
 .submitButton:disabled {
-  opacity: 0.6;
+  opacity: 0.7;
   cursor: not-allowed;
   transform: none;
+}
+
+.submitButton svg {
+  font-size: 1.1rem;
 }
 
 /* Estados de carga y error */
@@ -260,69 +294,67 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  min-height: 60vh;
+  min-height: 400px;
   text-align: center;
-  color: white;
+  color: black;
 }
 
-.spinner {
-  width: 50px;
-  height: 50px;
-  border: 4px solid rgba(255, 255, 255, 0.3);
-  border-top: 4px solid white;
-  border-radius: 50%;
-  animation: spin 1s linear infinite;
+.loadingContainer svg {
+  font-size: 3rem;
+  color: #667eea;
   margin-bottom: 1rem;
 }
 
-@keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
+.loadingContainer p,
+.errorContainer p {
+  font-size: 1.1rem;
+  margin: 0;
 }
 
 .errorContainer h2 {
-  color: white;
+  color: black;
   margin-bottom: 1rem;
   font-size: 2rem;
 }
 
-.errorContainer p {
-  color: rgba(255, 255, 255, 0.9);
-  font-size: 1.1rem;
-  margin-bottom: 0.5rem;
+.errorIcon {
+  font-size: 3rem;
+  color: black;
+  margin-bottom: 1rem;
 }
 
-/* Responsive */
+/* Responsive Design */
 @media (max-width: 768px) {
   .createClassContainer {
     padding: 1rem;
   }
 
   .createClassCard {
-    padding: 1.5rem;
+    padding: 2rem;
     margin-top: 1rem;
   }
 
-  .title {
+  .createClassTitle {
     font-size: 2rem;
   }
 
-  .subtitle {
+  .createClassSubtitle {
     font-size: 1rem;
   }
 
-  .infoGrid {
-    grid-template-columns: 1fr;
-  }
-
-  .timeRow {
+  .studentDetails {
     grid-template-columns: 1fr;
     gap: 1rem;
   }
 
-  .daysGrid {
+  .timeInputs {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+
+  .daysSelector {
     grid-template-columns: repeat(4, 1fr);
-    gap: 0.75rem;
+    gap: 0.5rem;
   }
 
   .dayButton {
@@ -339,13 +371,34 @@
   }
 
   .submitButton {
-    padding: 0.875rem 2rem;
+    padding: 1rem 2rem;
     font-size: 1rem;
+    min-width: 180px;
+  }
+
+  .formSection {
+    padding: 1.5rem;
+  }
+
+  .studentInfo {
+    padding: 1.5rem;
   }
 }
 
 @media (max-width: 480px) {
-  .daysGrid {
+  .createClassCard {
+    padding: 1.5rem;
+  }
+
+  .createClassTitle {
+    font-size: 1.8rem;
+  }
+
+  .headerIcon {
+    font-size: 2.5rem;
+  }
+
+  .daysSelector {
     grid-template-columns: repeat(3, 1fr);
   }
 
@@ -360,5 +413,27 @@
 
   .dayFull {
     font-size: 0.65rem;
+  }
+
+  .submitButton {
+    padding: 1rem 1.5rem;
+    font-size: 0.95rem;
+    min-width: 160px;
+  }
+
+  .timeInputs {
+    gap: 1rem;
+  }
+
+  .formSection {
+    padding: 1rem;
+  }
+
+  .studentInfo {
+    padding: 1rem;
+  }
+
+  .sectionTitle {
+    font-size: 1.2rem;
   }
 } 

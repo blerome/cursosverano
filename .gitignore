@@ -12,6 +12,25 @@ dist
 dist-ssr
 *.local
 
+# Archivos compilados que no deben estar en src/ (excluyendo generated y scripts)
+# Evitar archivos JS compilados de TypeScript en las páginas y componentes
+src/pages/**/*.js
+src/components/**/*.js
+src/contexts/**/*.js
+src/hooks/**/*.js
+src/types/**/*.js
+src/auth/**/*.js
+src/core/**/*.js
+src/common/**/*.js
+src/api/**/*.js
+
+# Permitir archivos JS específicos que son legítimos
+!src/**/*.config.js
+!src/scripts/*.js
+
+# Map files
+src/**/*.js.map
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json

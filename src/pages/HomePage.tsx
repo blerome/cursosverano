@@ -14,7 +14,8 @@ import {
   faQuoteLeft,
   faMapMarkerAlt,
   faPhone,
-  faEnvelope
+  faEnvelope,
+  faSignInAlt
 } from '@fortawesome/free-solid-svg-icons';
 import styles from './HomePage.module.css';
 
@@ -189,9 +190,9 @@ const HomePage: React.FC = () => {
                 <FontAwesomeIcon icon={faCalendarAlt} />
                 Ver Cursos Disponibles
               </Link>
-              <Link to="/profile" className={styles.ctaSecondaryButton}>
-                <FontAwesomeIcon icon={faUsers} />
-                Crear Cuenta
+              <Link to="/login" className={styles.ctaSecondaryButton}>
+                <FontAwesomeIcon icon={faSignInAlt} />
+                Iniciar Sesión
               </Link>
             </div>
           </div>
