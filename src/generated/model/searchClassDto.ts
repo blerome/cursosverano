@@ -14,6 +14,7 @@ export interface SearchClassDto {
   studentId?: number;
   clave?: string;
   status?: SearchClassDtoStatus;
+  period?: number;
   credits?: number;
   page?: number;
   pageSize?: number;

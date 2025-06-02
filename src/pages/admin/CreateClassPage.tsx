@@ -24,10 +24,15 @@ import styles from './CreateClassPage.module.css';
 interface ClassFormData {
   subjectId: number;
   clave: string;
+  period: number;
   description: string;
   startTime: string;
   endTime: string;
   selectedDays: number[];
+  // Campos opcionales para estudiante responsable (cuando admin crea la clase)
+  responsibleStudentId?: string;
+  responsibleControlNumber?: string;
+  responsiblePhone?: string;
 }
 
 interface ApiError {
@@ -46,6 +51,9 @@ const DAYS_OF_WEEK = [
   { id: 6, name: 'Sábado', shortName: 'S' },
   { id: 7, name: 'Domingo', shortName: 'D' },
 ];
+
+// Años académicos disponibles para cursos de verano
+const ACADEMIC_YEARS = [2024, 2025, 2026, 2027, 2028];
 
 const CreateClassPage: React.FC = () => {
   const { user, userType, isAuthenticated } = useAuth();
@@ -70,37 +78,32 @@ const CreateClassPage: React.FC = () => {
     );
   }
 
-  // Verificar que sea un estudiante
-  if (!isStudent) {
+  // Determinar el tipo de usuario
+  const isAdmin = userType === 'staff' && user?.type === 'staff';
+  const isValidStudent = isStudent && hasStudentProfile && studentData;
+
+  // Verificar que sea un estudiante válido O un administrador
+  if (!isValidStudent && !isAdmin) {
     return (
       <div className={styles.errorContainer}>
         <FontAwesomeIcon icon={faExclamationTriangle} className={styles.errorIcon} />
         <h2>Acceso restringido</h2>
-        <p>Solo los estudiantes registrados pueden crear clases.</p>
-        <p>Ve a tu perfil y regístrate como estudiante primero.</p>
+        <p>Solo los estudiantes registrados o administradores pueden crear clases.</p>
+        {isStudent && (
+          <p>Ve a tu <a href="/profile" style={{ color: '#667eea', textDecoration: 'underline' }}>perfil</a> y asegúrate de completar tu registro como estudiante.</p>
+        )}
       </div>
     );
   }
 
-  // Verificar que el perfil de estudiante esté completo
-  if (!hasStudentProfile || !studentData) {
-    return (
-      <div className={styles.errorContainer}>
-        <FontAwesomeIcon icon={faExclamationTriangle} className={styles.errorIcon} />
-        <h2>Perfil incompleto</h2>
-        <p>No se pudieron cargar los datos del estudiante.</p>
-        <p>Ve a tu <a href="/profile" style={{ color: '#667eea', textDecoration: 'underline' }}>perfil</a> y asegúrate de completar tu registro como estudiante.</p>
-      </div>
-    );
-  }
-
-  const currentStudentData = studentData;
-
-  // Obtener materias filtradas por la carrera del estudiante
+  // Para estudiantes: obtener materias filtradas por su carrera
+  // Para admins: obtener todas las materias (sin filtro por carrera)
+  const careerId = isValidStudent ? studentData?.id_career : undefined;
+  
   const {
     subjects: subjectsData,
     isLoading: subjectsLoading,
-  } = useAllCareersAndSubjects(currentStudentData?.id_career);
+  } = useAllCareersAndSubjects(careerId);
 
   const createClassMutation = usePostClasses();
   const { popup, showError, showSuccess, hidePopup } = usePopup();
@@ -108,10 +111,15 @@ const CreateClassPage: React.FC = () => {
   const [formData, setFormData] = useState<ClassFormData>({
     subjectId: 0,
     clave: '',
+    period: 0,
     description: '',
     startTime: '',
     endTime: '',
     selectedDays: [],
+    // Campos adicionales para cuando admin crea la clase
+    responsibleStudentId: '',
+    responsibleControlNumber: '',
+    responsiblePhone: '',
   });
 
   // Generar clave automática cuando se selecciona una materia
@@ -135,7 +143,7 @@ const CreateClassPage: React.FC = () => {
     const { name, value } = e.target;
     setFormData(prev => ({
       ...prev,
-      [name]: name === 'subjectId' ? parseInt(value) : value,
+      [name]: name === 'subjectId' || name === 'period' ? parseInt(value) : value,
     }));
   };
 
@@ -149,7 +157,7 @@ const CreateClassPage: React.FC = () => {
   };
 
   const validateForm = (): boolean => {
-    if (!formData.subjectId || !formData.clave || !formData.startTime || !formData.endTime) {
+    if (!formData.subjectId || !formData.clave || !formData.period || !formData.startTime || !formData.endTime) {
       showError(
         'Campos requeridos',
         'Por favor, completa todos los campos obligatorios.'
@@ -195,7 +203,8 @@ const CreateClassPage: React.FC = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (!currentStudentData) {
+    // Para estudiantes: validar que tengan datos
+    if (isValidStudent && !studentData) {
       showError(
         'Error de estudiante',
         'No se encontraron datos de estudiante. Debes estar registrado como estudiante para crear una clase.'
@@ -218,32 +227,54 @@ const CreateClassPage: React.FC = () => {
       const classData: CreateClassDto = {
         subjectId: formData.subjectId,
         clave: formData.clave,
+        period: formData.period,
         description: formData.description,
-        responsibleStudent: {
-          studentId: currentStudentData.id_student,
-          controlNumber: currentStudentData.control_number || '',
-          studentPhone: currentStudentData.phone || '',
-        },
         schedule,
       };
+
+      // Solo agregar responsibleStudent si es un estudiante creando la clase
+      // O si es un admin que especificó datos del estudiante responsable
+      if (isValidStudent && studentData) {
+        classData.responsibleStudent = {
+          studentId: studentData.id_student,
+          controlNumber: studentData.control_number || '',
+          studentPhone: studentData.phone || '',
+        };
+      } else if (isAdmin && formData.responsibleStudentId) {
+        // Admin especificó un estudiante responsable
+        classData.responsibleStudent = {
+          studentId: parseInt(formData.responsibleStudentId),
+          controlNumber: formData.responsibleControlNumber || '',
+          studentPhone: formData.responsiblePhone || '',
+        };
+      }
+      // Si es admin y no especificó estudiante responsable, responsibleStudent será undefined (opcional)
 
       await createClassMutation.mutateAsync({
         data: classData,
       });
 
+      const successMessage = isAdmin 
+        ? 'La clase ha sido creada exitosamente y está disponible para inscripciones.'
+        : 'Tu clase ha sido enviada para revisión del administrador. Recibirás una notificación cuando sea aprobada.';
+
       showSuccess(
         '¡Clase creada exitosamente!',
-        'Tu clase ha sido enviada para revisión del administrador. Recibirás una notificación cuando sea aprobada.'
+        successMessage
       );
 
       // Limpiar el formulario
       setFormData({
         subjectId: 0,
         clave: '',
+        period: 0,
         description: '',
         startTime: '',
         endTime: '',
         selectedDays: [],
+        responsibleStudentId: '',
+        responsibleControlNumber: '',
+        responsiblePhone: '',
       });
 
     } catch (error: any) {
@@ -275,33 +306,103 @@ const CreateClassPage: React.FC = () => {
         </div>
 
         <form onSubmit={handleSubmit} className={styles.createClassForm}>
-          {/* Información del estudiante */}
+          {/* Información del usuario */}
           <div className={styles.studentInfo}>
             <h3 className={styles.sectionTitle}>
               <FontAwesomeIcon icon={faGraduationCap} />
-              Información del Estudiante
+              {isAdmin ? 'Información del Administrador' : 'Información del Estudiante'}
             </h3>
             <div className={styles.studentDetails}>
               <div className={styles.studentDetailItem}>
-                <span className={styles.detailLabel}>Estudiante:</span>
+                <span className={styles.detailLabel}>{isAdmin ? 'Administrador' : 'Estudiante'}:</span>
                 <span className={styles.detailValue}>
-                  {userData?.name} {userData?.paternal_surname}
+                  {isAdmin ? user?.name : `${userData?.name} ${userData?.paternal_surname}`}
                 </span>
               </div>
-              <div className={styles.studentDetailItem}>
-                <span className={styles.detailLabel}>Número de Control:</span>
-                <span className={styles.detailValue}>
-                  {currentStudentData?.control_number || 'No disponible'}
-                </span>
-              </div>
-              <div className={styles.studentDetailItem}>
-                <span className={styles.detailLabel}>Carrera:</span>
-                <span className={styles.detailValue}>
-                  {currentStudentData?.career || 'No disponible'}
-                </span>
-              </div>
+              {isValidStudent && (
+                <>
+                  <div className={styles.studentDetailItem}>
+                    <span className={styles.detailLabel}>Número de Control:</span>
+                    <span className={styles.detailValue}>
+                      {studentData?.control_number || 'No disponible'}
+                    </span>
+                  </div>
+                  <div className={styles.studentDetailItem}>
+                    <span className={styles.detailLabel}>Carrera:</span>
+                    <span className={styles.detailValue}>
+                      {studentData?.career || 'No disponible'}
+                    </span>
+                  </div>
+                </>
+              )}
+              {isAdmin && (
+                <div className={styles.studentDetailItem}>
+                  <span className={styles.detailLabel}>Rol:</span>
+                  <span className={styles.detailValue}>
+                    {user?.role === 'admin' ? 'Administrador' : 'Personal'}
+                  </span>
+                </div>
+              )}
             </div>
           </div>
+
+          {/* Campos adicionales para admin: Estudiante Responsable (Opcional) */}
+          {isAdmin && (
+            <div className={styles.formSection}>
+              <h3 className={styles.sectionTitle}>
+                <FontAwesomeIcon icon={faUsers} />
+                Estudiante Responsable (Opcional)
+              </h3>
+              <p className={styles.sectionDescription}>
+                Puedes asignar un estudiante responsable para esta clase. Si no se especifica, la clase se creará sin estudiante responsable.
+              </p>
+              
+              <div className={styles.formGroup}>
+                <label htmlFor="responsibleStudentId" className={styles.formLabel}>
+                  ID del Estudiante
+                </label>
+                <input
+                  type="number"
+                  id="responsibleStudentId"
+                  name="responsibleStudentId"
+                  value={formData.responsibleStudentId}
+                  onChange={handleInputChange}
+                  className={styles.formInput}
+                  placeholder="ID del estudiante responsable"
+                />
+              </div>
+
+              <div className={styles.formGroup}>
+                <label htmlFor="responsibleControlNumber" className={styles.formLabel}>
+                  Número de Control
+                </label>
+                <input
+                  type="text"
+                  id="responsibleControlNumber"
+                  name="responsibleControlNumber"
+                  value={formData.responsibleControlNumber}
+                  onChange={handleInputChange}
+                  className={styles.formInput}
+                  placeholder="Número de control del estudiante"
+                />
+              </div>
+
+              <div className={styles.formGroup}>
+                <label htmlFor="responsiblePhone" className={styles.formLabel}>
+                  Teléfono
+                </label>
+                <input
+                  type="tel"
+                  id="responsiblePhone"
+                  name="responsiblePhone"
+                  value={formData.responsiblePhone}
+                  onChange={handleInputChange}
+                  className={styles.formInput}
+                  placeholder="Teléfono del estudiante responsable"
+                />
+              </div>
+            </div>
+          )}
 
           {/* Selección de materia */}
           <div className={styles.formSection}>
@@ -332,7 +433,7 @@ const CreateClassPage: React.FC = () => {
               {subjectsData && subjectsData.length > 0 && (
                 <small className={styles.formHint}>
                   <FontAwesomeIcon icon={faInfoCircle} />
-                  {subjectsData.length} materias disponibles para tu carrera
+                  {subjectsData.length} materias disponibles {isAdmin ? '' : 'para tu carrera'}
                 </small>
               )}
             </div>
@@ -355,6 +456,31 @@ const CreateClassPage: React.FC = () => {
               <small className={styles.formHint}>
                 <FontAwesomeIcon icon={faInfoCircle} />
                 La clave se genera automáticamente basada en la materia seleccionada
+              </small>
+            </div>
+
+            <div className={styles.formGroup}>
+              <label htmlFor="period" className={styles.formLabel}>
+                Año Académico <span className={styles.required}>*</span>
+              </label>
+              <select
+                id="period"
+                name="period"
+                value={formData.period}
+                onChange={handleInputChange}
+                className={styles.formSelect}
+                required
+              >
+                <option value={0}>Selecciona un año</option>
+                {ACADEMIC_YEARS.map((year) => (
+                  <option key={year} value={year}>
+                    {year}
+                  </option>
+                ))}
+              </select>
+              <small className={styles.formHint}>
+                <FontAwesomeIcon icon={faInfoCircle} />
+                Selecciona el año académico para esta clase
               </small>
             </div>
 

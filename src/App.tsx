@@ -60,6 +60,7 @@ const App: React.FC = () => {
           {/* 👇 Rutas de staff - REQUIEREN AUTENTICACIÓN POR SESIÓN */}
           <Route element={<AdminRoute />}>
             <Route path="/staff/profile" element={<StaffProfile />} />
+            <Route path="/create-class" element={<CreateClassPage />} />
             <Route path="/admin">
               <Route index element={<Navigate to="/admin/dashboard" replace />} />
               <Route path="dashboard" element={<AdminDashboard />} />

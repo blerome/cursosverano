@@ -14,6 +14,7 @@ export interface ClassResponseDto {
   id_class: number;
   status: string;
   max_students: number;
+  academic_period: number;
   description: ClassResponseDtoDescription;
   id_subject: number;
   image: ClassResponseDtoImage;

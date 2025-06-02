@@ -8,7 +8,8 @@ import {
   faCheckCircle,
   faBroom, 
   faChevronDown, 
-  faChevronUp 
+  faChevronUp,
+  faCalendarAlt
 } from '@fortawesome/free-solid-svg-icons';
 import styles from './ClassFilter.module.css';
 
@@ -17,6 +18,7 @@ interface FilterParams {
   subjectId?: number;
   status?: 'pendiente' | 'aprobado' | 'rechazado';
   clave?: string;
+  period?: number;
 }
 
 interface ClassFilterProps {
@@ -39,6 +41,9 @@ const ClassFilter: React.FC<ClassFilterProps> = ({
   hasActiveFilters,
 }) => {
   const [isOpen, setIsOpen] = useState(true);
+
+  // Años académicos disponibles
+  const ACADEMIC_YEARS = [2024, 2025, 2026, 2027, 2028];
 
   const handleInputChange = (key: keyof FilterParams, value: any) => {
     let processedValue = value;
@@ -221,6 +226,27 @@ const ClassFilter: React.FC<ClassFilterProps> = ({
               ))}
             </select>
           </div>
+
+          {/* Filtro por año académico */}
+          <div className={styles.filterGroup}>
+            <label htmlFor="period">
+              <FontAwesomeIcon icon={faCalendarAlt} />
+              Año Académico
+            </label>
+            <select
+              id="period"
+              value={filters.period || ''}
+              onChange={(e) => handleInputChange('period', parseInt(e.target.value) || undefined)}
+              className={styles.filterSelect}
+            >
+              <option value="">Todos los años</option>
+              {ACADEMIC_YEARS.map((year) => (
+                <option key={year} value={year}>
+                  {year}
+                </option>
+              ))}
+            </select>
+          </div>
         </div>
 
         {/* Botones de acción */}
@@ -270,6 +296,11 @@ const ClassFilter: React.FC<ClassFilterProps> = ({
               {filters.status && (
                 <span className={styles.filterTag}>
                   Estado: {statusOptions.find(s => s.value === filters.status)?.label}
+                </span>
+              )}
+              {filters.period && (
+                <span className={styles.filterTag}>
+                  Año: {filters.period}
                 </span>
               )}
             </div>

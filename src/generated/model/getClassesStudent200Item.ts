@@ -16,6 +16,7 @@ export type GetClassesStudent200Item = {
   description: GetClassesStudent200ItemDescription;
   status: GetClassesStudent200ItemStatus;
   id_class: number;
+  academic_period: number;
   max_students: number;
   image: GetClassesStudent200ItemImage;
 };

@@ -90,7 +90,8 @@ const ClassesPage: React.FC = () => {
       careerId: filters.careerId,
       subjectId: filters.subjectId,
       status: filters.status,
-      clave: filters.clave
+      clave: filters.clave,
+      period: filters.period
     });
     
     if (previousFiltersRef.current !== currentFiltersString) {
@@ -105,7 +106,7 @@ const ClassesPage: React.FC = () => {
       
       setCurrentPage(1);
     }
-  }, [filters.careerId, filters.subjectId, filters.status, filters.clave]);
+  }, [filters.careerId, filters.subjectId, filters.status, filters.clave, filters.period]);
 
   // Resetear estado de búsqueda cuando termina la carga
   useEffect(() => {

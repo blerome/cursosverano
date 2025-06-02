@@ -12,6 +12,7 @@ import type { Schedule } from './schedule';
 export interface CreatedClassResponseDto {
   id_class: number;
   status: string;
+  academic_period: number;
   description: CreatedClassResponseDtoDescription;
   id_subject: number;
   responsibleStudent: ResponsibleStudent;

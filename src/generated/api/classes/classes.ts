@@ -35,6 +35,7 @@ import type {
   PaginatedResponseDtoGetStudentByClassResponseDto,
   PostClassesEnrollStudent202Item0,
   PostClassesEnrollStudent202Item1,
+  PostClassesIdStatusStatus201,
   ResponseDtoCreatedClassResponseDto
 } from '../../model';
 
@@ -43,6 +44,7 @@ import postClassesMutator from '../../../api/http/axios.mutator';
 import getClassesStudentMutator from '../../../api/http/axios.mutator';
 import postClassesEnrollStudentMutator from '../../../api/http/axios.mutator';
 import getClassesIdStudentsMutator from '../../../api/http/axios.mutator';
+import postClassesIdStatusStatusMutator from '../../../api/http/axios.mutator';
 
 
 
@@ -416,3 +418,61 @@ export function useGetClassesIdStudents<TData = Awaited<ReturnType<typeof getCla
 
 
 
+export const postClassesIdStatusStatus = (
+    id: number,
+    status: 'pendiente' | 'aprobado' | 'rechazado',
+ signal?: AbortSignal
+) => {
+      
+      
+      return postClassesIdStatusStatusMutator<PostClassesIdStatusStatus201>(
+      {url: `/classes/${id}/status/${status}`, method: 'POST', signal
+    },
+      );
+    }
+  
+
+
+export const getPostClassesIdStatusStatusMutationOptions = <TError = unknown,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postClassesIdStatusStatus>>, TError,{id: number;status: 'pendiente' | 'aprobado' | 'rechazado'}, TContext>, }
+): UseMutationOptions<Awaited<ReturnType<typeof postClassesIdStatusStatus>>, TError,{id: number;status: 'pendiente' | 'aprobado' | 'rechazado'}, TContext> => {
+
+const mutationKey = ['postClassesIdStatusStatus'];
+const {mutation: mutationOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof postClassesIdStatusStatus>>, {id: number;status: 'pendiente' | 'aprobado' | 'rechazado'}> = (props) => {
+          const {id,status} = props ?? {};
+
+          return  postClassesIdStatusStatus(id,status,)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type PostClassesIdStatusStatusMutationResult = NonNullable<Awaited<ReturnType<typeof postClassesIdStatusStatus>>>
+    
+    export type PostClassesIdStatusStatusMutationError = unknown
+
+    export const usePostClassesIdStatusStatus = <TError = unknown,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postClassesIdStatusStatus>>, TError,{id: number;status: 'pendiente' | 'aprobado' | 'rechazado'}, TContext>, }
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof postClassesIdStatusStatus>>,
+        TError,
+        {id: number;status: 'pendiente' | 'aprobado' | 'rechazado'},
+        TContext
+      > => {
+
+      const mutationOptions = getPostClassesIdStatusStatusMutationOptions(options);
+
+      return useMutation(mutationOptions , queryClient);
+    }
+    

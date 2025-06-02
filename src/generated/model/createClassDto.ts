@@ -11,7 +11,8 @@ import type { CreateScheduleDto } from './createScheduleDto';
 export interface CreateClassDto {
   subjectId: number;
   clave: string;
+  period: number;
   description?: string;
-  responsibleStudent: EnrollStudentDto;
+  responsibleStudent?: EnrollStudentDto;
   schedule: CreateScheduleDto[];
 }

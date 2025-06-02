@@ -7,6 +7,7 @@ interface FilterParams {
   subjectId?: number;
   status?: 'pendiente' | 'aprobado' | 'rechazado';
   clave?: string;
+  period?: number;
 }
 
 interface UseClassFiltersProps {
@@ -30,6 +31,7 @@ export const useClassFilters = ({ studentCareer, currentPage, pageSize }: UseCla
       pageSize: pageSize,
       careerId: filters.careerId || studentCareer,
       subjectId: filters.subjectId,
+      period: filters.period,
     };
 
     // Solo enviar status 'pendiente' a la API (los otros son para filtrado local)
@@ -48,7 +50,7 @@ export const useClassFilters = ({ studentCareer, currentPage, pageSize }: UseCla
     }
 
     return params;
-  }, [currentPage, pageSize, filters.careerId, filters.subjectId, filters.status, debouncedClave, studentCareer]);
+  }, [currentPage, pageSize, filters.careerId, filters.subjectId, filters.status, filters.period, debouncedClave, studentCareer]);
 
   // Handler optimizado para cambios de filtros
   const handleFilterChange = useCallback((newFilters: FilterParams) => {
@@ -71,6 +73,7 @@ export const useClassFilters = ({ studentCareer, currentPage, pageSize }: UseCla
       hasValidClave ||
       filters.subjectId ||
       filters.status ||
+      filters.period ||
       (filters.careerId && filters.careerId !== studentCareer)
     );
   }, [filters, studentCareer]);

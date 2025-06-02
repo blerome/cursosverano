@@ -1,55 +1,289 @@
-import React, { useState } from 'react';
-import { useMsal } from '@azure/msal-react';
+import React, { useState, useEffect } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { 
-  faChartLine,
-  faUsers,
-  faGraduationCap,
+  faChartLine, 
+  faClipboardCheck, 
+  faUsers, 
+  faBuilding, 
   faChalkboardTeacher,
-  faBuilding,
-  faClipboardCheck,
-  faUserTimes,
-  faExchangeAlt,
+  faGraduationCap,
   faUserCheck,
-  faBan,
-  faEye,
   faPlus,
-  faFilter,
-  faSearch,
-  faExclamationTriangle,
+  faSignOutAlt,
+  faSpinner,
+  faClock,
   faCalendarAlt,
-  faSignOutAlt
+  faBook
 } from '@fortawesome/free-solid-svg-icons';
-import { useGetClasses } from '../../generated/api/classes/classes';
 import { useAuth } from '../../contexts/AuthContext';
+import { useNavigate } from 'react-router-dom';
+import { useGetClasses, usePostClasses } from '../../generated/api/classes/classes';
+import { useGetSubjects } from '../../generated/api/subjects/subjects';
+import { useGetCareers } from '../../generated/api/careers/careers';
+import { useAllCareersAndSubjects } from '../../hooks/useAllCareersAndSubjects';
+import { usePopup } from '../../hooks/usePopup';
 import ClassApprovalSection from './components/ClassApprovalSection';
-import type { ClassData } from '../../types/class.types';
+import { ClassResponseDto, CreateClassDto, CreateScheduleDto } from '../../generated/model';
 import styles from './AdminDashboard.module.css';
 
-type DashboardSection = 'overview' | 'class-approval' | 'student-management' | 'classroom-assignment' | 'teacher-management';
+type DashboardSection = 'overview' | 'class-approval' | 'student-management' | 'classroom-assignment' | 'teacher-management' | 'create-class';
+
+interface ClassFormData {
+  subjectId: number;
+  clave: string;
+  period: number;
+  description: string;
+  startTime: string;
+  endTime: string;
+  selectedDays: number[];
+  responsibleStudentId?: string;
+  responsibleControlNumber?: string;
+  responsiblePhone?: string;
+}
+
+// Días de la semana con sus IDs
+const DAYS_OF_WEEK = [
+  { id: 1, name: 'Lunes', shortName: 'L' },
+  { id: 2, name: 'Martes', shortName: 'M' },
+  { id: 3, name: 'Miércoles', shortName: 'X' },
+  { id: 4, name: 'Jueves', shortName: 'J' },
+  { id: 5, name: 'Viernes', shortName: 'V' },
+  { id: 6, name: 'Sábado', shortName: 'S' },
+  { id: 7, name: 'Domingo', shortName: 'D' },
+];
+
+// Años académicos disponibles para cursos de verano
+const ACADEMIC_YEARS = [2024, 2025, 2026, 2027, 2028];
 
 const AdminDashboard: React.FC = () => {
+  const { logout, user } = useAuth();
+  const navigate = useNavigate();
+
+  // Estado para la sección activa
   const [activeSection, setActiveSection] = useState<DashboardSection>('overview');
-  const { user, logout } = useAuth();
+  
+  // Estado para el filtro de periodo en el overview
+  const [overviewPeriod, setOverviewPeriod] = useState<number>(0);
+  
+  // Estado para el formulario de crear clases
+  const [formData, setFormData] = useState<ClassFormData>({
+    subjectId: 0,
+    clave: '',
+    period: 0,
+    description: '',
+    startTime: '',
+    endTime: '',
+    selectedDays: [],
+    responsibleStudentId: '',
+    responsibleControlNumber: '',
+    responsiblePhone: '',
+  });
+
+  // Estado para filtro de carrera
+  const [selectedCareerId, setSelectedCareerId] = useState<number>(0);
+  
+  // Estado para búsqueda de materias por nombre
+  const [searchSubjectName, setSearchSubjectName] = useState<string>('');
+
+  // Hooks para crear clases
+  const { popup, showError, showSuccess, hidePopup } = usePopup();
+  const createClassMutation = usePostClasses();
+  
+  // Obtener carreras para el filtro
+  const { data: careersResponse, isLoading: careersLoading } = useGetCareers({
+    pageSize: 1000 // Obtener todas las carreras disponibles
+  });
+  const careersData = careersResponse?.data?.data || [];
+  
+  // Obtener materias filtradas por carrera seleccionada
+  const subjectParams = {
+    pageSize: 1000,
+    ...(selectedCareerId > 0 && { careerId: selectedCareerId }),
+    ...(searchSubjectName.trim() && { name: searchSubjectName.trim() })
+  };
+  
+  const { data: subjectsResponse, isLoading: subjectsLoading } = useGetSubjects(subjectParams);
+  const subjectsData = subjectsResponse?.data?.data || [];
+
+  // Efecto para actualizar la clave automáticamente cuando se selecciona una materia
+  useEffect(() => {
+    if (formData.subjectId > 0) {
+      const selectedSubject = subjectsData.find(
+        (subject: any) => subject.id_subject === formData.subjectId
+      );
+      if (selectedSubject) {
+        setFormData(prev => ({
+          ...prev,
+          clave: selectedSubject.clave,
+        }));
+      }
+    }
+  }, [formData.subjectId, subjectsData]);
 
   // Obtener datos para el overview
   const { data: classesData, isLoading: classesLoading } = useGetClasses({
     page: 1,
-    pageSize: 100
+    pageSize: 100,
+    ...(overviewPeriod > 0 && { period: overviewPeriod })
   });
 
-  const classes: ClassData[] = classesData?.data?.data || [];
+  const classes: ClassResponseDto[] = classesData?.data?.data || [];
 
   // Calcular estadísticas
   const stats = {
     totalClasses: classes.length,
-    pendingClasses: classes.filter((c: ClassData) => c.status === 'pendiente').length,
-    activeClasses: classes.filter((c: ClassData) => c.status === 'active').length,
-    enrolledStudents: classes.reduce((acc: number, c: ClassData) => acc + (c.enrrolled || 0), 0),
+    pendingClasses: classes.filter((c: ClassResponseDto) => c.status === 'pendiente').length,
+    activeClasses: classes.filter((c: ClassResponseDto) => c.status === 'active').length,
+    enrolledStudents: classes.reduce((acc: number, c: ClassResponseDto) => acc + (c.enrrolled || 0), 0),
   };
 
   const handleLogout = () => {
     logout();
+  };
+
+  const handleCreateClass = () => {
+    setActiveSection('create-class');
+  };
+
+  // Funciones para el formulario de crear clases
+  const handleInputChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>
+  ) => {
+    const { name, value } = e.target;
+    setFormData(prev => ({
+      ...prev,
+      [name]: name === 'subjectId' || name === 'period' ? parseInt(value) : value,
+    }));
+  };
+
+  const handleCareerChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const careerId = parseInt(e.target.value);
+    setSelectedCareerId(careerId);
+    // Resetear la materia seleccionada y búsqueda cuando cambie la carrera
+    setFormData(prev => ({
+      ...prev,
+      subjectId: 0,
+      clave: '',
+    }));
+    setSearchSubjectName('');
+  };
+
+  const handleSearchSubjectChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchSubjectName(e.target.value);
+    // Resetear materia seleccionada cuando se busque
+    setFormData(prev => ({
+      ...prev,
+      subjectId: 0,
+      clave: '',
+    }));
+  };
+
+  const handleDayToggle = (dayId: number) => {
+    setFormData(prev => ({
+      ...prev,
+      selectedDays: prev.selectedDays.includes(dayId)
+        ? prev.selectedDays.filter(id => id !== dayId)
+        : [...prev.selectedDays, dayId],
+    }));
+  };
+
+  const validateClassForm = (): boolean => {
+    if (subjectsData.length === 0) {
+      showError(
+        'Sin materias disponibles',
+        'No se encontraron materias. Intenta ajustar los filtros de búsqueda.'
+      );
+      return false;
+    }
+
+    if (!formData.subjectId || !formData.clave || !formData.period || !formData.startTime || !formData.endTime) {
+      showError(
+        'Campos requeridos',
+        'Por favor, completa todos los campos obligatorios.'
+      );
+      return false;
+    }
+
+    if (formData.selectedDays.length === 0) {
+      showError(
+        'Días requeridos',
+        'Debes seleccionar al menos un día de la semana.'
+      );
+      return false;
+    }
+
+    if (formData.startTime >= formData.endTime) {
+      showError(
+        'Horario inválido',
+        'La hora de inicio debe ser menor que la hora de fin.'
+      );
+      return false;
+    }
+
+    return true;
+  };
+
+  const handleSubmitClass = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    if (!validateClassForm()) {
+      return;
+    }
+
+    try {
+      const schedule: CreateScheduleDto[] = formData.selectedDays.map(dayId => ({
+        dayId,
+        startTime: formData.startTime,
+        endTime: formData.endTime,
+      }));
+
+      const classData: CreateClassDto = {
+        subjectId: formData.subjectId,
+        clave: formData.clave,
+        period: formData.period,
+        description: formData.description,
+        schedule,
+      };
+
+      // Si se especificó un estudiante responsable
+      if (formData.responsibleStudentId) {
+        classData.responsibleStudent = {
+          studentId: parseInt(formData.responsibleStudentId),
+          controlNumber: formData.responsibleControlNumber || '',
+          studentPhone: formData.responsiblePhone || '',
+        };
+      }
+
+      await createClassMutation.mutateAsync({
+        data: classData,
+      });
+
+      showSuccess(
+        '¡Clase creada exitosamente!',
+        'La clase ha sido creada y está disponible para inscripciones.'
+      );
+
+      // Limpiar el formulario
+      setSelectedCareerId(0);
+      setSearchSubjectName('');
+      setFormData({
+        subjectId: 0,
+        clave: '',
+        period: 0,
+        description: '',
+        startTime: '',
+        endTime: '',
+        selectedDays: [],
+        responsibleStudentId: '',
+        responsibleControlNumber: '',
+        responsiblePhone: '',
+      });
+
+    } catch (error: any) {
+      console.error('Error al crear clase:', error);
+      const errorMessage = error?.response?.data?.message || 'Error inesperado. Por favor, intenta nuevamente.';
+      showError('Error al crear clase', errorMessage);
+    }
   };
 
   const menuItems = [
@@ -83,6 +317,12 @@ const AdminDashboard: React.FC = () => {
       title: 'Gestión de Profesores',
       icon: faChalkboardTeacher,
       description: 'Asignar profesores y aprobar solicitudes'
+    },
+    {
+      id: 'create-class' as DashboardSection,
+      title: 'Crear Clases',
+      icon: faPlus,
+      description: 'Agregar nuevas clases al sistema'
     }
   ];
 
@@ -92,6 +332,28 @@ const AdminDashboard: React.FC = () => {
         return (
           <div className={styles.overviewSection}>
             <h2>Resumen General del Sistema</h2>
+            
+            {/* Filtro por periodo */}
+            <div className={styles.overviewFilters}>
+              <div className={styles.filterGroup}>
+                <label htmlFor="overviewPeriodFilter" className={styles.filterLabel}>
+                  Filtrar por Año Académico:
+                </label>
+                <select
+                  id="overviewPeriodFilter"
+                  value={overviewPeriod}
+                  onChange={(e) => setOverviewPeriod(parseInt(e.target.value))}
+                  className={styles.filterSelect}
+                >
+                  <option value={0}>Todos los años</option>
+                  {ACADEMIC_YEARS.map((year) => (
+                    <option key={year} value={year}>
+                      {year}
+                    </option>
+                  ))}
+                </select>
+              </div>
+            </div>
             
             <div className={styles.statsGrid}>
               <div className={styles.statCard}>
@@ -138,6 +400,14 @@ const AdminDashboard: React.FC = () => {
             <div className={styles.quickActions}>
               <h3>Acciones Rápidas</h3>
               <div className={styles.actionButtons}>
+                <button 
+                  onClick={handleCreateClass}
+                  className={styles.actionButton}
+                >
+                  <FontAwesomeIcon icon={faPlus} />
+                  Crear Nueva Clase
+                </button>
+
                 <button 
                   onClick={() => setActiveSection('class-approval')}
                   className={styles.actionButton}
@@ -205,6 +475,380 @@ const AdminDashboard: React.FC = () => {
           </div>
         );
 
+      case 'create-class':
+        return (
+          <div className={styles.createClassSection}>
+            <div className={styles.createClassHeader}>
+              <h2>
+                <FontAwesomeIcon icon={faPlus} />
+                Crear Nueva Clase
+              </h2>
+              <p>Agrega una nueva clase al sistema como administrador</p>
+            </div>
+
+            {subjectsLoading ? (
+              <div className={styles.loadingContainer}>
+                <FontAwesomeIcon icon={faSpinner} spin />
+                <p>Cargando materias...</p>
+              </div>
+            ) : (
+              <form onSubmit={handleSubmitClass} className={styles.createClassForm}>
+                {/* Información del administrador */}
+                <div className={styles.adminInfo}>
+                  <h3 className={styles.sectionTitle}>
+                    <FontAwesomeIcon icon={faGraduationCap} />
+                    Información del Administrador
+                  </h3>
+                  <div className={styles.adminDetails}>
+                    <div className={styles.detailItem}>
+                      <span className={styles.detailLabel}>Administrador:</span>
+                      <span className={styles.detailValue}>{user?.name}</span>
+                    </div>
+                    <div className={styles.detailItem}>
+                      <span className={styles.detailLabel}>Rol:</span>
+                      <span className={styles.detailValue}>
+                        {(user as any)?.role === 'admin' ? 'Administrador' : 'Personal'}
+                      </span>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Filtro por carrera */}
+                <div className={styles.formSection}>
+                  <h3 className={styles.sectionTitle}>
+                    <FontAwesomeIcon icon={faGraduationCap} />
+                    Filtrar por Carrera
+                  </h3>
+                  <p className={styles.sectionDescription}>
+                    Selecciona una carrera para filtrar las materias disponibles
+                  </p>
+                  <div className={styles.formGroup}>
+                    <label htmlFor="careerId" className={styles.formLabel}>
+                      Carrera
+                    </label>
+                    <select
+                      id="careerId"
+                      name="careerId"
+                      value={selectedCareerId}
+                      onChange={handleCareerChange}
+                      className={styles.formSelect}
+                      disabled={careersLoading}
+                    >
+                      <option value={0}>Todas las carreras</option>
+                      {careersData.map((career: any) => (
+                        <option key={career.id_career} value={career.id_career}>
+                          {career.name}
+                        </option>
+                      ))}
+                    </select>
+                    {careersLoading && (
+                      <div className={styles.loadingText}>
+                        <FontAwesomeIcon icon={faSpinner} spin />
+                        Cargando carreras...
+                      </div>
+                    )}
+                  </div>
+                </div>
+
+                {/* Selección de materia */}
+                <div className={styles.formSection}>
+                  <h3 className={styles.sectionTitle}>
+                    <FontAwesomeIcon icon={faBook} />
+                    Información de la Materia
+                  </h3>
+                  {selectedCareerId > 0 && (
+                    <p className={styles.sectionDescription}>
+                      Materias disponibles para la carrera seleccionada ({subjectsData.length} encontradas)
+                    </p>
+                  )}
+                  {selectedCareerId === 0 && subjectsData.length > 0 && (
+                    <p className={styles.sectionDescription}>
+                      Todas las materias disponibles ({subjectsData.length} encontradas)
+                    </p>
+                  )}
+                  
+                  {/* Campo de búsqueda opcional */}
+                  <div className={styles.formGroup}>
+                    <label htmlFor="searchSubject" className={styles.formLabel}>
+                      Buscar materia por nombre (opcional)
+                    </label>
+                    <input
+                      type="text"
+                      id="searchSubject"
+                      name="searchSubject"
+                      value={searchSubjectName}
+                      onChange={handleSearchSubjectChange}
+                      className={styles.formInput}
+                      placeholder="Escribe para buscar por nombre de materia..."
+                    />
+                  </div>
+
+                  <div className={styles.formRow}>
+                    <div className={styles.formGroup}>
+                      <label htmlFor="subjectId" className={styles.formLabel}>
+                        Materia *
+                      </label>
+                      <select
+                        id="subjectId"
+                        name="subjectId"
+                        value={formData.subjectId}
+                        onChange={handleInputChange}
+                        className={styles.formSelect}
+                        required
+                        disabled={subjectsLoading}
+                      >
+                        <option value={0}>
+                          {subjectsLoading 
+                            ? 'Cargando materias...' 
+                            : subjectsData.length === 0
+                              ? 'No se encontraron materias'
+                              : 'Selecciona una materia'
+                          }
+                        </option>
+                        {subjectsData.map((subject: any) => (
+                          <option key={subject.id_subject} value={subject.id_subject}>
+                            {subject.name} - {subject.clave}
+                          </option>
+                        ))}
+                      </select>
+                      {subjectsLoading && (
+                        <div className={styles.loadingText}>
+                          <FontAwesomeIcon icon={faSpinner} spin />
+                          Cargando materias...
+                        </div>
+                      )}
+                      {!subjectsLoading && subjectsData.length === 0 && (
+                        <div className={styles.noDataText}>
+                          {searchSubjectName.trim() 
+                            ? `No se encontraron materias que contengan "${searchSubjectName}"`
+                            : selectedCareerId > 0 
+                              ? 'No hay materias disponibles para esta carrera'
+                              : 'No hay materias disponibles'
+                          }
+                        </div>
+                      )}
+                    </div>
+                    <div className={styles.formGroup}>
+                      <label htmlFor="clave" className={styles.formLabel}>
+                        Clave *
+                      </label>
+                      <input
+                        type="text"
+                        id="clave"
+                        name="clave"
+                        value={formData.clave}
+                        onChange={handleInputChange}
+                        className={styles.formInput}
+                        placeholder="Clave de la materia"
+                        required
+                        readOnly
+                      />
+                    </div>
+                  </div>
+                  
+                  <div className={styles.formRow}>
+                    <div className={styles.formGroup}>
+                      <label htmlFor="period" className={styles.formLabel}>
+                        Año Académico *
+                      </label>
+                      <select
+                        id="period"
+                        name="period"
+                        value={formData.period}
+                        onChange={handleInputChange}
+                        className={styles.formSelect}
+                        required
+                      >
+                        <option value={0}>Selecciona un año</option>
+                        {ACADEMIC_YEARS.map((year) => (
+                          <option key={year} value={year}>
+                            {year}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Horarios */}
+                <div className={styles.formSection}>
+                  <h3 className={styles.sectionTitle}>
+                    <FontAwesomeIcon icon={faClock} />
+                    Horarios
+                  </h3>
+                  <div className={styles.formRow}>
+                    <div className={styles.formGroup}>
+                      <label htmlFor="startTime" className={styles.formLabel}>
+                        Hora de Inicio *
+                      </label>
+                      <input
+                        type="time"
+                        id="startTime"
+                        name="startTime"
+                        value={formData.startTime}
+                        onChange={handleInputChange}
+                        className={styles.formInput}
+                        required
+                      />
+                    </div>
+                    <div className={styles.formGroup}>
+                      <label htmlFor="endTime" className={styles.formLabel}>
+                        Hora de Fin *
+                      </label>
+                      <input
+                        type="time"
+                        id="endTime"
+                        name="endTime"
+                        value={formData.endTime}
+                        onChange={handleInputChange}
+                        className={styles.formInput}
+                        required
+                      />
+                    </div>
+                  </div>
+                </div>
+
+                {/* Días de la semana */}
+                <div className={styles.formSection}>
+                  <h3 className={styles.sectionTitle}>
+                    <FontAwesomeIcon icon={faCalendarAlt} />
+                    Días de la Semana *
+                  </h3>
+                  <div className={styles.daysGrid}>
+                    {DAYS_OF_WEEK.map(day => (
+                      <button
+                        key={day.id}
+                        type="button"
+                        onClick={() => handleDayToggle(day.id)}
+                        className={`${styles.dayButton} ${
+                          formData.selectedDays.includes(day.id) ? styles.dayButtonActive : ''
+                        }`}
+                      >
+                        <span className={styles.dayShort}>{day.shortName}</span>
+                        <span className={styles.dayName}>{day.name}</span>
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Estudiante responsable (opcional) */}
+                <div className={styles.formSection}>
+                  <h3 className={styles.sectionTitle}>
+                    <FontAwesomeIcon icon={faUsers} />
+                    Estudiante Responsable (Opcional)
+                  </h3>
+                  <p className={styles.sectionDescription}>
+                    Puedes asignar un estudiante responsable de la clase
+                  </p>
+                  <div className={styles.formRow}>
+                    <div className={styles.formGroup}>
+                      <label htmlFor="responsibleStudentId" className={styles.formLabel}>
+                        ID del Estudiante
+                      </label>
+                      <input
+                        type="number"
+                        id="responsibleStudentId"
+                        name="responsibleStudentId"
+                        value={formData.responsibleStudentId}
+                        onChange={handleInputChange}
+                        className={styles.formInput}
+                        placeholder="ID del estudiante"
+                      />
+                    </div>
+                    <div className={styles.formGroup}>
+                      <label htmlFor="responsibleControlNumber" className={styles.formLabel}>
+                        Número de Control
+                      </label>
+                      <input
+                        type="text"
+                        id="responsibleControlNumber"
+                        name="responsibleControlNumber"
+                        value={formData.responsibleControlNumber}
+                        onChange={handleInputChange}
+                        className={styles.formInput}
+                        placeholder="Número de control"
+                      />
+                    </div>
+                    <div className={styles.formGroup}>
+                      <label htmlFor="responsiblePhone" className={styles.formLabel}>
+                        Teléfono
+                      </label>
+                      <input
+                        type="tel"
+                        id="responsiblePhone"
+                        name="responsiblePhone"
+                        value={formData.responsiblePhone}
+                        onChange={handleInputChange}
+                        className={styles.formInput}
+                        placeholder="Teléfono del estudiante"
+                      />
+                    </div>
+                  </div>
+                </div>
+
+                {/* Descripción */}
+                <div className={styles.formSection}>
+                  <div className={styles.formGroup}>
+                    <label htmlFor="description" className={styles.formLabel}>
+                      Descripción
+                    </label>
+                    <textarea
+                      id="description"
+                      name="description"
+                      value={formData.description}
+                      onChange={handleInputChange}
+                      className={styles.formTextarea}
+                      placeholder="Descripción opcional de la clase"
+                      rows={4}
+                    />
+                  </div>
+                </div>
+
+                {/* Botones */}
+                <div className={styles.formActions}>
+                  <button
+                    type="button"
+                    onClick={() => setActiveSection('overview')}
+                    className={styles.cancelButton}
+                  >
+                    Cancelar
+                  </button>
+                  <button
+                    type="submit"
+                    disabled={createClassMutation.isPending}
+                    className={styles.submitButton}
+                  >
+                    {createClassMutation.isPending ? (
+                      <>
+                        <FontAwesomeIcon icon={faSpinner} spin />
+                        Creando...
+                      </>
+                    ) : (
+                      <>
+                        <FontAwesomeIcon icon={faPlus} />
+                        Crear Clase
+                      </>
+                    )}
+                  </button>
+                </div>
+              </form>
+            )}
+
+            {/* Popup de errores/éxito */}
+            {popup.isOpen && (
+              <div className={styles.popupOverlay} onClick={hidePopup}>
+                <div className={styles.popupContent} onClick={(e) => e.stopPropagation()}>
+                  <h3>{popup.title}</h3>
+                  <p>{popup.message}</p>
+                  <button onClick={hidePopup} className={styles.popupButton}>
+                    Cerrar
+                  </button>
+                </div>
+              </div>
+            )}
+          </div>
+        );
+
       default:
         return null;
     }
@@ -250,6 +894,7 @@ const AdminDashboard: React.FC = () => {
               </button>
             ))}
           </nav>
+          
           <div className={styles.sidebarFooter}>
             <button 
               onClick={handleLogout}

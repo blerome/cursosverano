@@ -13,6 +13,7 @@ careerId?: number;
 studentId?: number;
 clave?: string;
 status?: 'pendiente' | 'aprobado' | 'rechazado';
+period?: number;
 credits?: number;
 page?: number;
 pageSize?: number;

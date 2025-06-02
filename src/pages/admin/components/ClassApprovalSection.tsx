@@ -13,14 +13,22 @@ import {
   faFilter,
   faSearch
 } from '@fortawesome/free-solid-svg-icons';
-import { useGetClasses } from '../../../generated/api/classes/classes';
+import { useGetClasses, usePostClassesIdStatusStatus } from '../../../generated/api/classes/classes';
 import { usePopup } from '../../../hooks/usePopup';
 import ErrorPopup from '../../../components/UI/ErrorPopup';
-import type { ClassData } from '../../../types/class.types';
+import type { ClassResponseDto } from '../../../generated/model';
 import styles from './ClassApprovalSection.module.css';
 
+// Opciones de filtro por estado
+const statusOptions = [
+  { value: 'pendiente' as const, label: 'Pendientes', icon: faClock },
+  { value: 'aprobado' as const, label: 'Aprobadas', icon: faCheck },
+  { value: 'rechazado' as const, label: 'Rechazadas', icon: faTimes },
+  { value: 'all' as const, label: 'Todas', icon: faFilter },
+];
+
 interface ClassApprovalModalProps {
-  classData: ClassData | null;
+  classData: ClassResponseDto | null;
   isOpen: boolean;
   onClose: () => void;
   onApprove: (classId: number, reason?: string) => void;
@@ -36,22 +44,26 @@ const ClassApprovalModal: React.FC<ClassApprovalModalProps> = ({
 }) => {
   const [action, setAction] = useState<'approve' | 'reject' | null>(null);
   const [reason, setReason] = useState('');
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   if (!isOpen || !classData) return null;
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     if (action === 'approve') {
-      onApprove(classData.id_class, reason || undefined);
+      setIsSubmitting(true);
+      await onApprove(classData.id_class, reason || undefined);
+      setIsSubmitting(false);
     } else if (action === 'reject') {
       if (!reason.trim()) {
         alert('Debes proporcionar una razón para rechazar la clase');
         return;
       }
-      onReject(classData.id_class, reason);
+      setIsSubmitting(true);
+      await onReject(classData.id_class, reason);
+      setIsSubmitting(false);
     }
     setAction(null);
     setReason('');
-    onClose();
   };
 
   const formatSchedules = () => {
@@ -92,22 +104,13 @@ const ClassApprovalModal: React.FC<ClassApprovalModalProps> = ({
             <span>{formatSchedules()}</span>
           </div>
           <div className={styles.detailRow}>
-            <strong>Estudiantes máximo:</strong>
-            <span>{classData.max_students}</span>
+            <strong>Estudiantes inscritos:</strong>
+            <span>{classData.enrrolled} / {classData.max_students}</span>
           </div>
           {classData.description && (
             <div className={styles.detailRow}>
               <strong>Descripción:</strong>
               <span>{classData.description}</span>
-            </div>
-          )}
-          {classData.ResponsibleStudent && (
-            <div className={styles.detailRow}>
-              <strong>Estudiante responsable:</strong>
-              <span>
-                Control: {classData.ResponsibleStudent.control_number}
-                {classData.ResponsibleStudent.student_phone && ` | Tel: ${classData.ResponsibleStudent.student_phone}`}
-              </span>
             </div>
           )}
         </div>
@@ -152,8 +155,16 @@ const ClassApprovalModal: React.FC<ClassApprovalModalProps> = ({
               <button 
                 onClick={handleSubmit}
                 className={action === 'approve' ? styles.confirmApprove : styles.confirmReject}
+                disabled={isSubmitting}
               >
-                {action === 'approve' ? 'Confirmar Aprobación' : 'Confirmar Rechazo'}
+                {isSubmitting ? (
+                  <>
+                    <FontAwesomeIcon icon={faSpinner} spin />
+                    {action === 'approve' ? 'Aprobando...' : 'Rechazando...'}
+                  </>
+                ) : (
+                  action === 'approve' ? 'Confirmar Aprobación' : 'Confirmar Rechazo'
+                )}
               </button>
             </div>
           </div>
@@ -164,22 +175,30 @@ const ClassApprovalModal: React.FC<ClassApprovalModalProps> = ({
 };
 
 const ClassApprovalSection: React.FC = () => {
-  const [selectedClass, setSelectedClass] = useState<ClassData | null>(null);
+  const [selectedClass, setSelectedClass] = useState<ClassResponseDto | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [filterStatus, setFilterStatus] = useState<'all' | 'pendiente' | 'aprobado' | 'rechazado'>('pendiente');
+  const [filterPeriod, setFilterPeriod] = useState<number>(0); // 0 = todos los periodos
   const [searchTerm, setSearchTerm] = useState('');
 
   const { popup, showError, showSuccess, hidePopup } = usePopup();
 
+  // Años académicos disponibles para filtros
+  const ACADEMIC_YEARS = [2024, 2025, 2026, 2027, 2028];
+
   const { data: classesData, isLoading, error, refetch } = useGetClasses({
     page: 1,
-    pageSize: 100
+    pageSize: 1000, // Obtener más clases para el dashboard
+    ...(filterPeriod > 0 && { period: filterPeriod })
   });
 
-  const classes: ClassData[] = classesData?.data?.data || [];
+  // Hook para cambiar status de clase
+  const changeStatusMutation = usePostClassesIdStatusStatus();
+
+  const classes: ClassResponseDto[] = classesData?.data?.data || [];
 
   // Filtrar clases
-  const filteredClasses = classes.filter((classItem: ClassData) => {
+  const filteredClasses = classes.filter((classItem: ClassResponseDto) => {
     const matchesStatus = filterStatus === 'all' || classItem.status === filterStatus;
     const matchesSearch = searchTerm === '' || 
       classItem.Subjects?.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -188,30 +207,40 @@ const ClassApprovalSection: React.FC = () => {
     return matchesStatus && matchesSearch;
   });
 
-  const handleViewClass = (classData: ClassData) => {
+  const handleViewClass = (classData: ClassResponseDto) => {
     setSelectedClass(classData);
     setIsModalOpen(true);
   };
 
   const handleApprove = async (classId: number, reason?: string) => {
     try {
-      // TODO: Implementar API call para aprobar clase
-      console.log('Aprobar clase:', classId, reason);
+      await changeStatusMutation.mutateAsync({
+        id: classId,
+        status: 'aprobado'
+      });
       showSuccess('Clase Aprobada', 'La clase ha sido aprobada exitosamente');
       refetch();
-    } catch (error) {
-      showError('Error', 'No se pudo aprobar la clase');
+      setIsModalOpen(false);
+    } catch (error: any) {
+      console.error('Error al aprobar clase:', error);
+      const errorMessage = error?.response?.data?.message || 'No se pudo aprobar la clase';
+      showError('Error', errorMessage);
     }
   };
 
   const handleReject = async (classId: number, reason: string) => {
     try {
-      // TODO: Implementar API call para rechazar clase
-      console.log('Rechazar clase:', classId, reason);
+      await changeStatusMutation.mutateAsync({
+        id: classId,
+        status: 'rechazado'
+      });
       showSuccess('Clase Rechazada', 'La clase ha sido rechazada');
       refetch();
-    } catch (error) {
-      showError('Error', 'No se pudo rechazar la clase');
+      setIsModalOpen(false);
+    } catch (error: any) {
+      console.error('Error al rechazar clase:', error);
+      const errorMessage = error?.response?.data?.message || 'No se pudo rechazar la clase';
+      showError('Error', errorMessage);
     }
   };
 
@@ -230,6 +259,18 @@ const ClassApprovalSection: React.FC = () => {
       default:
         return <span className={`${styles.statusBadge} ${styles.unknown}`}>Desconocido</span>;
     }
+  };
+
+  const handleStatusChange = (status: typeof filterStatus) => {
+    setFilterStatus(status);
+  };
+
+  const handlePeriodChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    setFilterPeriod(parseInt(e.target.value));
+  };
+
+  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchTerm(e.target.value);
   };
 
   if (isLoading) {
@@ -261,28 +302,66 @@ const ClassApprovalSection: React.FC = () => {
         <p>Revisa y aprueba o rechaza las clases creadas por estudiantes</p>
       </div>
 
-      <div className={styles.filters}>
-        <div className={styles.searchContainer}>
-          <FontAwesomeIcon icon={faSearch} className={styles.searchIcon} />
-          <input
-            type="text"
-            placeholder="Buscar por materia o clave..."
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            className={styles.searchInput}
-          />
+      <div className={styles.filtersSection}>
+        <div className={styles.filterRow}>
+          {/* Filtro por estado */}
+          <div className={styles.filterGroup}>
+            <label className={styles.filterLabel}>Estado:</label>
+            <div className={styles.statusFilters}>
+              {statusOptions.map((status) => (
+                <button
+                  key={status.value}
+                  onClick={() => handleStatusChange(status.value)}
+                  className={`${styles.filterButton} ${
+                    filterStatus === status.value ? styles.filterButtonActive : ''
+                  }`}
+                >
+                  <FontAwesomeIcon icon={status.icon} />
+                  {status.label}
+                  {status.value !== 'all' && classes && (
+                    <span className={styles.filterCount}>
+                      {classes.filter(c => c.status === status.value).length}
+                    </span>
+                  )}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {/* Filtro por periodo */}
+          <div className={styles.filterGroup}>
+            <label htmlFor="periodFilter" className={styles.filterLabel}>
+              Año Académico:
+            </label>
+            <select
+              id="periodFilter"
+              value={filterPeriod}
+              onChange={handlePeriodChange}
+              className={styles.filterSelect}
+            >
+              <option value={0}>Todos los años</option>
+              {ACADEMIC_YEARS.map((year) => (
+                <option key={year} value={year}>
+                  {year}
+                </option>
+              ))}
+            </select>
+          </div>
         </div>
 
-        <select
-          value={filterStatus}
-          onChange={(e) => setFilterStatus(e.target.value as 'all' | 'pendiente' | 'aprobado' | 'rechazado')}
-          className={styles.statusFilter}
-        >
-          <option value="pendiente">Solo Pendientes</option>
-          <option value="aprobado">Solo Aprobadas</option>
-          <option value="rechazado">Solo Rechazadas</option>
-          <option value="all">Todas las Clases</option>
-        </select>
+        {/* Búsqueda */}
+        <div className={styles.searchSection}>
+          <div className={styles.searchGroup}>
+            <FontAwesomeIcon icon={faSearch} className={styles.searchIcon} />
+            <input
+              type="text"
+              placeholder="Buscar por clave o nombre de materia..."
+              value={searchTerm}
+              onChange={handleSearchChange}
+              className={styles.searchInput}
+            />
+          </div>
+        </div>
       </div>
 
       <div className={styles.classesGrid}>
@@ -293,7 +372,7 @@ const ClassApprovalSection: React.FC = () => {
             <p>No se encontraron clases que coincidan con los filtros seleccionados.</p>
           </div>
         ) : (
-          filteredClasses.map((classItem: ClassData) => (
+          filteredClasses.map((classItem: ClassResponseDto) => (
             <div key={classItem.id_class} className={styles.classCard}>
               <div className={styles.cardHeader}>
                 <h3>{classItem.Subjects?.name || 'Materia no disponible'}</h3>
@@ -307,20 +386,12 @@ const ClassApprovalSection: React.FC = () => {
                 </div>
                 <div className={styles.cardDetail}>
                   <FontAwesomeIcon icon={faUser} />
-                  <span>{classItem.max_students} estudiantes máx.</span>
+                  <span>{classItem.enrrolled} / {classItem.max_students} estudiantes</span>
                 </div>
                 <div className={styles.cardDetail}>
                   <FontAwesomeIcon icon={faCalendarAlt} />
                   <span>{classItem.Schedules?.length || 0} horarios</span>
                 </div>
-                {classItem.ResponsibleStudent && (
-                  <div className={styles.cardDetail}>
-                    <FontAwesomeIcon icon={faUser} />
-                    <span>
-                      Control: {classItem.ResponsibleStudent.control_number}
-                    </span>
-                  </div>
-                )}
               </div>
 
               <div className={styles.cardActions}>

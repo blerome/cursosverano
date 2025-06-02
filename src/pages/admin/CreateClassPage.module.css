@@ -79,6 +79,14 @@
   font-size: 1.2rem;
 }
 
+.sectionDescription {
+  color: #666;
+  font-size: 0.9rem;
+  line-height: 1.4;
+  margin: 0 0 1.5rem 0;
+  font-style: italic;
+}
+
 .studentDetails {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
