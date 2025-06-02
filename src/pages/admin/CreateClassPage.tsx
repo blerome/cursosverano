@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useAllCareersAndSubjects } from '../../hooks/useAllCareersAndSubjects';
 import { usePostClasses } from '../../generated/api/classes/classes';
 import { useAuth } from '../../contexts/AuthContext';
+import { useStudentAuth } from '../../hooks/useStudentAuth';
 import { usePopup } from '../../hooks/usePopup';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { 
@@ -13,7 +14,8 @@ import {
   faChalkboardTeacher,
   faInfoCircle,
   faSave,
-  faSpinner
+  faSpinner,
+  faExclamationTriangle
 } from '@fortawesome/free-solid-svg-icons';
 import ErrorPopup from '../../components/UI/ErrorPopup';
 import type { CreateClassDto, CreateScheduleDto } from '../../generated/model';
@@ -49,17 +51,50 @@ const CreateClassPage: React.FC = () => {
   const { user, userType, isAuthenticated } = useAuth();
   const [selectedCareerId, setSelectedCareerId] = useState<number>(0);
 
-  // Verificar que el usuario sea un estudiante autenticado
-  if (!isAuthenticated || userType !== 'student' || !user || user.type !== 'student') {
+  // Hook específico de estudiante para validación de perfil
+  const {
+    isStudent,
+    studentData,
+    userData,
+    hasStudentProfile,
+  } = useStudentAuth();
+
+  // Verificar que el usuario esté autenticado
+  if (!isAuthenticated) {
     return (
       <div className={styles.errorContainer}>
+        <FontAwesomeIcon icon={faExclamationTriangle} className={styles.errorIcon} />
         <h2>Acceso restringido</h2>
-        <p>Solo los estudiantes registrados pueden crear clases.</p>
+        <p>Debes iniciar sesión para crear clases.</p>
       </div>
     );
   }
 
-  const currentStudentData = user.studentData;
+  // Verificar que sea un estudiante
+  if (!isStudent) {
+    return (
+      <div className={styles.errorContainer}>
+        <FontAwesomeIcon icon={faExclamationTriangle} className={styles.errorIcon} />
+        <h2>Acceso restringido</h2>
+        <p>Solo los estudiantes registrados pueden crear clases.</p>
+        <p>Ve a tu perfil y regístrate como estudiante primero.</p>
+      </div>
+    );
+  }
+
+  // Verificar que el perfil de estudiante esté completo
+  if (!hasStudentProfile || !studentData) {
+    return (
+      <div className={styles.errorContainer}>
+        <FontAwesomeIcon icon={faExclamationTriangle} className={styles.errorIcon} />
+        <h2>Perfil incompleto</h2>
+        <p>No se pudieron cargar los datos del estudiante.</p>
+        <p>Ve a tu <a href="/profile" style={{ color: '#667eea', textDecoration: 'underline' }}>perfil</a> y asegúrate de completar tu registro como estudiante.</p>
+      </div>
+    );
+  }
+
+  const currentStudentData = studentData;
 
   // Obtener materias filtradas por la carrera del estudiante
   const {
@@ -250,7 +285,7 @@ const CreateClassPage: React.FC = () => {
               <div className={styles.studentDetailItem}>
                 <span className={styles.detailLabel}>Estudiante:</span>
                 <span className={styles.detailValue}>
-                  {user.name} {user.paternal_surname}
+                  {userData?.name} {userData?.paternal_surname}
                 </span>
               </div>
               <div className={styles.studentDetailItem}>

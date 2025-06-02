@@ -6,6 +6,9 @@
   "scripts": {
     "start": "vite",
     "build": "tsc -b && vite build",
+    "build:clean": "npm run clean && npm run build",
+    "clean": "rm -rf dist && find src -name '*.js' -not -path 'src/generated/*' -not -path 'src/scripts/*' -not -name '*.config.js' -delete",
+    "clean:src": "find src -name '*.js' -not -path 'src/generated/*' -not -path 'src/scripts/*' -not -name '*.config.js' -delete",
     "lint": "eslint .",
     "preview": "vite preview",
     "generate-api": "orval --config orval.config.ts",

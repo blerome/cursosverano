@@ -296,7 +296,7 @@
   justify-content: center;
   min-height: 400px;
   text-align: center;
-  color: #666;
+  color: black;
 }
 
 .loadingContainer svg {
@@ -312,9 +312,15 @@
 }
 
 .errorContainer h2 {
-  color: #e74c3c;
+  color: black;
   margin-bottom: 1rem;
   font-size: 2rem;
+}
+
+.errorIcon {
+  font-size: 3rem;
+  color: black;
+  margin-bottom: 1rem;
 }
 
 /* Responsive Design */
