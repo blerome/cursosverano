@@ -13,6 +13,7 @@ import {
   faArrowRight
 } from '@fortawesome/free-solid-svg-icons';
 import { useStudentAuth, useStudentClasses, useFormatters, usePopup } from '../../hooks';
+import { useAuth } from '../../contexts/AuthContext';
 import ErrorPopup from '../../components/UI/ErrorPopup';
 import type { GetClassesStudent200Item } from '../../generated/model';
 import styles from './MyCoursesPage.module.css';
@@ -22,14 +23,15 @@ const MyCoursesPage: React.FC = () => {
   const { popup, hidePopup } = usePopup();
   const { getStatusInfo } = useFormatters();
 
-  // Autenticación del estudiante
+  // Contexto de autenticación principal
+  const { user, userType, isAuthenticated } = useAuth();
+
+  // Hook específico de estudiante
   const {
+    isStudent,
+    studentData,
     userData,
-    currentStudentData,
-    isLoading: authLoading,
-    hasProfileError,
-    hasStudentError,
-    isAuthenticated,
+    hasStudentProfile,
   } = useStudentAuth();
 
   // Clases del estudiante
@@ -40,33 +42,24 @@ const MyCoursesPage: React.FC = () => {
     refetch: refetchClasses,
     hasClasses,
     classesCount,
-  } = useStudentClasses(currentStudentData?.id_student);
+  } = useStudentClasses(studentData?.id_student);
 
   const handleViewClassmates = (classId: number) => {
     navigate(`/my-courses/class/${classId}/students`);
   };
 
   // Estados de carga y error
-  if (authLoading) {
-    return (
-      <div className={styles.loadingContainer}>
-        <FontAwesomeIcon icon={faSpinner} className={styles.spinner} spin />
-        <p>Cargando información del estudiante...</p>
-      </div>
-    );
-  }
-
-  if (hasProfileError) {
+  if (!isAuthenticated) {
     return (
       <div className={styles.errorContainer}>
         <FontAwesomeIcon icon={faExclamationTriangle} className={styles.errorIcon} />
-        <h2>Error de autenticación</h2>
-        <p>No se pudo cargar la información del usuario.</p>
+        <h2>Acceso restringido</h2>
+        <p>Debes iniciar sesión para ver tus cursos.</p>
       </div>
     );
   }
 
-  if (hasStudentError) {
+  if (!isStudent) {
     return (
       <div className={styles.errorContainer}>
         <FontAwesomeIcon icon={faExclamationTriangle} className={styles.errorIcon} />
@@ -77,8 +70,36 @@ const MyCoursesPage: React.FC = () => {
     );
   }
 
+  if (!hasStudentProfile || !studentData) {
+    return (
+      <div className={styles.errorContainer}>
+        <FontAwesomeIcon icon={faExclamationTriangle} className={styles.errorIcon} />
+        <h2>Perfil incompleto</h2>
+        <p>No se pudieron cargar los datos del estudiante.</p>
+        <p>Ve a tu perfil y asegúrate de completar tu registro como estudiante.</p>
+      </div>
+    );
+  }
+
   return (
     <div className={styles.myCoursesContainer}>
+      {/* Banner de estado de conexión */}
+      {userData && userData.id_user === 0 && (
+        <div style={{
+          background: 'linear-gradient(135deg, #f39c12, #e67e22)',
+          color: 'white',
+          padding: '1rem',
+          textAlign: 'center',
+          marginBottom: '1rem',
+          borderRadius: '10px',
+          boxShadow: '0 4px 12px rgba(0,0,0,0.1)'
+        }}>
+          <strong>⚠️ Modo Sin Conexión</strong>
+          <br />
+          <small>El servidor backend no está disponible. Mostrando información básica del perfil.</small>
+        </div>
+      )}
+
       {/* Header */}
       <div className={styles.pageHeader}>
         <div className={styles.headerContent}>
@@ -99,14 +120,25 @@ const MyCoursesPage: React.FC = () => {
                 <FontAwesomeIcon icon={faUserGraduate} />
                 <span>{userData?.name} {userData?.paternal_surname} {userData?.maternal_surname}</span>
               </div>
-              <div className={styles.studentDetail}>
-                <FontAwesomeIcon icon={faIdCard} />
-                <span>Control: {currentStudentData?.control_number}</span>
-              </div>
-              <div className={styles.studentDetail}>
-                <FontAwesomeIcon icon={faGraduationCap} />
-                <span>{currentStudentData?.career}</span>
-              </div>
+              {studentData ? (
+                <>
+                  <div className={styles.studentDetail}>
+                    <FontAwesomeIcon icon={faIdCard} />
+                    <span>Control: {studentData.control_number}</span>
+                  </div>
+                  <div className={styles.studentDetail}>
+                    <FontAwesomeIcon icon={faGraduationCap} />
+                    <span>{studentData.career}</span>
+                  </div>
+                </>
+              ) : (
+                <div className={styles.studentDetail}>
+                  <FontAwesomeIcon icon={faIdCard} />
+                  <span style={{ fontStyle: 'italic', color: '#666' }}>
+                    Email: {userData?.email}
+                  </span>
+                </div>
+              )}
             </div>
           </div>
         </div>
@@ -122,10 +154,13 @@ const MyCoursesPage: React.FC = () => {
         ) : classesError ? (
           <div className={styles.errorSection}>
             <FontAwesomeIcon icon={faExclamationTriangle} className={styles.errorIcon} />
-            <h3>Error al cargar cursos</h3>
-            <p>No se pudieron cargar tus cursos. Intenta nuevamente.</p>
+            <h3>Error de conexión con el servidor</h3>
+            <p>No se pudieron cargar tus cursos debido a problemas de conectividad.</p>
+            <p style={{ fontSize: '0.9rem', color: '#666' }}>
+              Verifica que el servidor backend esté corriendo en el puerto 3000.
+            </p>
             <button onClick={() => refetchClasses()} className={styles.retryButton}>
-              Reintentar
+              Reintentar Conexión
             </button>
           </div>
         ) : !hasClasses ? (

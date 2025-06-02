@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useGetClasses } from '../../generated/api/classes/classes';
 import { useGetStudents } from '../../generated/api/students/students';
-import { useGetAuthProfile } from '../../generated/api/auth/auth';
+import { useAuth } from '../../contexts/AuthContext';
 import { ClassData } from '../../types/class.types';
 import { useClassEnrollment } from '../../hooks/useClassEnrollment';
 import { useClassFilters } from '../../hooks/useClassFilters';
@@ -24,8 +24,8 @@ const ClassesPage: React.FC = () => {
   const { enrollInClass } = useClassEnrollment();
 
   // Obtener datos del usuario autenticado
-  const { data: profileData } = useGetAuthProfile();
-  const userData = profileData?.data;
+  const { user, userType, isAuthenticated } = useAuth();
+  const userData = user?.type === 'student' ? user : null;
 
   // Obtener datos del estudiante para filtrar por carrera
   const { data: studentData } = useGetStudents(
@@ -71,8 +71,8 @@ const ClassesPage: React.FC = () => {
     },
   });
 
-  const classes: ClassData[] = classesData?.data?.data || [];
-  const totalPages = Math.ceil((classesData?.data?.total || 0) / pageSize);
+  const classes: any[] = classesData?.data?.data || [];
+  const totalPages = Math.ceil((classesData?.data?.meta?.total || 0) / pageSize);
 
   // Efecto para manejar errores
   useEffect(() => {
@@ -175,11 +175,9 @@ const ClassesPage: React.FC = () => {
       </div>
     );
   }
-  console.log(classesData)
 
   return (
     <div className={styles.classesContainer}>
-
       <ClassFilter
         careers={careers}
         subjects={subjects}

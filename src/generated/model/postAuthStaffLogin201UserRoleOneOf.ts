@@ -6,4 +6,7 @@
  * OpenAPI spec version: 1.0
  */
 
-export type UserTypeType = null | 'admin' | 'student' | 'teacher';
+export type PostAuthStaffLogin201UserRoleOneOf = {
+  id_role: number;
+  name: string;
+};

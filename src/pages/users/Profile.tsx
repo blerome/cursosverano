@@ -1,13 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { useGetAuthProfile } from '../../generated/api/auth/auth';
+import { useAuth } from '../../contexts/AuthContext';
 import { useGetUsersRoles } from '../../generated/api/users/users';
 import { useGetCareers } from '../../generated/api/careers/careers';
-import { usePostStudents } from '../../generated/api/students/students';
-import { useGetStudents } from '../../generated/api/students/students';
-import { useMsal } from '@azure/msal-react';
+import { useGetStudents, usePostStudents } from '../../generated/api/students/students';
 import { usePopup } from '../../hooks/usePopup';
 import ErrorPopup from '../../components/UI/ErrorPopup';
 import styles from './Profile.module.css';
+import { ROLES } from '../../common';
 
 interface StudentFormData {
   phone: string;
@@ -40,35 +39,27 @@ const COUNTRY_CODES = [
 ];
 
 const Profile: React.FC = () => {
-  const { accounts } = useMsal();
-  const {
-    data: profileData,
-    isLoading: profileLoading,
-    error: profileError,
-  } = useGetAuthProfile();
+  const { user, userType, isAuthenticated } = useAuth();
   const { data: rolesData, isLoading: rolesLoading } = useGetUsersRoles();
   const { data: careersData, isLoading: careersLoading } = useGetCareers();
 
-  const userData = profileData?.data;
-
-  // Ahora usamos el nuevo endpoint con userId
+  // Solo obtener datos adicionales si el usuario es estudiante pero no tiene studentData
+  const needsStudentData = userType === 'student' && user?.type === 'student' && !user.studentData;
   const {
     data: studentsData,
     isLoading: studentsLoading,
     error: studentsError,
   } = useGetStudents(
-    { userId: userData?.id_user || 0 },
+    { userId: user?.type === 'student' ? user.id_user : 0 },
     {
       query: {
-        enabled: !!userData?.id_user, // Solo ejecutar si tenemos el userId
-        retry: false, // No reintentar automáticamente en caso de error
+        enabled: needsStudentData,
+        retry: false,
       },
     },
   );
 
   const createStudentMutation = usePostStudents();
-
-  // Hook personalizado para popups
   const { popup, showError, showSuccess, showWarning, hidePopup } = usePopup();
 
   const [isEditing, setIsEditing] = useState(false);
@@ -79,17 +70,9 @@ const Profile: React.FC = () => {
     countryCode: '+52',
   });
 
-  // Obtener el controlNumber guardado del localStorage (si existe)
-  const savedControlNumber = localStorage.getItem(
-    `student_control_${userData?.id_user}`,
-  );
-
-  // Verificar si el usuario ya es estudiante basado SOLO en si tiene datos de estudiante
-  // Si hay error 404, significa que no es estudiante
-  const isAlreadyStudent = !!(studentsData?.data && !studentsError);
-
-  // Con el nuevo endpoint, los datos del estudiante vienen directamente filtrados por userId
-  const currentStudentData = studentsData?.data;
+  // Verificar si el usuario ya es estudiante
+  const isAlreadyStudent = userType === 'student' && user?.type === 'student' && !!user.studentData;
+  const currentStudentData = user?.type === 'student' ? user.studentData : null;
 
   // useEffect para debug y manejo de errores
   useEffect(() => {
@@ -143,17 +126,13 @@ const Profile: React.FC = () => {
 
   const parseApiError = (error: any): string => {
     try {
-      // Si el error tiene una estructura específica del backend
       if (error?.response?.data) {
         const apiError = error.response.data as ApiError;
         return apiError.message || 'Error desconocido del servidor';
       }
-
-      // Si es un error de red o genérico
       if (error?.message) {
         return error.message;
       }
-
       return 'Error inesperado. Por favor, intenta nuevamente.';
     } catch {
       return 'Error inesperado. Por favor, intenta nuevamente.';
@@ -163,7 +142,7 @@ const Profile: React.FC = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (!userData?.id_user) {
+    if (!user || user.type !== 'student') {
       showError(
         'Error de sesión',
         'No se pudo obtener la información del usuario. Por favor, inicia sesión nuevamente.',
@@ -183,14 +162,14 @@ const Profile: React.FC = () => {
           id_career: formData.careerId,
           control_number: formData.controlNumber,
           phone: fullPhoneNumber,
-          id_role: 2,
-          id_user: userData.id_user,
+          id_role: ROLES.STUDENT.id,
+          id_user: user.id_user,
         },
       });
 
       // Guardar el número de control en localStorage para futuras consultas
       localStorage.setItem(
-        `student_control_${userData.id_user}`,
+        `student_control_${user.id_user}`,
         formData.controlNumber,
       );
 
@@ -240,7 +219,7 @@ const Profile: React.FC = () => {
   };
 
   // Estados de carga y error
-  if (!accounts || accounts.length === 0) {
+  if (!isAuthenticated) {
     return (
       <div className={styles.errorContainer}>
         <h2>Sesión requerida</h2>
@@ -249,7 +228,7 @@ const Profile: React.FC = () => {
     );
   }
 
-  if (profileLoading || rolesLoading || careersLoading) {
+  if (rolesLoading || careersLoading) {
     return (
       <div className={styles.loadingContainer}>
         <div className={styles.spinner}></div>
@@ -258,7 +237,7 @@ const Profile: React.FC = () => {
     );
   }
 
-  if (profileError) {
+  if (!user) {
     return (
       <div className={styles.errorContainer}>
         <h2>Error al cargar el perfil</h2>
@@ -278,7 +257,7 @@ const Profile: React.FC = () => {
       <div className={styles.profileCard}>
         <div className={styles.profileHeader}>
           <div className={styles.avatar}>
-            {userData?.name?.charAt(0) || 'U'}
+            {user.name?.charAt(0) || 'U'}
           </div>
           <h1 className={styles.profileTitle}>Mi Perfil</h1>
         </div>
@@ -291,28 +270,28 @@ const Profile: React.FC = () => {
             <div className={styles.infoRow}>
               <label className={styles.label}>Nombre:</label>
               <span className={styles.value}>
-                {userData?.name || 'No disponible'}
+                {user.name || 'No disponible'}
               </span>
             </div>
 
             <div className={styles.infoRow}>
               <label className={styles.label}>Apellido Paterno:</label>
               <span className={styles.value}>
-                {userData?.paternal_surname || 'No disponible'}
+                {user.type === 'student' ? user.paternal_surname : 'No disponible'}
               </span>
             </div>
 
             <div className={styles.infoRow}>
               <label className={styles.label}>Apellido Materno:</label>
               <span className={styles.value}>
-                {userData?.maternal_surname || 'No disponible'}
+                {user.type === 'student' ? user.maternal_surname : 'No disponible'}
               </span>
             </div>
 
             <div className={styles.infoRow}>
               <label className={styles.label}>Email:</label>
               <span className={styles.value}>
-                {userData?.email || 'No disponible'}
+                {user.email || 'No disponible'}
               </span>
             </div>
           </div>
@@ -345,49 +324,6 @@ const Profile: React.FC = () => {
             </div>
           )}
 
-          {/* Sección de debug temporal - REMOVER EN PRODUCCIÓN */}
-          {/* {process.env.NODE_ENV === 'development' && (
-            <div className={styles.infoSection}>
-              <h3 className={styles.sectionTitle}>Debug Info (Solo desarrollo)</h3>
-              <div className={styles.infoRow}>
-                <label className={styles.label}>Es estudiante:</label>
-                <span className={styles.value}>{isAlreadyStudent ? 'Sí' : 'No'}</span>
-              </div>
-              <div className={styles.infoRow}>
-                <label className={styles.label}>Datos de estudiante encontrados:</label>
-                <span className={styles.value}>{currentStudentData ? 'Sí' : 'No'}</span>
-              </div>
-              <div className={styles.infoRow}>
-                <label className={styles.label}>ID Usuario actual:</label>
-                <span className={styles.value}>{userData?.id_user || 'No disponible'}</span>
-              </div>
-              <div className={styles.infoRow}>
-                <label className={styles.label}>Cargando estudiantes:</label>
-                <span className={styles.value}>{studentsLoading ? 'Sí' : 'No'}</span>
-              </div>
-              <div className={styles.infoRow}>
-                <label className={styles.label}>Error estudiantes:</label>
-                <span className={styles.value}>{studentsError ? 'Sí (404 es normal)' : 'No'}</span>
-              </div>
-              {studentsError && (
-                <div className={styles.infoRow}>
-                  <label className={styles.label}>Detalle del error:</label>
-                  <span className={styles.value}>
-                    {JSON.stringify(studentsError, null, 2)}
-                  </span>
-                </div>
-              )}
-              {currentStudentData && (
-                <div className={styles.infoRow}>
-                  <label className={styles.label}>Datos del estudiante:</label>
-                  <span className={styles.value}>
-                    {JSON.stringify(currentStudentData, null, 2)}
-                  </span>
-                </div>
-              )}
-            </div>
-          )} */}
-
           {/* Sección de registro como estudiante */}
           <div className={styles.infoSection}>
             <div className={styles.sectionHeader}>
@@ -419,37 +355,28 @@ const Profile: React.FC = () => {
               <form onSubmit={handleSubmit} className={styles.studentForm}>
                 <div className={styles.formRow}>
                   <label className={styles.formLabel}>Teléfono:</label>
-                  <div className={styles.phoneInputContainer}>
+                  <div className={styles.phoneInput}>
                     <select
                       name="countryCode"
                       value={formData.countryCode}
                       onChange={handleInputChange}
-                      className={styles.countryCodeSelect}
+                      className={styles.countrySelect}
                     >
-                      {COUNTRY_CODES.map((country, index) => (
-                        <option
-                          key={`${country.code}-${index}`}
-                          value={country.code}
-                        >
-                          {country.flag} {country.code} {country.country}
-                        </option>
-                      ))}
+                      <option value="+52">+52 (México)</option>
+                      <option value="+1">+1 (US/Canada)</option>
                     </select>
                     <input
                       type="tel"
                       name="phone"
                       value={formData.phone}
                       onChange={handleInputChange}
-                      className={styles.phoneInput}
-                      placeholder="9981234567"
+                      className={styles.formInput}
+                      placeholder="9982123456"
                       pattern="[0-9]{10,15}"
-                      title="Solo números, 10-15 dígitos"
+                      title="Solo números, entre 10 y 15 dígitos"
                       required
                     />
                   </div>
-                  <small className={styles.phoneHelp}>
-                    Ejemplo: {formData.countryCode}9981234567
-                  </small>
                 </div>
 
                 <div className={styles.formRow}>

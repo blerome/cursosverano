@@ -6,4 +6,7 @@
  * OpenAPI spec version: 1.0
  */
 
-export type UserTypeType = null | 'admin' | 'student' | 'teacher';
+export interface AcceptInvitationDto {
+  token: string;
+  password: string;
+}

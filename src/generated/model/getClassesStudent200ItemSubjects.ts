@@ -8,7 +8,7 @@
 
 export type GetClassesStudent200ItemSubjects = {
   name: string;
+  id_subject: number;
   clave: string;
   credits: number;
-  id_subject: number;
 };

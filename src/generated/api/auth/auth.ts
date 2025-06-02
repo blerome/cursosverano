@@ -6,100 +6,370 @@
  * OpenAPI spec version: 1.0
  */
 import {
+  useMutation,
   useQuery
 } from '@tanstack/react-query';
 import type {
   DataTag,
   DefinedInitialDataOptions,
   DefinedUseQueryResult,
+  MutationFunction,
   QueryClient,
   QueryFunction,
   QueryKey,
   UndefinedInitialDataOptions,
+  UseMutationOptions,
+  UseMutationResult,
   UseQueryOptions,
   UseQueryResult
 } from '@tanstack/react-query';
 
 import type {
+  AcceptInvitationDto,
+  GlobalExpressUser,
+  InviteStaffDto,
+  PostAuthStaffAcceptInvitation201,
+  PostAuthStaffInvite201,
+  PostAuthStaffLogin201,
+  StaffLoginDto,
   UserProfileResponseDto
 } from '../../model';
 
-import getAuthProfileMutator from '../../../api/http/axios.mutator';
+import getAuthStudentProfileMutator from '../../../api/http/axios.mutator';
+import postAuthStaffLoginMutator from '../../../api/http/axios.mutator';
+import postAuthStaffInviteMutator from '../../../api/http/axios.mutator';
+import postAuthStaffAcceptInvitationMutator from '../../../api/http/axios.mutator';
+import getAuthStaffProfileMutator from '../../../api/http/axios.mutator';
 
 
 
 
-export const getAuthProfile = (
+export const getAuthStudentProfile = (
     
  signal?: AbortSignal
 ) => {
       
       
-      return getAuthProfileMutator<UserProfileResponseDto>(
-      {url: `/auth/profile`, method: 'GET', signal
+      return getAuthStudentProfileMutator<UserProfileResponseDto>(
+      {url: `/auth/student/profile`, method: 'GET', signal
     },
       );
     }
   
 
-export const getGetAuthProfileQueryKey = () => {
-    return [`/auth/profile`] as const;
+export const getGetAuthStudentProfileQueryKey = () => {
+    return [`/auth/student/profile`] as const;
     }
 
     
-export const getGetAuthProfileQueryOptions = <TData = Awaited<ReturnType<typeof getAuthProfile>>, TError = unknown>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAuthProfile>>, TError, TData>>, }
+export const getGetAuthStudentProfileQueryOptions = <TData = Awaited<ReturnType<typeof getAuthStudentProfile>>, TError = unknown>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAuthStudentProfile>>, TError, TData>>, }
 ) => {
 
 const {query: queryOptions} = options ?? {};
 
-  const queryKey =  queryOptions?.queryKey ?? getGetAuthProfileQueryKey();
+  const queryKey =  queryOptions?.queryKey ?? getGetAuthStudentProfileQueryKey();
 
   
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getAuthProfile>>> = ({ signal }) => getAuthProfile(signal);
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getAuthStudentProfile>>> = ({ signal }) => getAuthStudentProfile(signal);
 
       
 
       
 
-   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getAuthProfile>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getAuthStudentProfile>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
 }
 
-export type GetAuthProfileQueryResult = NonNullable<Awaited<ReturnType<typeof getAuthProfile>>>
-export type GetAuthProfileQueryError = unknown
+export type GetAuthStudentProfileQueryResult = NonNullable<Awaited<ReturnType<typeof getAuthStudentProfile>>>
+export type GetAuthStudentProfileQueryError = unknown
 
 
-export function useGetAuthProfile<TData = Awaited<ReturnType<typeof getAuthProfile>>, TError = unknown>(
-  options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAuthProfile>>, TError, TData>> & Pick<
+export function useGetAuthStudentProfile<TData = Awaited<ReturnType<typeof getAuthStudentProfile>>, TError = unknown>(
+  options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAuthStudentProfile>>, TError, TData>> & Pick<
         DefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getAuthProfile>>,
+          Awaited<ReturnType<typeof getAuthStudentProfile>>,
           TError,
-          Awaited<ReturnType<typeof getAuthProfile>>
+          Awaited<ReturnType<typeof getAuthStudentProfile>>
         > , 'initialData'
       >, }
  , queryClient?: QueryClient
   ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetAuthProfile<TData = Awaited<ReturnType<typeof getAuthProfile>>, TError = unknown>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAuthProfile>>, TError, TData>> & Pick<
+export function useGetAuthStudentProfile<TData = Awaited<ReturnType<typeof getAuthStudentProfile>>, TError = unknown>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAuthStudentProfile>>, TError, TData>> & Pick<
         UndefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getAuthProfile>>,
+          Awaited<ReturnType<typeof getAuthStudentProfile>>,
           TError,
-          Awaited<ReturnType<typeof getAuthProfile>>
+          Awaited<ReturnType<typeof getAuthStudentProfile>>
         > , 'initialData'
       >, }
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetAuthProfile<TData = Awaited<ReturnType<typeof getAuthProfile>>, TError = unknown>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAuthProfile>>, TError, TData>>, }
+export function useGetAuthStudentProfile<TData = Awaited<ReturnType<typeof getAuthStudentProfile>>, TError = unknown>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAuthStudentProfile>>, TError, TData>>, }
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 
-export function useGetAuthProfile<TData = Awaited<ReturnType<typeof getAuthProfile>>, TError = unknown>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAuthProfile>>, TError, TData>>, }
+export function useGetAuthStudentProfile<TData = Awaited<ReturnType<typeof getAuthStudentProfile>>, TError = unknown>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAuthStudentProfile>>, TError, TData>>, }
  , queryClient?: QueryClient 
  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
 
-  const queryOptions = getGetAuthProfileQueryOptions(options)
+  const queryOptions = getGetAuthStudentProfileQueryOptions(options)
+
+  const query = useQuery(queryOptions , queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
+}
+
+
+
+export const postAuthStaffLogin = (
+    staffLoginDto: StaffLoginDto,
+ signal?: AbortSignal
+) => {
+      
+      
+      return postAuthStaffLoginMutator<PostAuthStaffLogin201>(
+      {url: `/auth/staff/login`, method: 'POST',
+      headers: {'Content-Type': 'application/json', },
+      data: staffLoginDto, signal
+    },
+      );
+    }
+  
+
+
+export const getPostAuthStaffLoginMutationOptions = <TError = unknown,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postAuthStaffLogin>>, TError,{data: StaffLoginDto}, TContext>, }
+): UseMutationOptions<Awaited<ReturnType<typeof postAuthStaffLogin>>, TError,{data: StaffLoginDto}, TContext> => {
+
+const mutationKey = ['postAuthStaffLogin'];
+const {mutation: mutationOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof postAuthStaffLogin>>, {data: StaffLoginDto}> = (props) => {
+          const {data} = props ?? {};
+
+          return  postAuthStaffLogin(data,)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type PostAuthStaffLoginMutationResult = NonNullable<Awaited<ReturnType<typeof postAuthStaffLogin>>>
+    export type PostAuthStaffLoginMutationBody = StaffLoginDto
+    export type PostAuthStaffLoginMutationError = unknown
+
+    export const usePostAuthStaffLogin = <TError = unknown,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postAuthStaffLogin>>, TError,{data: StaffLoginDto}, TContext>, }
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof postAuthStaffLogin>>,
+        TError,
+        {data: StaffLoginDto},
+        TContext
+      > => {
+
+      const mutationOptions = getPostAuthStaffLoginMutationOptions(options);
+
+      return useMutation(mutationOptions , queryClient);
+    }
+    export const postAuthStaffInvite = (
+    inviteStaffDto: InviteStaffDto,
+ signal?: AbortSignal
+) => {
+      
+      
+      return postAuthStaffInviteMutator<PostAuthStaffInvite201>(
+      {url: `/auth/staff/invite`, method: 'POST',
+      headers: {'Content-Type': 'application/json', },
+      data: inviteStaffDto, signal
+    },
+      );
+    }
+  
+
+
+export const getPostAuthStaffInviteMutationOptions = <TError = unknown,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postAuthStaffInvite>>, TError,{data: InviteStaffDto}, TContext>, }
+): UseMutationOptions<Awaited<ReturnType<typeof postAuthStaffInvite>>, TError,{data: InviteStaffDto}, TContext> => {
+
+const mutationKey = ['postAuthStaffInvite'];
+const {mutation: mutationOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof postAuthStaffInvite>>, {data: InviteStaffDto}> = (props) => {
+          const {data} = props ?? {};
+
+          return  postAuthStaffInvite(data,)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type PostAuthStaffInviteMutationResult = NonNullable<Awaited<ReturnType<typeof postAuthStaffInvite>>>
+    export type PostAuthStaffInviteMutationBody = InviteStaffDto
+    export type PostAuthStaffInviteMutationError = unknown
+
+    export const usePostAuthStaffInvite = <TError = unknown,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postAuthStaffInvite>>, TError,{data: InviteStaffDto}, TContext>, }
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof postAuthStaffInvite>>,
+        TError,
+        {data: InviteStaffDto},
+        TContext
+      > => {
+
+      const mutationOptions = getPostAuthStaffInviteMutationOptions(options);
+
+      return useMutation(mutationOptions , queryClient);
+    }
+    export const postAuthStaffAcceptInvitation = (
+    acceptInvitationDto: AcceptInvitationDto,
+ signal?: AbortSignal
+) => {
+      
+      
+      return postAuthStaffAcceptInvitationMutator<PostAuthStaffAcceptInvitation201>(
+      {url: `/auth/staff/accept-invitation`, method: 'POST',
+      headers: {'Content-Type': 'application/json', },
+      data: acceptInvitationDto, signal
+    },
+      );
+    }
+  
+
+
+export const getPostAuthStaffAcceptInvitationMutationOptions = <TError = unknown,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postAuthStaffAcceptInvitation>>, TError,{data: AcceptInvitationDto}, TContext>, }
+): UseMutationOptions<Awaited<ReturnType<typeof postAuthStaffAcceptInvitation>>, TError,{data: AcceptInvitationDto}, TContext> => {
+
+const mutationKey = ['postAuthStaffAcceptInvitation'];
+const {mutation: mutationOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof postAuthStaffAcceptInvitation>>, {data: AcceptInvitationDto}> = (props) => {
+          const {data} = props ?? {};
+
+          return  postAuthStaffAcceptInvitation(data,)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type PostAuthStaffAcceptInvitationMutationResult = NonNullable<Awaited<ReturnType<typeof postAuthStaffAcceptInvitation>>>
+    export type PostAuthStaffAcceptInvitationMutationBody = AcceptInvitationDto
+    export type PostAuthStaffAcceptInvitationMutationError = unknown
+
+    export const usePostAuthStaffAcceptInvitation = <TError = unknown,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postAuthStaffAcceptInvitation>>, TError,{data: AcceptInvitationDto}, TContext>, }
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof postAuthStaffAcceptInvitation>>,
+        TError,
+        {data: AcceptInvitationDto},
+        TContext
+      > => {
+
+      const mutationOptions = getPostAuthStaffAcceptInvitationMutationOptions(options);
+
+      return useMutation(mutationOptions , queryClient);
+    }
+    export const getAuthStaffProfile = (
+    
+ signal?: AbortSignal
+) => {
+      
+      
+      return getAuthStaffProfileMutator<GlobalExpressUser>(
+      {url: `/auth/staff/profile`, method: 'GET', signal
+    },
+      );
+    }
+  
+
+export const getGetAuthStaffProfileQueryKey = () => {
+    return [`/auth/staff/profile`] as const;
+    }
+
+    
+export const getGetAuthStaffProfileQueryOptions = <TData = Awaited<ReturnType<typeof getAuthStaffProfile>>, TError = unknown>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAuthStaffProfile>>, TError, TData>>, }
+) => {
+
+const {query: queryOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetAuthStaffProfileQueryKey();
+
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getAuthStaffProfile>>> = ({ signal }) => getAuthStaffProfile(signal);
+
+      
+
+      
+
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getAuthStaffProfile>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetAuthStaffProfileQueryResult = NonNullable<Awaited<ReturnType<typeof getAuthStaffProfile>>>
+export type GetAuthStaffProfileQueryError = unknown
+
+
+export function useGetAuthStaffProfile<TData = Awaited<ReturnType<typeof getAuthStaffProfile>>, TError = unknown>(
+  options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAuthStaffProfile>>, TError, TData>> & Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getAuthStaffProfile>>,
+          TError,
+          Awaited<ReturnType<typeof getAuthStaffProfile>>
+        > , 'initialData'
+      >, }
+ , queryClient?: QueryClient
+  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetAuthStaffProfile<TData = Awaited<ReturnType<typeof getAuthStaffProfile>>, TError = unknown>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAuthStaffProfile>>, TError, TData>> & Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getAuthStaffProfile>>,
+          TError,
+          Awaited<ReturnType<typeof getAuthStaffProfile>>
+        > , 'initialData'
+      >, }
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetAuthStaffProfile<TData = Awaited<ReturnType<typeof getAuthStaffProfile>>, TError = unknown>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAuthStaffProfile>>, TError, TData>>, }
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+
+export function useGetAuthStaffProfile<TData = Awaited<ReturnType<typeof getAuthStaffProfile>>, TError = unknown>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAuthStaffProfile>>, TError, TData>>, }
+ , queryClient?: QueryClient 
+ ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+
+  const queryOptions = getGetAuthStaffProfileQueryOptions(options)
 
   const query = useQuery(queryOptions , queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
 

@@ -1,11 +1,22 @@
 import React, { useState, useEffect } from 'react';
-import { useGetAuthProfile } from '../../generated/api/auth/auth';
-import { useGetStudents } from '../../generated/api/students/students';
 import { useAllCareersAndSubjects } from '../../hooks/useAllCareersAndSubjects';
 import { usePostClasses } from '../../generated/api/classes/classes';
+import { useAuth } from '../../contexts/AuthContext';
 import { usePopup } from '../../hooks/usePopup';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { 
+  faPlus, 
+  faCalendarAlt, 
+  faClock, 
+  faUsers, 
+  faGraduationCap,
+  faChalkboardTeacher,
+  faInfoCircle,
+  faSave,
+  faSpinner
+} from '@fortawesome/free-solid-svg-icons';
 import ErrorPopup from '../../components/UI/ErrorPopup';
-import { CreateClassDto, CreateScheduleDto } from '../../generated/model';
+import type { CreateClassDto, CreateScheduleDto } from '../../generated/model';
 import styles from './CreateClassPage.module.css';
 
 interface ClassFormData {
@@ -35,30 +46,20 @@ const DAYS_OF_WEEK = [
 ];
 
 const CreateClassPage: React.FC = () => {
-  const {
-    data: profileData,
-    isLoading: profileLoading,
-    error: profileError,
-  } = useGetAuthProfile();
+  const { user, userType, isAuthenticated } = useAuth();
+  const [selectedCareerId, setSelectedCareerId] = useState<number>(0);
 
-  const userData = profileData?.data;
+  // Verificar que el usuario sea un estudiante autenticado
+  if (!isAuthenticated || userType !== 'student' || !user || user.type !== 'student') {
+    return (
+      <div className={styles.errorContainer}>
+        <h2>Acceso restringido</h2>
+        <p>Solo los estudiantes registrados pueden crear clases.</p>
+      </div>
+    );
+  }
 
-  // Obtener datos del estudiante actual
-  const {
-    data: studentsData,
-    isLoading: studentsLoading,
-    error: studentsError,
-  } = useGetStudents(
-    { userId: userData?.id_user || 0 },
-    {
-      query: {
-        enabled: !!userData?.id_user,
-        retry: false,
-      },
-    },
-  );
-
-  const currentStudentData = studentsData?.data;
+  const currentStudentData = user.studentData;
 
   // Obtener materias filtradas por la carrera del estudiante
   const {
@@ -182,7 +183,7 @@ const CreateClassPage: React.FC = () => {
       const classData: CreateClassDto = {
         subjectId: formData.subjectId,
         clave: formData.clave,
-        description: formData.description || undefined,
+        description: formData.description,
         responsibleStudent: {
           studentId: currentStudentData.id_student,
           controlNumber: currentStudentData.control_number || '',
@@ -191,14 +192,16 @@ const CreateClassPage: React.FC = () => {
         schedule,
       };
 
-      await createClassMutation.mutateAsync({ data: classData });
+      await createClassMutation.mutateAsync({
+        data: classData,
+      });
 
       showSuccess(
         '¡Clase creada exitosamente!',
-        'La clase ha sido creada y tú eres el jefe de grupo. Los estudiantes ya pueden inscribirse.'
+        'Tu clase ha sido enviada para revisión del administrador. Recibirás una notificación cuando sea aprobada.'
       );
 
-      // Limpiar formulario
+      // Limpiar el formulario
       setFormData({
         subjectId: 0,
         clave: '',
@@ -215,80 +218,69 @@ const CreateClassPage: React.FC = () => {
     }
   };
 
-  // Estados de carga y error
-  if (profileLoading || studentsLoading || subjectsLoading) {
+  // Estados de carga
+  if (subjectsLoading) {
     return (
       <div className={styles.loadingContainer}>
-        <div className={styles.spinner}></div>
-        <p>
-          {profileLoading && 'Cargando información del usuario...'}
-          {studentsLoading && 'Cargando información del estudiante...'}
-          {subjectsLoading && 'Cargando materias disponibles...'}
-        </p>
+        <FontAwesomeIcon icon={faSpinner} spin />
+        <p>Cargando datos del formulario...</p>
       </div>
     );
   }
-
-  if (profileError) {
-    return (
-      <div className={styles.errorContainer}>
-        <h2>Error de autenticación</h2>
-        <p>No se pudo cargar la información del usuario.</p>
-      </div>
-    );
-  }
-
-  if (studentsError || !currentStudentData) {
-    return (
-      <div className={styles.errorContainer}>
-        <h2>Acceso restringido</h2>
-        <p>Debes estar registrado como estudiante para crear clases.</p>
-        <p>Ve a tu perfil y regístrate como estudiante primero.</p>
-      </div>
-    );
-  }
-
-  const subjects = subjectsData || [];
 
   return (
     <div className={styles.createClassContainer}>
       <div className={styles.createClassCard}>
-        <div className={styles.header}>
-          <h1 className={styles.title}>Crear Nueva Clase</h1>
-          <p className={styles.subtitle}>
-            Como jefe de grupo, puedes crear una nueva clase para que otros estudiantes se inscriban
+        <div className={styles.createClassHeader}>
+          <FontAwesomeIcon icon={faPlus} className={styles.headerIcon} />
+          <h1 className={styles.createClassTitle}>Crear Nueva Clase</h1>
+          <p className={styles.createClassSubtitle}>
+            Propón una nueva clase para el curso de verano
           </p>
         </div>
 
-        <div className={styles.studentInfo}>
-          <h3>Información del Jefe de Grupo</h3>
-          <div className={styles.infoGrid}>
-            <div className={styles.infoItem}>
-              <label>Nombre:</label>
-              <span>{userData?.name} {userData?.paternal_surname}</span>
-            </div>
-            <div className={styles.infoItem}>
-              <label>Número de Control:</label>
-              <span>{currentStudentData.control_number}</span>
-            </div>
-            <div className={styles.infoItem}>
-              <label>Teléfono:</label>
-              <span>{currentStudentData.phone}</span>
-            </div>
-            <div className={styles.infoItem}>
-              <label>Carrera:</label>
-              <span>{currentStudentData.career}</span>
+        <form onSubmit={handleSubmit} className={styles.createClassForm}>
+          {/* Información del estudiante */}
+          <div className={styles.studentInfo}>
+            <h3 className={styles.sectionTitle}>
+              <FontAwesomeIcon icon={faGraduationCap} />
+              Información del Estudiante
+            </h3>
+            <div className={styles.studentDetails}>
+              <div className={styles.studentDetailItem}>
+                <span className={styles.detailLabel}>Estudiante:</span>
+                <span className={styles.detailValue}>
+                  {user.name} {user.paternal_surname}
+                </span>
+              </div>
+              <div className={styles.studentDetailItem}>
+                <span className={styles.detailLabel}>Número de Control:</span>
+                <span className={styles.detailValue}>
+                  {currentStudentData?.control_number || 'No disponible'}
+                </span>
+              </div>
+              <div className={styles.studentDetailItem}>
+                <span className={styles.detailLabel}>Carrera:</span>
+                <span className={styles.detailValue}>
+                  {currentStudentData?.career || 'No disponible'}
+                </span>
+              </div>
             </div>
           </div>
-        </div>
 
-        <form onSubmit={handleSubmit} className={styles.classForm}>
+          {/* Selección de materia */}
           <div className={styles.formSection}>
-            <h3>Información de la Clase</h3>
+            <h3 className={styles.sectionTitle}>
+              <FontAwesomeIcon icon={faChalkboardTeacher} />
+              Información de la Clase
+            </h3>
             
-            <div className={styles.formRow}>
-              <label className={styles.formLabel}>Materia: *</label>
+            <div className={styles.formGroup}>
+              <label htmlFor="subjectId" className={styles.formLabel}>
+                Materia <span className={styles.required}>*</span>
+              </label>
               <select
+                id="subjectId"
                 name="subjectId"
                 value={formData.subjectId}
                 onChange={handleInputChange}
@@ -296,55 +288,72 @@ const CreateClassPage: React.FC = () => {
                 required
               >
                 <option value={0}>Selecciona una materia</option>
-                {subjects.map((subject: any) => (
+                {subjectsData?.map((subject: any) => (
                   <option key={subject.id_subject} value={subject.id_subject}>
-                    {subject.clave} - {subject.name} ({subject.credits} créditos)
+                    {subject.clave} - {subject.name}
                   </option>
                 ))}
               </select>
-              <small className={styles.helpText}>
-                Mostrando {subjects.length} materias disponibles para tu carrera: {currentStudentData.career}
-              </small>
+              {subjectsData && subjectsData.length > 0 && (
+                <small className={styles.formHint}>
+                  <FontAwesomeIcon icon={faInfoCircle} />
+                  {subjectsData.length} materias disponibles para tu carrera
+                </small>
+              )}
             </div>
 
-            <div className={styles.formRow}>
-              <label className={styles.formLabel}>Clave de la Clase: *</label>
+            <div className={styles.formGroup}>
+              <label htmlFor="clave" className={styles.formLabel}>
+                Clave de la Clase <span className={styles.required}>*</span>
+              </label>
               <input
                 type="text"
+                id="clave"
                 name="clave"
                 value={formData.clave}
                 onChange={handleInputChange}
                 className={styles.formInput}
                 placeholder="Se genera automáticamente"
-                required
                 readOnly
+                required
               />
-              <small className={styles.helpText}>
-                La clave se genera automáticamente al seleccionar una materia
+              <small className={styles.formHint}>
+                <FontAwesomeIcon icon={faInfoCircle} />
+                La clave se genera automáticamente basada en la materia seleccionada
               </small>
             </div>
 
-            <div className={styles.formRow}>
-              <label className={styles.formLabel}>Descripción:</label>
+            <div className={styles.formGroup}>
+              <label htmlFor="description" className={styles.formLabel}>
+                Motivo
+              </label>
               <textarea
+                id="description"
                 name="description"
                 value={formData.description}
                 onChange={handleInputChange}
                 className={styles.formTextarea}
-                placeholder="Descripción opcional de la clase..."
-                rows={3}
+                placeholder="Motivo de apertura de la clase..."
+                rows={4}
               />
             </div>
           </div>
 
+          {/* Horarios */}
           <div className={styles.formSection}>
-            <h3>Horario</h3>
+            <h3 className={styles.sectionTitle}>
+              <FontAwesomeIcon icon={faClock} />
+              Horarios Sugeridos
+            </h3>
             
-            <div className={styles.timeRow}>
-              <div className={styles.timeGroup}>
-                <label className={styles.formLabel}>Hora de Inicio: *</label>
+            <div className={styles.timeInputs}>
+              <div className={styles.formGroup}>
+                <label htmlFor="startTime" className={styles.formLabel}>
+                  Hora de Inicio <span className={styles.required}>*</span>
+                </label>
                 <input
                   type="time"
+                  id="startTime"
                   name="startTime"
                   value={formData.startTime}
                   onChange={handleInputChange}
@@ -352,11 +361,14 @@ const CreateClassPage: React.FC = () => {
                   required
                 />
               </div>
-              
-              <div className={styles.timeGroup}>
-                <label className={styles.formLabel}>Hora de Fin: *</label>
+
+              <div className={styles.formGroup}>
+                <label htmlFor="endTime" className={styles.formLabel}>
+                  Hora de Fin <span className={styles.required}>*</span>
+                </label>
                 <input
                   type="time"
+                  id="endTime"
                   name="endTime"
                   value={formData.endTime}
                   onChange={handleInputChange}
@@ -366,41 +378,56 @@ const CreateClassPage: React.FC = () => {
               </div>
             </div>
 
-            <div className={styles.daysSection}>
-              <label className={styles.formLabel}>Días de la Semana: *</label>
-              <div className={styles.daysGrid}>
+            <div className={styles.formGroup}>
+              <label className={styles.formLabel}>
+                Días de la Semana <span className={styles.required}>*</span>
+              </label>
+              <div className={styles.daysSelector}>
                 {DAYS_OF_WEEK.map(day => (
                   <button
                     key={day.id}
                     type="button"
-                    className={`${styles.dayButton} ${
-                      formData.selectedDays.includes(day.id) ? styles.selected : ''
-                    }`}
                     onClick={() => handleDayToggle(day.id)}
+                    className={`${styles.dayButton} ${
+                      formData.selectedDays.includes(day.id) ? styles.daySelected : ''
+                    }`}
                   >
                     <span className={styles.dayShort}>{day.shortName}</span>
                     <span className={styles.dayFull}>{day.name}</span>
                   </button>
                 ))}
               </div>
-              <small className={styles.helpText}>
-                Selecciona los días en que se impartirá la clase
+              <small className={styles.formHint}>
+                <FontAwesomeIcon icon={faInfoCircle} />
+                Selecciona uno o más días para la clase
               </small>
             </div>
           </div>
 
+          {/* Botones de acción */}
           <div className={styles.formActions}>
             <button
               type="submit"
               className={styles.submitButton}
-              disabled={createClassMutation.isPending || subjectsLoading}
+              disabled={createClassMutation.isPending}
             >
-              {createClassMutation.isPending ? 'Creando Clase...' : 'Crear Clase'}
+              {createClassMutation.isPending ? (
+                <>
+                  <FontAwesomeIcon icon={faSpinner} spin />
+                  Creando clase...
+                </>
+              ) : (
+                <>
+                  <FontAwesomeIcon icon={faSave} />
+                  Crear Clase
+                </>
+              )}
             </button>
           </div>
         </form>
       </div>
 
+      {/* Popup de errores/mensajes */}
       <ErrorPopup
         isOpen={popup.isOpen}
         onClose={hidePopup}

@@ -21,7 +21,7 @@ import {
   faSignOutAlt
 } from '@fortawesome/free-solid-svg-icons';
 import { useGetClasses } from '../../generated/api/classes/classes';
-import { useGetAuthProfile } from '../../generated/api/auth/auth';
+import { useAuth } from '../../contexts/AuthContext';
 import ClassApprovalSection from './components/ClassApprovalSection';
 import type { ClassData } from '../../types/class.types';
 import styles from './AdminDashboard.module.css';
@@ -30,15 +30,13 @@ type DashboardSection = 'overview' | 'class-approval' | 'student-management' | '
 
 const AdminDashboard: React.FC = () => {
   const [activeSection, setActiveSection] = useState<DashboardSection>('overview');
-  const { instance } = useMsal();
+  const { user, logout } = useAuth();
 
   // Obtener datos para el overview
   const { data: classesData, isLoading: classesLoading } = useGetClasses({
     page: 1,
     pageSize: 100
   });
-
-  const { data: profileData } = useGetAuthProfile();
 
   const classes: ClassData[] = classesData?.data?.data || [];
 
@@ -51,10 +49,7 @@ const AdminDashboard: React.FC = () => {
   };
 
   const handleLogout = () => {
-    instance.logoutPopup({
-      postLogoutRedirectUri: '/',
-      mainWindowRedirectUri: '/'
-    });
+    logout();
   };
 
   const menuItems = [

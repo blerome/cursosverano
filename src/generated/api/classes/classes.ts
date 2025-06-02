@@ -53,7 +53,7 @@ export const getClasses = (
 ) => {
       
       
-      return getClassesMutator(
+      return getClassesMutator<PaginatedResponseDtoClassResponseDto>(
       {url: `/classes`, method: 'GET',
         params, signal
     },
@@ -135,7 +135,7 @@ export const postClasses = (
 ) => {
       
       
-      return postClassesMutator(
+      return postClassesMutator<ResponseDtoCreatedClassResponseDto>(
       {url: `/classes`, method: 'POST',
       headers: {'Content-Type': 'application/json', },
       data: createClassDto, signal
@@ -193,7 +193,7 @@ const {mutation: mutationOptions} = options ?
 ) => {
       
       
-      return getClassesStudentMutator(
+      return getClassesStudentMutator<GetClassesStudent200Item[]>(
       {url: `/classes/student`, method: 'GET',
         params, signal
     },
@@ -275,7 +275,7 @@ export const postClassesEnrollStudent = (
 ) => {
       
       
-      return postClassesEnrollStudentMutator(
+      return postClassesEnrollStudentMutator<[PostClassesEnrollStudent202Item0, PostClassesEnrollStudent202Item1]>(
       {url: `/classes/enrollStudent`, method: 'POST',
       headers: {'Content-Type': 'application/json', },
       data: enrollStudentClassDto, signal
@@ -334,7 +334,7 @@ const {mutation: mutationOptions} = options ?
 ) => {
       
       
-      return getClassesIdStudentsMutator(
+      return getClassesIdStudentsMutator<PaginatedResponseDtoGetStudentByClassResponseDto>(
       {url: `/classes/${id}/students`, method: 'GET',
         params, signal
     },

@@ -6,4 +6,4 @@
  * OpenAPI spec version: 1.0
  */
 
-export type UserTypeType = null | 'admin' | 'student' | 'teacher';
+export interface GlobalExpressUser { [key: string]: unknown }

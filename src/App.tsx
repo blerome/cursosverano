@@ -6,11 +6,13 @@ import {
   Navigate,
 } from 'react-router-dom';
 import HomePage from './pages/HomePage';
+import LoginPage from './pages/LoginPage';
 import ReglamentoEstudiante from './pages/ReglamentoEstudiante';
 import ReglamentoGeneral from './pages/ReglamentoGeneral';
 import { PrivateRoute } from './components/privateroutes/PrivateRoute';
 import { AdminRoute } from './components/privateroutes/AdminRoute';
 import { PublicRoute } from './components/privateroutes/PublicRoute';
+import { AuthProvider } from './contexts/AuthContext';
 import NewProject from './pages/admin/NewProjectPage/NewProjectPage';
 import CreateClassPage from './pages/admin/CreateClassPage';
 import AdminDashboard from './pages/admin/AdminDashboard';
@@ -19,11 +21,14 @@ import ClassesPage from './pages/classes/ClassesPage';
 import DiagnosticPage from './pages/DiagnosticPage';
 import MyCoursesPage from './pages/courses/MyCoursesPage';
 import ClassStudentsPage from './pages/courses/ClassStudentsPage';
+import StaffLogin from './components/auth/StaffLogin';
+import StaffProfile from './pages/staff/StaffProfile';
 import './App.css';
 
 const App: React.FC = () => {
   return (
-    <Router>
+    <AuthProvider>
+      <Router>
         <Routes>
           {/* 👇 Rutas públicas - MANEJAN SU PROPIO LAYOUT DENTRO DE PublicRoute */}
           <Route element={<PublicRoute />}>
@@ -36,7 +41,13 @@ const App: React.FC = () => {
             <Route path="/Reglamento-General" element={<ReglamentoGeneral />} />
           </Route>
 
-          {/* 👇 Rutas privadas para usuarios autenticados - USAN PrivateLayout */}
+          {/* 👇 Ruta de login unificada (público, sin layout) */}
+          <Route path="/login" element={<LoginPage />} />
+
+          {/* 👇 Rutas de staff login (público) */}
+          <Route path="/staff/login" element={<StaffLogin />} />
+
+          {/* 👇 Rutas privadas para usuarios estudiantes - USAN PrivateLayout */}
           <Route element={<PrivateRoute />}>
             <Route path="/profile" element={<Profile />} />
             <Route path="/classes" element={<ClassesPage />} />
@@ -46,8 +57,9 @@ const App: React.FC = () => {
             <Route path="/diagnostic" element={<DiagnosticPage />} />
           </Route>
 
-          {/* 👇 Rutas de admin - USAN SU PROPIO LAYOUT INTERNO */}
+          {/* 👇 Rutas de staff - REQUIEREN AUTENTICACIÓN POR SESIÓN */}
           <Route element={<AdminRoute />}>
+            <Route path="/staff/profile" element={<StaffProfile />} />
             <Route path="/admin">
               <Route index element={<Navigate to="/admin/dashboard" replace />} />
               <Route path="dashboard" element={<AdminDashboard />} />
@@ -58,7 +70,8 @@ const App: React.FC = () => {
           {/* Redirección para rutas no encontradas */}
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
-    </Router>
+      </Router>
+    </AuthProvider>
   );
 };
 

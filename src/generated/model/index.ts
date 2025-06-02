@@ -6,6 +6,7 @@
  * OpenAPI spec version: 1.0
  */
 
+export * from './acceptInvitationDto';
 export * from './buildingResponseDto';
 export * from './careerResponseDto';
 export * from './classResponseDto';
@@ -47,12 +48,22 @@ export * from './getSubjects202Meta';
 export * from './getSubjectsParams';
 export * from './getUsersId200';
 export * from './getUsersParams';
+export * from './globalExpressUser';
+export * from './inviteStaffDto';
+export * from './inviteStaffDtoRole';
 export * from './paginatedResponseDtoClassResponseDto';
 export * from './paginatedResponseDtoClassResponseDtoMeta';
 export * from './paginatedResponseDtoGetStudentByClassResponseDto';
 export * from './paginatedResponseDtoGetStudentByClassResponseDtoMeta';
 export * from './paginatedResultUser';
 export * from './paginationMeta';
+export * from './postAuthStaffAcceptInvitation201';
+export * from './postAuthStaffInvite201';
+export * from './postAuthStaffLogin201';
+export * from './postAuthStaffLogin201User';
+export * from './postAuthStaffLogin201UserMaternalSurname';
+export * from './postAuthStaffLogin201UserRole';
+export * from './postAuthStaffLogin201UserRoleOneOf';
 export * from './postClassesEnrollStudent202Item0';
 export * from './postClassesEnrollStudent202Item0CreatedAt';
 export * from './postClassesEnrollStudent202Item0DeletedAt';
@@ -79,6 +90,7 @@ export * from './searchClassDto';
 export * from './searchClassDtoStatus';
 export * from './searchSubjectDto';
 export * from './searchUsersDto';
+export * from './staffLoginDto';
 export * from './studentResponseDto';
 export * from './studentResponseDtoCareer';
 export * from './studentResponseDtoControlNumber';
