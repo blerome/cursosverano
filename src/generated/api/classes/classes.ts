@@ -36,6 +36,7 @@ import type {
   PostClassesEnrollStudent202Item0,
   PostClassesEnrollStudent202Item1,
   PostClassesIdStatusStatus201,
+  PrismaBatchPayload,
   ResponseDtoCreatedClassResponseDto
 } from '../../model';
 
@@ -45,6 +46,7 @@ import getClassesStudentMutator from '../../../api/http/axios.mutator';
 import postClassesEnrollStudentMutator from '../../../api/http/axios.mutator';
 import getClassesIdStudentsMutator from '../../../api/http/axios.mutator';
 import postClassesIdStatusStatusMutator from '../../../api/http/axios.mutator';
+import deleteClassesIdStudentStudentIdMutator from '../../../api/http/axios.mutator';
 
 
 
@@ -472,6 +474,62 @@ const {mutation: mutationOptions} = options ?
       > => {
 
       const mutationOptions = getPostClassesIdStatusStatusMutationOptions(options);
+
+      return useMutation(mutationOptions , queryClient);
+    }
+    export const deleteClassesIdStudentStudentId = (
+    id: number,
+    studentId: number,
+ ) => {
+      
+      
+      return deleteClassesIdStudentStudentIdMutator<PrismaBatchPayload>(
+      {url: `/classes/${id}/student/${studentId}`, method: 'DELETE'
+    },
+      );
+    }
+  
+
+
+export const getDeleteClassesIdStudentStudentIdMutationOptions = <TError = unknown,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof deleteClassesIdStudentStudentId>>, TError,{id: number;studentId: number}, TContext>, }
+): UseMutationOptions<Awaited<ReturnType<typeof deleteClassesIdStudentStudentId>>, TError,{id: number;studentId: number}, TContext> => {
+
+const mutationKey = ['deleteClassesIdStudentStudentId'];
+const {mutation: mutationOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof deleteClassesIdStudentStudentId>>, {id: number;studentId: number}> = (props) => {
+          const {id,studentId} = props ?? {};
+
+          return  deleteClassesIdStudentStudentId(id,studentId,)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type DeleteClassesIdStudentStudentIdMutationResult = NonNullable<Awaited<ReturnType<typeof deleteClassesIdStudentStudentId>>>
+    
+    export type DeleteClassesIdStudentStudentIdMutationError = unknown
+
+    export const useDeleteClassesIdStudentStudentId = <TError = unknown,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof deleteClassesIdStudentStudentId>>, TError,{id: number;studentId: number}, TContext>, }
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof deleteClassesIdStudentStudentId>>,
+        TError,
+        {id: number;studentId: number},
+        TContext
+      > => {
+
+      const mutationOptions = getDeleteClassesIdStudentStudentIdMutationOptions(options);
 
       return useMutation(mutationOptions , queryClient);
     }

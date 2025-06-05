@@ -1,0 +1,337 @@
+.pageContainer {
+  padding: 20px 30px;
+  max-width: 950px;
+  margin: 20px auto;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  background-color: #f4f7f9;
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+}
+
+.pageHeader {
+  display: flex;
+  align-items: center;
+  margin-bottom: 30px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid #dfe6eb;
+}
+
+.pageHeader h1 {
+  margin: 0 0 0 15px;
+  font-size: 1.9em;
+  color: #2c3e50;
+  font-weight: 600;
+}
+
+.pageHeader svg {
+  margin-right: 10px;
+  color: #3498db;
+}
+
+.backButton {
+  background-color: #ffffff;
+  border: 1px solid #ced4da;
+  color: #495057;
+  padding: 10px 18px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.9em;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  transition: background-color 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.backButton:hover {
+  background-color: #f8f9fa;
+  border-color: #adb5bd;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+.backButton svg {
+  margin-right: 7px;
+}
+
+.classInfoSection {
+  background-color: #ffffff;
+  padding: 25px;
+  border-radius: 8px;
+  margin-bottom: 30px;
+  border: 1px solid #e9ecef;
+  box-shadow: 0 3px 8px rgba(0,0,0,0.04);
+}
+
+.classInfoSection h2 {
+  margin-top: 0;
+  font-size: 1.6em;
+  color: #343a40;
+  margin-bottom: 18px;
+  font-weight: 600;
+}
+
+.classInfoSection p {
+  margin: 10px 0;
+  font-size: 1em;
+  color: #495057;
+  display: flex;
+  align-items: center;
+}
+
+.classInfoSection svg {
+  margin-right: 12px;
+  color: #17a2b8;
+  font-size: 1.1em;
+}
+
+.studentsListSection h3 {
+  font-size: 1.5em;
+  color: #2c3e50;
+  margin-bottom: 20px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid #dfe6eb;
+  font-weight: 600;
+}
+
+.studentsList {
+  list-style-type: none;
+  padding: 0;
+}
+
+.studentItem {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px 20px;
+  border: 1px solid #e9ecef;
+  border-radius: 8px;
+  margin-bottom: 12px;
+  background-color: #fff;
+  transition: box-shadow 0.25s ease, transform 0.25s ease, border-color 0.25s ease;
+}
+
+.studentItem:hover {
+  box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+  transform: translateY(-3px);
+  border-left: 4px solid #3498db;
+  padding-left: 17px;
+}
+
+.studentInfo {
+  display: flex;
+  align-items: center;
+}
+
+.studentIcon {
+  margin-right: 15px;
+  color: #3498db;
+  font-size: 1.4em;
+}
+
+.studentName {
+  font-weight: 600;
+  color: #343a40;
+  display: block;
+  margin-bottom: 4px;
+  font-size: 1.05em;
+}
+
+.studentControlNumber {
+  font-size: 0.9em;
+  color: #6c757d;
+}
+
+.leaderBadge {
+  background-color: #20c997;
+  color: white;
+  padding: 5px 10px;
+  border-radius: 15px;
+  font-size: 0.75em;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.loadingState, .errorState, .noStudentsMessage {
+  text-align: center;
+  padding: 40px 20px;
+  font-size: 1.1em;
+  color: #6c757d;
+  background-color: #fff;
+  border: 1px solid #e9ecef;
+  border-radius: 8px;
+  margin-top: 20px;
+}
+
+.loadingState svg, .errorState svg {
+  display: block;
+  margin: 0 auto 15px auto;
+  font-size: 2.5em;
+  color: #3498db;
+}
+
+.errorState svg {
+  color: #e74c3c;
+}
+
+.errorContainer {
+  text-align: center;
+  padding: 40px;
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 3px 8px rgba(0,0,0,0.04);
+}
+
+.errorContainer h2 {
+  color: #e74c3c;
+  margin-top: 15px;
+  margin-bottom: 10px;
+  font-size: 1.5em;
+}
+
+/* Botón para eliminar estudiante */
+.deleteStudentButton {
+  background-color: transparent;
+  border: none;
+  color: #adb5bd; /* Un gris suave */
+  padding: 5px 8px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 1em; /* Ajustar según el tamaño del ícono */
+  margin-left: 0; /* Eliminamos el margen izquierdo si está dentro de studentActions */
+  transition: color 0.2s ease, background-color 0.2s ease;
+}
+
+.deleteStudentButton:hover {
+  color: #e74c3c; /* Rojo al pasar el mouse */
+  background-color: rgba(231, 76, 60, 0.1); /* Fondo rojo muy sutil */
+}
+
+.deleteStudentButton:disabled {
+  color: #ced4da;
+  cursor: not-allowed;
+  background-color: transparent;
+}
+
+.deleteStudentButton svg {
+  display: block; /* Para asegurar que el ícono no tenga espacio extra */
+}
+
+/* Sección para inscribir nuevo estudiante */
+.enrollStudentSection {
+  background-color: #ffffff;
+  padding: 20px 25px;
+  border-radius: 8px;
+  margin-bottom: 30px;
+  border: 1px solid #e9ecef;
+  box-shadow: 0 3px 8px rgba(0,0,0,0.04);
+}
+
+.enrollStudentSection h3 {
+  font-size: 1.3em;
+  color: #2c3e50;
+  margin-top: 0;
+  margin-bottom: 20px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+}
+
+.enrollStudentSection h3 svg {
+  margin-right: 10px;
+  color: #17a2b8;
+}
+
+.enrollFormContainer {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  flex-wrap: wrap; /* Permitir que los elementos se envuelvan si no caben */
+}
+
+/* Contenedor para el input de búsqueda de estudiantes a inscribir */
+.enrollSearchContainer {
+  position: relative;
+  display: flex;
+  flex-grow: 1; /* Permitir que ocupe espacio disponible */
+  min-width: 250px; /* Ancho mínimo para el campo de búsqueda */
+  margin-bottom: 10px; /* Espacio si se envuelve debajo del select/botón */
+}
+
+.enrollSearchIcon {
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #adb5bd;
+  font-size: 0.9em;
+}
+
+.enrollSearchInput {
+  flex-grow: 1;
+  padding: 10px 12px 10px 35px; /* Padding izquierdo para el ícono */
+  border: 1px solid #ced4da;
+  border-radius: 6px;
+  font-size: 0.95em;
+  background-color: #fff;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.enrollSearchInput:focus {
+  outline: none;
+  border-color: #3498db;
+  box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.2);
+}
+
+.enrollSelect {
+  flex-grow: 1;
+  padding: 10px 12px;
+  border: 1px solid #ced4da;
+  border-radius: 6px;
+  font-size: 0.95em;
+  background-color: #fff;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.enrollSelect:focus {
+  outline: none;
+  border-color: #3498db;
+  box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.2);
+}
+
+.enrollSelect:disabled {
+  background-color: #e9ecef;
+  cursor: not-allowed;
+}
+
+.enrollButton {
+  background-color: #28a745; /* Verde para acción positiva */
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.95em;
+  font-weight: 500;
+  display: inline-flex;
+  align-items: center;
+  transition: background-color 0.2s ease, box-shadow 0.2s ease;
+  white-space: nowrap; /* Evitar que el texto se parta */
+}
+
+.enrollButton:hover {
+  background-color: #218838; /* Verde más oscuro */
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.enrollButton:disabled {
+  background-color: #6c757d;
+  cursor: not-allowed;
+  opacity: 0.7;
+}
+
+/* Estilos para el contenedor de acciones del estudiante (badge y botón delete) */
+.studentActions {
+  display: flex;
+  align-items: center;
+  gap: 10px; /* Espacio entre badge y botón delete si ambos están presentes */
+} 

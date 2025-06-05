@@ -11,12 +11,14 @@ import {
   faExclamationTriangle,
   faSpinner,
   faFilter,
-  faSearch
+  faSearch,
+  faUsers
 } from '@fortawesome/free-solid-svg-icons';
 import { useGetClasses, usePostClassesIdStatusStatus } from '../../../generated/api/classes/classes';
 import { usePopup } from '../../../hooks/usePopup';
 import ErrorPopup from '../../../components/UI/ErrorPopup';
 import type { ClassResponseDto } from '../../../generated/model';
+import { useNavigate } from 'react-router-dom';
 import styles from './ClassApprovalSection.module.css';
 
 // Opciones de filtro por estado
@@ -45,8 +47,17 @@ const ClassApprovalModal: React.FC<ClassApprovalModalProps> = ({
   const [action, setAction] = useState<'approve' | 'reject' | null>(null);
   const [reason, setReason] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const navigate = useNavigate();
 
   if (!isOpen || !classData) return null;
+
+  const handleViewStudentsClick = () => {
+    if (classData?.id_class) {
+      navigate(`/admin/class-students/${classData.id_class}`, {
+        state: { classDetails: classData }
+      });
+    }
+  };
 
   const handleSubmit = async () => {
     if (action === 'approve') {
@@ -113,6 +124,17 @@ const ClassApprovalModal: React.FC<ClassApprovalModalProps> = ({
               <span>{classData.description}</span>
             </div>
           )}
+        </div>
+
+        {/* Botón para ver estudiantes */} 
+        <div className={styles.viewStudentsSection}>
+          <button 
+            onClick={handleViewStudentsClick}
+            className={styles.viewStudentsButton}
+          >
+            <FontAwesomeIcon icon={faUsers} />
+            Ver Estudiantes Inscritos ({classData.enrrolled})
+          </button>
         </div>
 
         {!action && (

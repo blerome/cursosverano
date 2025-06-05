@@ -86,6 +86,7 @@ export * from './postStudents201';
 export * from './postStudents201ControlNumber';
 export * from './postStudents201IdRole';
 export * from './postStudents201Phone';
+export * from './prismaBatchPayload';
 export * from './responseDtoCreatedClassResponseDto';
 export * from './responsibleStudent';
 export * from './schedule';

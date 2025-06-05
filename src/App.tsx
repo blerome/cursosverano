@@ -20,7 +20,8 @@ import Profile from './pages/users/Profile';
 import ClassesPage from './pages/classes/ClassesPage';
 import DiagnosticPage from './pages/DiagnosticPage';
 import MyCoursesPage from './pages/courses/MyCoursesPage';
-import ClassStudentsPage from './pages/courses/ClassStudentsPage';
+import CourseClassStudentsPage from './pages/courses/ClassStudentsPage';
+import AdminClassStudentsPage from './pages/admin/ClassStudentsPage';
 import StaffLogin from './components/auth/StaffLogin';
 import StaffProfile from './pages/staff/StaffProfile';
 import './App.css';
@@ -53,18 +54,18 @@ const App: React.FC = () => {
             <Route path="/classes" element={<ClassesPage />} />
             <Route path="/create-class" element={<CreateClassPage />} />
             <Route path="/my-courses" element={<MyCoursesPage />} />
-            <Route path="/my-courses/class/:classId/students" element={<ClassStudentsPage />} />
+            <Route path="/my-courses/class/:classId/students" element={<CourseClassStudentsPage />} />
             <Route path="/diagnostic" element={<DiagnosticPage />} />
           </Route>
 
           {/* 👇 Rutas de staff - REQUIEREN AUTENTICACIÓN POR SESIÓN */}
           <Route element={<AdminRoute />}>
             <Route path="/staff/profile" element={<StaffProfile />} />
-            <Route path="/create-class" element={<CreateClassPage />} />
             <Route path="/admin">
               <Route index element={<Navigate to="/admin/dashboard" replace />} />
               <Route path="dashboard" element={<AdminDashboard />} />
               <Route path="new-project" element={<NewProject />} />
+              <Route path="class-students/:classId" element={<AdminClassStudentsPage />} />
             </Route>
           </Route>
 

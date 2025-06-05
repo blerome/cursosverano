@@ -452,6 +452,7 @@
 
 .detailRow span {
   color: var(--approval-dark);
+  word-break: break-word;
 }
 
 .actionButtons {
@@ -574,6 +575,39 @@
 .confirmReject:hover {
   background: #c0392b;
 }
+
+/* Estilos para la sección y botón de ver estudiantes */
+.viewStudentsSection {
+  margin-top: 15px;
+  margin-bottom: 20px; /* Añade espacio antes de los botones de acción */
+  text-align: center; /* Centra el botón si es el único elemento */
+}
+
+.viewStudentsButton {
+  background-color: #007bff; /* Azul primario, similar a otros botones de acción */
+  color: white;
+  border: none;
+  padding: 10px 18px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 0.95em;
+  font-weight: 500;
+  display: inline-flex; /* Para alinear ícono y texto */
+  align-items: center;
+  transition: background-color 0.2s ease, box-shadow 0.2s ease;
+  text-decoration: none; /* En caso de que se use como Link en el futuro */
+}
+
+.viewStudentsButton:hover {
+  background-color: #0056b3; /* Azul más oscuro al pasar el mouse */
+  box-shadow: 0 2px 5px rgba(0,0,0,0.15);
+}
+
+.viewStudentsButton svg {
+  margin-right: 8px;
+}
+
+/* Fin de estilos para ver estudiantes */
 
 /* Responsive */
 @media (max-width: 768px) {

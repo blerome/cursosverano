@@ -84,6 +84,11 @@ const AdminDashboard: React.FC = () => {
   
   // Estado para búsqueda de materias por nombre
   const [searchSubjectName, setSearchSubjectName] = useState<string>('');
+  // Estado para el valor actual del input de búsqueda de materia (actualización inmediata)
+  const [currentSearchInput, setCurrentSearchInput] = useState<string>('');
+
+  // Estado para el temporizador del debounce de búsqueda de materias
+  const [searchDebounceTimeout, setSearchDebounceTimeout] = useState<NodeJS.Timeout | null>(null);
 
   // Hooks para crear clases
   const { popup, showError, showSuccess, hidePopup } = usePopup();
@@ -119,6 +124,15 @@ const AdminDashboard: React.FC = () => {
       }
     }
   }, [formData.subjectId, subjectsData]);
+
+  // Efecto para limpiar timeouts al desmontar el componente
+  useEffect(() => {
+    return () => {
+      if (searchDebounceTimeout) {
+        clearTimeout(searchDebounceTimeout);
+      }
+    };
+  }, [searchDebounceTimeout]);
 
   // Obtener datos para el overview
   const { data: classesData, isLoading: classesLoading } = useGetClasses({
@@ -169,13 +183,24 @@ const AdminDashboard: React.FC = () => {
   };
 
   const handleSearchSubjectChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setSearchSubjectName(e.target.value);
-    // Resetear materia seleccionada cuando se busque
-    setFormData(prev => ({
-      ...prev,
-      subjectId: 0,
-      clave: '',
-    }));
+    const newSearchValue = e.target.value;
+    setCurrentSearchInput(newSearchValue); // Actualiza el input inmediatamente
+    
+    if (searchDebounceTimeout) {
+      clearTimeout(searchDebounceTimeout);
+    }
+
+    const newTimeout = setTimeout(() => {
+      setSearchSubjectName(newSearchValue); // Esto dispara la búsqueda/filtrado
+      // Resetear materia seleccionada cuando se busque
+      setFormData(prev => ({
+        ...prev,
+        subjectId: 0,
+        clave: '',
+      }));
+    }, 500); // Espera 500ms antes de actualizar
+
+    setSearchDebounceTimeout(newTimeout);
   };
 
   const handleDayToggle = (dayId: number) => {
@@ -576,7 +601,7 @@ const AdminDashboard: React.FC = () => {
                       type="text"
                       id="searchSubject"
                       name="searchSubject"
-                      value={searchSubjectName}
+                      value={currentSearchInput}
                       onChange={handleSearchSubjectChange}
                       className={styles.formInput}
                       placeholder="Escribe para buscar por nombre de materia..."

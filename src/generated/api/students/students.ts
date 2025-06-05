@@ -28,11 +28,13 @@ import type {
   CreateStudentDto,
   GetStudentResponseDto,
   GetStudentsParams,
-  PostStudents201
+  PostStudents201,
+  StudentResponseDto
 } from '../../model';
 
 import postStudentsMutator from '../../../api/http/axios.mutator';
 import getStudentsMutator from '../../../api/http/axios.mutator';
+import getStudentsStudentsMutator from '../../../api/http/axios.mutator';
 
 
 
@@ -167,6 +169,87 @@ export function useGetStudents<TData = Awaited<ReturnType<typeof getStudents>>, 
  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
 
   const queryOptions = getGetStudentsQueryOptions(params,options)
+
+  const query = useQuery(queryOptions , queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
+}
+
+
+
+export const getStudentsStudents = (
+    
+ signal?: AbortSignal
+) => {
+      
+      
+      return getStudentsStudentsMutator<StudentResponseDto[]>(
+      {url: `/students/students`, method: 'GET', signal
+    },
+      );
+    }
+  
+
+export const getGetStudentsStudentsQueryKey = () => {
+    return [`/students/students`] as const;
+    }
+
+    
+export const getGetStudentsStudentsQueryOptions = <TData = Awaited<ReturnType<typeof getStudentsStudents>>, TError = unknown>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getStudentsStudents>>, TError, TData>>, }
+) => {
+
+const {query: queryOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetStudentsStudentsQueryKey();
+
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getStudentsStudents>>> = ({ signal }) => getStudentsStudents(signal);
+
+      
+
+      
+
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getStudentsStudents>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetStudentsStudentsQueryResult = NonNullable<Awaited<ReturnType<typeof getStudentsStudents>>>
+export type GetStudentsStudentsQueryError = unknown
+
+
+export function useGetStudentsStudents<TData = Awaited<ReturnType<typeof getStudentsStudents>>, TError = unknown>(
+  options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getStudentsStudents>>, TError, TData>> & Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getStudentsStudents>>,
+          TError,
+          Awaited<ReturnType<typeof getStudentsStudents>>
+        > , 'initialData'
+      >, }
+ , queryClient?: QueryClient
+  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetStudentsStudents<TData = Awaited<ReturnType<typeof getStudentsStudents>>, TError = unknown>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getStudentsStudents>>, TError, TData>> & Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getStudentsStudents>>,
+          TError,
+          Awaited<ReturnType<typeof getStudentsStudents>>
+        > , 'initialData'
+      >, }
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetStudentsStudents<TData = Awaited<ReturnType<typeof getStudentsStudents>>, TError = unknown>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getStudentsStudents>>, TError, TData>>, }
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+
+export function useGetStudentsStudents<TData = Awaited<ReturnType<typeof getStudentsStudents>>, TError = unknown>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getStudentsStudents>>, TError, TData>>, }
+ , queryClient?: QueryClient 
+ ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+
+  const queryOptions = getGetStudentsStudentsQueryOptions(options)
 
   const query = useQuery(queryOptions , queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
 
