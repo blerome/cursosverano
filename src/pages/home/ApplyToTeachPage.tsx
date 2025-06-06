@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { usePostTeachers } from '../../generated/api/teachers/teachers';
+import { usePostTeachersApplications } from '../../generated/api/teachers/teachers';
 import styles from './ApplyToTeachPage.module.css';
 
 const initialState = {
@@ -27,7 +27,7 @@ const ApplyToTeachPage: React.FC = () => {
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const mutation = usePostTeachers({
+  const mutation = usePostTeachersApplications({
     mutation: {
       onSuccess: () => {
         setSuccess(true);

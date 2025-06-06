@@ -24,6 +24,8 @@ import AdminClassStudentsPage from './pages/admin/ClassStudentsPage';
 import StaffLogin from './components/auth/StaffLogin';
 import StaffProfile from './pages/staff/StaffProfile';
 import ApplyToTeachPage from './pages/home/ApplyToTeachPage';
+import TeacherApplicationsListPage from './pages/admin/TeacherApplicationsListPage';
+import TeacherApplicationDetailPage from './pages/admin/TeacherApplicationDetailPage';
 import './App.css';
 
 const App: React.FC = () => {
@@ -66,6 +68,8 @@ const App: React.FC = () => {
               <Route index element={<Navigate to="/admin/dashboard" replace />} />
               <Route path="dashboard" element={<AdminDashboard />} />
               <Route path="class-students/:classId" element={<AdminClassStudentsPage />} />
+              <Route path="teacher-applications" element={<TeacherApplicationsListPage />} />
+              <Route path="teacher-applications/:id" element={<TeacherApplicationDetailPage />} />
             </Route>
           </Route>
 

@@ -34,8 +34,8 @@ export const useClassFilters = ({ studentCareer, currentPage, pageSize }: UseCla
       period: filters.period,
     };
 
-    // Solo enviar status 'pendiente' a la API (los otros son para filtrado local)
-    if (filters.status === 'pendiente') {
+    // Enviar cualquier estado seleccionado ('pendiente', 'aprobado', 'rechazado')
+    if (filters.status) {
       params.status = filters.status;
     }
 

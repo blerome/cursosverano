@@ -41,7 +41,7 @@ export interface ResponsibleStudent {
 
 export interface ClassData {
   id_class: number;
-  status: 'pendiente' | 'active' | 'cancelled';
+  status: 'pendiente' | 'aprobado' | 'rechazado';
   max_students: number;
   description: string | null;
   id_subject: number;

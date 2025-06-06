@@ -6,33 +6,47 @@
  * OpenAPI spec version: 1.0
  */
 import {
-  useMutation
+  useMutation,
+  useQuery
 } from '@tanstack/react-query';
 import type {
+  DataTag,
+  DefinedInitialDataOptions,
+  DefinedUseQueryResult,
   MutationFunction,
   QueryClient,
+  QueryFunction,
+  QueryKey,
+  UndefinedInitialDataOptions,
   UseMutationOptions,
-  UseMutationResult
+  UseMutationResult,
+  UseQueryOptions,
+  UseQueryResult
 } from '@tanstack/react-query';
 
 import type {
-  PostTeachers201,
-  PostTeachersParams
+  GetTeachersApplications200Item,
+  GetTeachersApplicationsId200,
+  GetTeachersApplicationsParams,
+  PostTeachersApplications201,
+  PostTeachersApplicationsParams
 } from '../../model';
 
-import postTeachersMutator from '../../../api/http/axios.mutator';
+import postTeachersApplicationsMutator from '../../../api/http/axios.mutator';
+import getTeachersApplicationsMutator from '../../../api/http/axios.mutator';
+import getTeachersApplicationsIdMutator from '../../../api/http/axios.mutator';
 
 
 
 
-export const postTeachers = (
-    params: PostTeachersParams,
+export const postTeachersApplications = (
+    params: PostTeachersApplicationsParams,
  signal?: AbortSignal
 ) => {
       
       
-      return postTeachersMutator<PostTeachers201>(
-      {url: `/teachers`, method: 'POST',
+      return postTeachersApplicationsMutator<PostTeachersApplications201>(
+      {url: `/teachers/applications`, method: 'POST',
         params, signal
     },
       );
@@ -40,11 +54,11 @@ export const postTeachers = (
   
 
 
-export const getPostTeachersMutationOptions = <TError = unknown,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postTeachers>>, TError,{params: PostTeachersParams}, TContext>, }
-): UseMutationOptions<Awaited<ReturnType<typeof postTeachers>>, TError,{params: PostTeachersParams}, TContext> => {
+export const getPostTeachersApplicationsMutationOptions = <TError = unknown,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postTeachersApplications>>, TError,{params: PostTeachersApplicationsParams}, TContext>, }
+): UseMutationOptions<Awaited<ReturnType<typeof postTeachersApplications>>, TError,{params: PostTeachersApplicationsParams}, TContext> => {
 
-const mutationKey = ['postTeachers'];
+const mutationKey = ['postTeachersApplications'];
 const {mutation: mutationOptions} = options ?
       options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
       options
@@ -54,10 +68,10 @@ const {mutation: mutationOptions} = options ?
       
 
 
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof postTeachers>>, {params: PostTeachersParams}> = (props) => {
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof postTeachersApplications>>, {params: PostTeachersApplicationsParams}> = (props) => {
           const {params} = props ?? {};
 
-          return  postTeachers(params,)
+          return  postTeachersApplications(params,)
         }
 
         
@@ -65,21 +79,183 @@ const {mutation: mutationOptions} = options ?
 
   return  { mutationFn, ...mutationOptions }}
 
-    export type PostTeachersMutationResult = NonNullable<Awaited<ReturnType<typeof postTeachers>>>
+    export type PostTeachersApplicationsMutationResult = NonNullable<Awaited<ReturnType<typeof postTeachersApplications>>>
     
-    export type PostTeachersMutationError = unknown
+    export type PostTeachersApplicationsMutationError = unknown
 
-    export const usePostTeachers = <TError = unknown,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postTeachers>>, TError,{params: PostTeachersParams}, TContext>, }
+    export const usePostTeachersApplications = <TError = unknown,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postTeachersApplications>>, TError,{params: PostTeachersApplicationsParams}, TContext>, }
  , queryClient?: QueryClient): UseMutationResult<
-        Awaited<ReturnType<typeof postTeachers>>,
+        Awaited<ReturnType<typeof postTeachersApplications>>,
         TError,
-        {params: PostTeachersParams},
+        {params: PostTeachersApplicationsParams},
         TContext
       > => {
 
-      const mutationOptions = getPostTeachersMutationOptions(options);
+      const mutationOptions = getPostTeachersApplicationsMutationOptions(options);
 
       return useMutation(mutationOptions , queryClient);
     }
+    export const getTeachersApplications = (
+    params?: GetTeachersApplicationsParams,
+ signal?: AbortSignal
+) => {
+      
+      
+      return getTeachersApplicationsMutator<GetTeachersApplications200Item[]>(
+      {url: `/teachers/applications`, method: 'GET',
+        params, signal
+    },
+      );
+    }
+  
+
+export const getGetTeachersApplicationsQueryKey = (params?: GetTeachersApplicationsParams,) => {
+    return [`/teachers/applications`, ...(params ? [params]: [])] as const;
+    }
+
     
+export const getGetTeachersApplicationsQueryOptions = <TData = Awaited<ReturnType<typeof getTeachersApplications>>, TError = unknown>(params?: GetTeachersApplicationsParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getTeachersApplications>>, TError, TData>>, }
+) => {
+
+const {query: queryOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetTeachersApplicationsQueryKey(params);
+
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getTeachersApplications>>> = ({ signal }) => getTeachersApplications(params, signal);
+
+      
+
+      
+
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getTeachersApplications>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetTeachersApplicationsQueryResult = NonNullable<Awaited<ReturnType<typeof getTeachersApplications>>>
+export type GetTeachersApplicationsQueryError = unknown
+
+
+export function useGetTeachersApplications<TData = Awaited<ReturnType<typeof getTeachersApplications>>, TError = unknown>(
+ params: undefined |  GetTeachersApplicationsParams, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getTeachersApplications>>, TError, TData>> & Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getTeachersApplications>>,
+          TError,
+          Awaited<ReturnType<typeof getTeachersApplications>>
+        > , 'initialData'
+      >, }
+ , queryClient?: QueryClient
+  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetTeachersApplications<TData = Awaited<ReturnType<typeof getTeachersApplications>>, TError = unknown>(
+ params?: GetTeachersApplicationsParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getTeachersApplications>>, TError, TData>> & Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getTeachersApplications>>,
+          TError,
+          Awaited<ReturnType<typeof getTeachersApplications>>
+        > , 'initialData'
+      >, }
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetTeachersApplications<TData = Awaited<ReturnType<typeof getTeachersApplications>>, TError = unknown>(
+ params?: GetTeachersApplicationsParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getTeachersApplications>>, TError, TData>>, }
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+
+export function useGetTeachersApplications<TData = Awaited<ReturnType<typeof getTeachersApplications>>, TError = unknown>(
+ params?: GetTeachersApplicationsParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getTeachersApplications>>, TError, TData>>, }
+ , queryClient?: QueryClient 
+ ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+
+  const queryOptions = getGetTeachersApplicationsQueryOptions(params,options)
+
+  const query = useQuery(queryOptions , queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
+}
+
+
+
+export const getTeachersApplicationsId = (
+    id: number,
+ signal?: AbortSignal
+) => {
+      
+      
+      return getTeachersApplicationsIdMutator<GetTeachersApplicationsId200>(
+      {url: `/teachers/applications/${id}`, method: 'GET', signal
+    },
+      );
+    }
+  
+
+export const getGetTeachersApplicationsIdQueryKey = (id: number,) => {
+    return [`/teachers/applications/${id}`] as const;
+    }
+
+    
+export const getGetTeachersApplicationsIdQueryOptions = <TData = Awaited<ReturnType<typeof getTeachersApplicationsId>>, TError = unknown>(id: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getTeachersApplicationsId>>, TError, TData>>, }
+) => {
+
+const {query: queryOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetTeachersApplicationsIdQueryKey(id);
+
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getTeachersApplicationsId>>> = ({ signal }) => getTeachersApplicationsId(id, signal);
+
+      
+
+      
+
+   return  { queryKey, queryFn, enabled: !!(id), ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getTeachersApplicationsId>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetTeachersApplicationsIdQueryResult = NonNullable<Awaited<ReturnType<typeof getTeachersApplicationsId>>>
+export type GetTeachersApplicationsIdQueryError = unknown
+
+
+export function useGetTeachersApplicationsId<TData = Awaited<ReturnType<typeof getTeachersApplicationsId>>, TError = unknown>(
+ id: number, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getTeachersApplicationsId>>, TError, TData>> & Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getTeachersApplicationsId>>,
+          TError,
+          Awaited<ReturnType<typeof getTeachersApplicationsId>>
+        > , 'initialData'
+      >, }
+ , queryClient?: QueryClient
+  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetTeachersApplicationsId<TData = Awaited<ReturnType<typeof getTeachersApplicationsId>>, TError = unknown>(
+ id: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getTeachersApplicationsId>>, TError, TData>> & Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getTeachersApplicationsId>>,
+          TError,
+          Awaited<ReturnType<typeof getTeachersApplicationsId>>
+        > , 'initialData'
+      >, }
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetTeachersApplicationsId<TData = Awaited<ReturnType<typeof getTeachersApplicationsId>>, TError = unknown>(
+ id: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getTeachersApplicationsId>>, TError, TData>>, }
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+
+export function useGetTeachersApplicationsId<TData = Awaited<ReturnType<typeof getTeachersApplicationsId>>, TError = unknown>(
+ id: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getTeachersApplicationsId>>, TError, TData>>, }
+ , queryClient?: QueryClient 
+ ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+
+  const queryOptions = getGetTeachersApplicationsIdQueryOptions(id,options)
+
+  const query = useQuery(queryOptions , queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
+}
+
+
+

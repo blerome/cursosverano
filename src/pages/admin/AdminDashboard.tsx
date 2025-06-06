@@ -24,6 +24,7 @@ import { useAllCareersAndSubjects } from '../../hooks/useAllCareersAndSubjects';
 import { usePopup } from '../../hooks/usePopup';
 import ClassApprovalSection from './components/ClassApprovalSection';
 import StudentManagementSection from './components/StudentManagementSection';
+import TeacherManagementSection from './components/TeacherManagementSection';
 import { ClassResponseDto, CreateClassDto, CreateScheduleDto } from '../../generated/model';
 import styles from './AdminDashboard.module.css';
 
@@ -489,12 +490,7 @@ const AdminDashboard: React.FC = () => {
         );
 
       case 'teacher-management':
-        return (
-          <div className={styles.sectionPlaceholder}>
-            <h2>Gestión de Profesores</h2>
-            <p>Funcionalidad en desarrollo...</p>
-          </div>
-        );
+        return <TeacherManagementSection />;
 
       case 'create-class':
         return (

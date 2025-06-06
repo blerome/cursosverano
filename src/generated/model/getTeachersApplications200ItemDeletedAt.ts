@@ -6,4 +6,4 @@
  * OpenAPI spec version: 1.0
  */
 
-export type PostTeachers201CreatedAt = null | string;
+export type GetTeachersApplications200ItemDeletedAt = null | string;

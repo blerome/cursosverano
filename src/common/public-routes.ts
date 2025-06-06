@@ -1,4 +1,4 @@
 export const PUBLIC_ROUTES = [
-    '/classes',
-    '/teachers'
-]
+  { path: '/classes', method: 'GET' },
+  { path: '/teachers/applications', method: 'POST' },
+];

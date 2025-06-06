@@ -43,6 +43,8 @@ const ClassCard: React.FC<ClassCardProps> = ({
         return { text: 'Pendiente', icon: faExclamationTriangle, className: styles.statusPending };
       case 'cancelled':
         return { text: 'Cancelada', icon: faExclamationTriangle, className: styles.statusCancelled };
+      case 'rechazado':
+        return { text: 'Rechazada', icon: faExclamationTriangle, className: styles.statusRejected };
       default:
         return { text: 'Desconocido', icon: faInfoCircle, className: styles.statusUnknown };
     }

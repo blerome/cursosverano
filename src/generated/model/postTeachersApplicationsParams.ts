@@ -6,7 +6,7 @@
  * OpenAPI spec version: 1.0
  */
 
-export type PostTeachersParams = {
+export type PostTeachersApplicationsParams = {
 contactEmail: string;
 contactPhone: string;
 name: string;

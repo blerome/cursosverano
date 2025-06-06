@@ -29,23 +29,25 @@
 }
 
 .backButton {
-  background-color: #ffffff;
-  border: 1px solid #ced4da;
-  color: #495057;
-  padding: 10px 18px;
-  border-radius: 6px;
+  background: #e3f2fd;
+  border: none;
+  color: #1976d2;
+  font-size: 1.08rem;
+  font-weight: 600;
   cursor: pointer;
-  font-size: 0.9em;
-  font-weight: 500;
-  display: flex;
+  margin-bottom: 18px;
+  padding: 8px 18px;
+  border-radius: 8px;
+  transition: background 0.18s, color 0.18s;
+  box-shadow: 0 1px 4px rgba(44,152,185,0.07);
+  display: inline-flex;
   align-items: center;
-  transition: background-color 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+  gap: 8px;
 }
 
 .backButton:hover {
-  background-color: #f8f9fa;
-  border-color: #adb5bd;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+  background: #1976d2;
+  color: #fff;
 }
 
 .backButton svg {

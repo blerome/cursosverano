@@ -15,6 +15,7 @@ clave?: string;
 status?: string;
 period?: number;
 credits?: number;
+subjectName?: string;
 page?: number;
 pageSize?: number;
 };

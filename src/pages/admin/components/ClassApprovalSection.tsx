@@ -187,26 +187,37 @@ const ClassApprovalSection: React.FC = () => {
   // Años académicos disponibles para filtros
   const ACADEMIC_YEARS = [2024, 2025, 2026, 2027, 2028];
 
-  const { data: classesData, isLoading, error, refetch } = useGetClasses({
-    page: 1,
-    pageSize: 1000, // Obtener más clases para el dashboard
-    ...(filterPeriod > 0 && { period: filterPeriod })
-  });
+  // Paginación desde backend
+  const [currentPage, setCurrentPage] = useState(1);
+  const classesPerPage = 6;
+
+  // Construir los parámetros para el backend
+  const params: any = {
+    page: currentPage,
+    pageSize: classesPerPage,
+  };
+  if (filterPeriod > 0) params.period = filterPeriod;
+  if (filterStatus !== 'all') params.status = filterStatus;
+  if (searchTerm.trim()) params.search = searchTerm.trim();
+
+  const { data: classesData, isLoading, error, refetch } = useGetClasses(params);
+  const classes: ClassResponseDto[] = classesData?.data?.data || [];
+  const meta = classesData?.data?.meta || { total: 0, page: 1, pageSize: classesPerPage, totalPages: 1 };
+
+  // Reiniciar página si cambia el total de páginas (por ejemplo, tras filtrar)
+  React.useEffect(() => {
+    if (currentPage > meta.totalPages) {
+      setCurrentPage(1);
+    }
+  }, [meta.totalPages]);
+
+  // Cambiar de página
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page);
+  };
 
   // Hook para cambiar status de clase
   const changeStatusMutation = usePostClassesIdStatusStatus();
-
-  const classes: ClassResponseDto[] = classesData?.data?.data || [];
-
-  // Filtrar clases
-  const filteredClasses = classes.filter((classItem: ClassResponseDto) => {
-    const matchesStatus = filterStatus === 'all' || classItem.status === filterStatus;
-    const matchesSearch = searchTerm === '' || 
-      classItem.Subjects?.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      classItem.Subjects?.clave?.toLowerCase().includes(searchTerm.toLowerCase());
-    
-    return matchesStatus && matchesSearch;
-  });
 
   const handleViewClass = (classData: ClassResponseDto) => {
     setSelectedClass(classData);
@@ -319,11 +330,6 @@ const ClassApprovalSection: React.FC = () => {
                 >
                   <FontAwesomeIcon icon={status.icon} />
                   {status.label}
-                  {status.value !== 'all' && classes && (
-                    <span className={styles.filterCount}>
-                      {classes.filter(c => c.status === status.value).length}
-                    </span>
-                  )}
                 </button>
               ))}
             </div>
@@ -366,14 +372,14 @@ const ClassApprovalSection: React.FC = () => {
       </div>
 
       <div className={styles.classesGrid}>
-        {filteredClasses.length === 0 ? (
+        {classes.length === 0 ? (
           <div className={styles.emptyState}>
             <FontAwesomeIcon icon={faGraduationCap} />
             <h3>No hay clases para revisar</h3>
             <p>No se encontraron clases que coincidan con los filtros seleccionados.</p>
           </div>
-        ) : (
-          filteredClasses.map((classItem: ClassResponseDto) => (
+        ) :
+          classes.map((classItem: ClassResponseDto) => (
             <div key={classItem.id_class} className={styles.classCard}>
               <div className={styles.cardHeader}>
                 <h3>{classItem.Subjects?.name || 'Materia no disponible'}</h3>
@@ -406,7 +412,28 @@ const ClassApprovalSection: React.FC = () => {
               </div>
             </div>
           ))
-        )}
+        }
+      </div>
+
+      {/* Controles de paginación */}
+      <div style={{ display: 'flex', justifyContent: 'center', margin: '24px 0' }}>
+        <button
+          onClick={() => handlePageChange(currentPage - 1)}
+          disabled={currentPage === 1}
+          style={{ marginRight: 12, padding: '8px 16px', borderRadius: 8, border: '1px solid #b3d6f6', background: currentPage === 1 ? '#f0f0f0' : '#e3f2fd', color: '#1976d2', cursor: currentPage === 1 ? 'not-allowed' : 'pointer' }}
+        >
+          Anterior
+        </button>
+        <span style={{ alignSelf: 'center', fontWeight: 600, color: '#1976d2' }}>
+          Página {meta.page} de {meta.totalPages || 1}
+        </span>
+        <button
+          onClick={() => handlePageChange(currentPage + 1)}
+          disabled={currentPage === (meta.totalPages || 1)}
+          style={{ marginLeft: 12, padding: '8px 16px', borderRadius: 8, border: '1px solid #b3d6f6', background: currentPage === (meta.totalPages || 1) ? '#f0f0f0' : '#e3f2fd', color: '#1976d2', cursor: currentPage === (meta.totalPages || 1) ? 'not-allowed' : 'pointer' }}
+        >
+          Siguiente
+        </button>
       </div>
 
       <ClassApprovalModal

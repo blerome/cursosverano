@@ -108,7 +108,7 @@ const MenuPrincipal: React.FC = () => {
             >
               <a href="#">
                 <FaLaptopCode className={styles.icon} /> 
-                <span>Plataformas Digitales</span>
+                <span>Plataformas</span>
               </a>
               {activeDropdown === 'platforms' && (
                 <PlatformsDropdown 
@@ -122,7 +122,7 @@ const MenuPrincipal: React.FC = () => {
               <li onClick={closeAll} className={styles.studentPortalItem}>
                 <Link to="/profile" className={styles.studentPortalLink}>
                   <FaUserGraduate className={styles.icon} /> 
-                  <span>Portal Estudiante</span>
+                  <span>{'{e}'} Portal</span>
                   <div className={styles.portalBadge}></div>
                 </Link>
               </li>

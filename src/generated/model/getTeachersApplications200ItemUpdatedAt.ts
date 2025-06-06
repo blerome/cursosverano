@@ -6,4 +6,4 @@
  * OpenAPI spec version: 1.0
  */
 
-export type SearchClassDtoStatus = 'pendiente' | 'aprobado' | 'rechazado';
+export type GetTeachersApplications200ItemUpdatedAt = null | string;

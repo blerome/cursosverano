@@ -60,9 +60,11 @@ const isStudentRoute = (url: string): boolean => {
   return studentOnlyRoutes.some(route => url.includes(route));
 };
 
-const isPublicRoute = (url: string) => {
+const isPublicRoute = (url: string, method?: string) => {
   const cleanUrl = url.split('?')[0]
-  return PUBLIC_ROUTES.includes(cleanUrl);
+  return PUBLIC_ROUTES.some(
+    route => route.path === cleanUrl && route.method === method
+  );
 }
 
 axiosInstance.interceptors.request.use(
@@ -74,8 +76,9 @@ axiosInstance.interceptors.request.use(
     }
     
     const url = config.url;
+    const method = config.method?.toLocaleUpperCase();
 
-    if (isPublicRoute(url)) {
+    if (isPublicRoute(url, method)) {
       return config;
     }
     

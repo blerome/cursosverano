@@ -6,4 +6,4 @@
  * OpenAPI spec version: 1.0
  */
 
-export type GetClassesStatusItem = 'pendiente' | 'aprobado' | 'rechazado';
+export type PostTeachersApplications201Reason = null | string;

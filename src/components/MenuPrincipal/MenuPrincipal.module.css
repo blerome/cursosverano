@@ -23,6 +23,8 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  padding: 0 24px;
+  min-height: 64px;
 }
 
 .menu {
@@ -34,10 +36,19 @@
   margin: 0;
   transition: all 0.3s ease;
   width: 100%;
+  gap: 0.5rem;
 }
 
 .menu li {
   position: relative;
+  flex: 1 1 auto;
+  display: flex;
+  justify-content: center;
+}
+
+.menu li a, .menu li button {
+  width: 100%;
+  justify-content: center;
 }
 
 .menu li a {
@@ -163,7 +174,27 @@
 }
 
 /* Estilos para móvil */
+@media (max-width: 1024px) {
+  .menuContainer {
+    padding: 0 8px;
+  }
+}
+
 @media (max-width: 767px) {
+  .menuContainer {
+    flex-direction: row;
+    justify-content: flex-start;
+    padding: 0 8px;
+  }
+  .menu {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0;
+  }
+  .menu li {
+    flex: unset;
+    justify-content: flex-start;
+  }
   .hamburger {
     display: block;
   }
