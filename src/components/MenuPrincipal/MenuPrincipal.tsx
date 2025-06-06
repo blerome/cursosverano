@@ -128,6 +128,14 @@ const MenuPrincipal: React.FC = () => {
               </li>
             )}
             
+            {/* Enlace a solicitud de profesor */}
+            <li onClick={closeAll}>
+              <Link to="/solicitud-impartir-clase" className={styles.teacherRequestLink}>
+                <FaChalkboardTeacher className={styles.icon} />
+                <span>Solicitar ser profesor</span>
+              </Link>
+            </li>
+            
             <li onClick={closeAll}>
               {isAuthenticated ? <LogoutButton /> : <LoginButton />}
             </li>

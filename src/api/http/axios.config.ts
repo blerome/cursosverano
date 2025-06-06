@@ -2,6 +2,7 @@ import axios from 'axios';
 import { msalInstance } from '../../auth/msalConfig';
 import { loginRequest } from '../../auth/msalConfig';
 import { AuthError } from '@azure/msal-browser';
+import { PUBLIC_ROUTES } from '../../common';
 
 const axiosInstance = axios.create({
   baseURL: 'http://localhost:3000',
@@ -59,6 +60,11 @@ const isStudentRoute = (url: string): boolean => {
   return studentOnlyRoutes.some(route => url.includes(route));
 };
 
+const isPublicRoute = (url: string) => {
+  const cleanUrl = url.split('?')[0]
+  return PUBLIC_ROUTES.includes(cleanUrl);
+}
+
 axiosInstance.interceptors.request.use(
   async (config) => {
     // Validar que config y url estén definidos
@@ -68,11 +74,13 @@ axiosInstance.interceptors.request.use(
     }
     
     const url = config.url;
-    console.log('🔄 Procesando request para:', url);
+
+    if (isPublicRoute(url)) {
+      return config;
+    }
     
     // Si es una ruta específicamente de staff, solo usar token de staff
     if (isStaffRoute(url)) {
-      console.log('👨‍💼 Ruta detectada como staff exclusiva');
       const staffToken = getStaffToken();
       if (staffToken) {
         config.headers.Authorization = `Bearer ${staffToken}`;
@@ -87,7 +95,6 @@ axiosInstance.interceptors.request.use(
     
     // Si es una ruta específicamente de estudiante, solo usar MSAL
     if (isStudentRoute(url)) {
-      console.log('🎓 Ruta detectada como estudiante exclusiva');
       const accounts = msalInstance.getAllAccounts();
       if (accounts.length > 0) {
         try {
@@ -111,7 +118,6 @@ axiosInstance.interceptors.request.use(
       try {
         const session = JSON.parse(staffSession);
         if (session.token && (!session.expiresAt || Date.now() < session.expiresAt)) {
-          console.log('🔑 Usando autenticación de staff para ruta ambigua');
           config.headers.Authorization = `Bearer ${session.token}`;
           return config;
         }
@@ -124,7 +130,6 @@ axiosInstance.interceptors.request.use(
     const accounts = msalInstance.getAllAccounts();
     if (accounts.length > 0) {
       try {
-        console.log('🔑 Usando autenticación MSAL para ruta ambigua');
         const response = await msalInstance.acquireTokenSilent({
           ...loginRequest,
           account: accounts[0],
@@ -137,7 +142,6 @@ axiosInstance.interceptors.request.use(
     }
     
     // Si no hay autenticación disponible, rechazar
-    console.log('❌ No hay autenticación disponible para:', url);
     throw new AuthError('Autenticación requerida')
   },
   (error) => Promise.reject(error)

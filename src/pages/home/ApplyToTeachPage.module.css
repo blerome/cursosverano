@@ -1,0 +1,147 @@
+.container {
+  max-width: 420px;
+  margin: 40px auto;
+  background: #fff;
+  border-radius: 14px;
+  box-shadow: 0 2px 16px rgba(0,0,0,0.09);
+  padding: 32px 28px 28px 28px;
+}
+
+.title {
+  text-align: center;
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: #1976d2;
+  margin-bottom: 18px;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.row {
+  display: flex;
+  gap: 18px;
+}
+
+@media (max-width: 700px) {
+  .row {
+    flex-direction: column;
+    gap: 0;
+  }
+}
+
+.fieldGroup {
+  flex: 1 1 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.fieldGroup label {
+  font-size: 1rem;
+  color: #34495e;
+  font-weight: 500;
+}
+
+input, textarea {
+  border: 1.5px solid #b0bec5;
+  border-radius: 7px;
+  padding: 8px 12px;
+  font-size: 1rem;
+  outline: none;
+  transition: border 0.18s;
+  background: #f8fafc;
+}
+input:focus, textarea:focus {
+  border-color: #1976d2;
+  background: #fff;
+}
+
+textarea {
+  resize: vertical;
+  min-height: 60px;
+  max-height: 160px;
+}
+
+.charCount {
+  font-size: 0.92rem;
+  color: #888;
+  text-align: right;
+  margin-top: 2px;
+}
+
+.error {
+  color: #e53935;
+  background: #ffebee;
+  border-radius: 6px;
+  padding: 8px 12px;
+  font-size: 1rem;
+  margin-bottom: 4px;
+  text-align: center;
+}
+.success {
+  color: #388e3c;
+  background: #e8f5e9;
+  border-radius: 6px;
+  padding: 8px 12px;
+  font-size: 1rem;
+  margin-bottom: 4px;
+  text-align: center;
+}
+
+.submitButton {
+  background: #1976d2;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 10px 0;
+  font-size: 1.08rem;
+  font-weight: 600;
+  cursor: pointer;
+  margin-top: 8px;
+  transition: background 0.18s;
+}
+.submitButton:disabled {
+  background: #b0bec5;
+  color: #ececec;
+  cursor: not-allowed;
+}
+.submitButton:hover:not(:disabled) {
+  background: #125ea2;
+}
+
+.phoneRow {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.countryCode {
+  background: #e3f2fd;
+  color: #1976d2;
+  border-radius: 6px;
+  padding: 6px 10px;
+  font-size: 1rem;
+  font-weight: 600;
+  border: 1.5px solid #b0bec5;
+}
+
+.countryCodeSelect {
+  background: #e3f2fd;
+  color: #1976d2;
+  border-radius: 6px;
+  padding: 6px 10px;
+  font-size: 1rem;
+  font-weight: 600;
+  border: 1.5px solid #b0bec5;
+  outline: none;
+  margin-right: 4px;
+  min-width: 80px;
+  transition: border 0.18s;
+}
+.countryCodeSelect:focus {
+  border-color: #1976d2;
+} 

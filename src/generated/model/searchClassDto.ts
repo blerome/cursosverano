@@ -5,7 +5,6 @@
  * ITCancún summer API
  * OpenAPI spec version: 1.0
  */
-import type { SearchClassDtoStatus } from './searchClassDtoStatus';
 
 export interface SearchClassDto {
   subjectId?: number;
@@ -13,7 +12,7 @@ export interface SearchClassDto {
   careerId?: number;
   studentId?: number;
   clave?: string;
-  status?: SearchClassDtoStatus;
+  status?: string;
   period?: number;
   credits?: number;
   page?: number;

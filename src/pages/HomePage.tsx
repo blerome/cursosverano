@@ -18,6 +18,7 @@ import {
   faSignInAlt
 } from '@fortawesome/free-solid-svg-icons';
 import styles from './HomePage.module.css';
+import OpenClassesSection from './home/components/OpenClassesSection';
 
 const HomePage: React.FC = () => {
   const currentYear = new Date().getFullYear();
@@ -108,6 +109,8 @@ const HomePage: React.FC = () => {
         </div>
         <div className={styles.heroWave}></div>
       </section>
+
+      <OpenClassesSection />
 
       {/* Stats Section */}
       <section className={styles.statsSection}>

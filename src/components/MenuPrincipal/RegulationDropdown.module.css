@@ -3,15 +3,15 @@
     top: 100%;
     left: 50%;
     transform: translateX(-50%);
-    background-color: white;
-    width: 915px;
-    max-width: 90vw;
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+    background-color: #fff;
+    width: 420px;
+    max-width: 96vw;
+    box-shadow: 0 2px 10px rgba(44, 152, 185, 0.10);
     z-index: 1000;
-    border-radius: 8px;
-    padding: 1.5rem;
-    border-top: 4px solid #2c98b9;
-    animation: fadeIn 0.3s ease;
+    border-radius: 12px;
+    padding: 1rem 1.2rem;
+    border-top: 3px solid #2c98b9;
+    animation: fadeIn 0.18s cubic-bezier(.4,0,.2,1);
   }
   
   .mobileDropdown {
@@ -23,28 +23,29 @@
   }
   
   @keyframes fadeIn {
-    from { opacity: 0; transform: translateX(-50%) translateY(10px); }
+    from { opacity: 0; transform: translateX(-50%) translateY(8px); }
     to { opacity: 1; transform: translateX(-50%) translateY(0); }
   }
   
   .regulationContainer {
     display: flex;
-    margin-bottom: 20px;
+    margin-bottom: 14px;
     border: 1px solid #e9ecef;
     border-radius: 8px;
     overflow: hidden;
-    transition: all 0.3s ease;
+    transition: box-shadow 0.2s, transform 0.2s;
+    background: #f8f9fa;
   }
   
   .regulationContainer:hover {
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-    transform: translateY(-3px);
+    box-shadow: 0 2px 8px rgba(44, 152, 185, 0.10);
+    transform: translateY(-2px);
   }
   
   .regulationImage {
-    flex: 0 0 40%;
-    padding: 15px;
-    background-color: #f8f9fa;
+    flex: 0 0 36%;
+    padding: 10px;
+    background-color: #f4f8fb;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -53,35 +54,35 @@
   .regulationImage img {
     max-width: 100%;
     height: auto;
-    max-height: 150px;
+    max-height: 90px;
     object-fit: contain;
   }
   
   .regulationContent {
-    flex: 0 0 60%;
-    padding: 20px;
+    flex: 0 0 64%;
+    padding: 12px 10px 12px 16px;
   }
   
   .regulationContent h3 {
-    color: #0056b3;
-    margin-bottom: 10px;
-    font-size: 1.2rem;
+    color: #1976d2;
+    margin-bottom: 6px;
+    font-size: 1.08rem;
   }
   
   .regulationContent p {
     color: #6c757d;
-    font-size: 0.95rem;
-    line-height: 1.5;
+    font-size: 0.93rem;
+    line-height: 1.4;
   }
   
   .regulationLink {
     display: inline-block;
     background: none;
     border: none;
-    color: var(--accent-color);
+    color: #1976d2;
     font-weight: 600;
     text-decoration: none;
-    font-size: 0.9rem;
+    font-size: 0.92rem;
     cursor: pointer;
     padding: 0;
     font-family: inherit;
@@ -91,26 +92,20 @@
     text-decoration: underline;
   }
   
-  @media (max-width: 1200px) {
+  @media (max-width: 600px) {
     .dropdown {
-      width: 95vw;
+      width: 99vw;
+      padding: 0.7rem 0.3rem;
     }
-    
     .regulationContainer {
       flex-direction: column;
+      margin-bottom: 10px;
     }
-    
     .regulationImage, .regulationContent {
       flex: 0 0 100%;
+      padding: 10px 6px;
     }
-    
-    .regulationImage {
-      padding: 20px;
-    }
-  }
-  
-  @media (max-width: 768px) {
     .regulationImage img {
-      max-height: 120px;
+      max-height: 60px;
     }
   }
