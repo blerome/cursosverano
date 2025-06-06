@@ -23,6 +23,7 @@ import { useGetCareers } from '../../generated/api/careers/careers';
 import { useAllCareersAndSubjects } from '../../hooks/useAllCareersAndSubjects';
 import { usePopup } from '../../hooks/usePopup';
 import ClassApprovalSection from './components/ClassApprovalSection';
+import StudentManagementSection from './components/StudentManagementSection';
 import { ClassResponseDto, CreateClassDto, CreateScheduleDto } from '../../generated/model';
 import styles from './AdminDashboard.module.css';
 
@@ -477,12 +478,7 @@ const AdminDashboard: React.FC = () => {
         return <ClassApprovalSection />;
 
       case 'student-management':
-        return (
-          <div className={styles.sectionPlaceholder}>
-            <h2>Gestión de Estudiantes</h2>
-            <p>Funcionalidad en desarrollo...</p>
-          </div>
-        );
+        return <StudentManagementSection />;
 
       case 'classroom-assignment':
         return (

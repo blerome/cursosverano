@@ -329,6 +329,22 @@
   opacity: 0.7;
 }
 
+/* Mensaje cuando las acciones de gestión están deshabilitadas */
+.actionsDisabledMessage {
+  padding: 15px 20px;
+  background-color: #fffbe6; /* Amarillo pálido */
+  border: 1px solid #ffe58f;
+  border-radius: 8px;
+  margin-bottom: 30px;
+  color: #8a6d3b;
+  text-align: center;
+  font-size: 0.95em;
+}
+
+.actionsDisabledMessage p {
+  margin: 0;
+}
+
 /* Estilos para el contenedor de acciones del estudiante (badge y botón delete) */
 .studentActions {
   display: flex;

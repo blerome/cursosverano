@@ -1,0 +1,170 @@
+.sectionContainer {
+  padding: 10px;
+}
+
+.sectionContainer h2 {
+  font-size: 1.8em;
+  color: #2c3e50;
+  margin-bottom: 8px;
+}
+
+.sectionDescription {
+  font-size: 1.1em;
+  color: #7f8c8d;
+  margin-top: 0;
+  margin-bottom: 30px;
+}
+
+.classesGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 25px;
+}
+
+.classCard {
+  background-color: #ffffff;
+  border-radius: 8px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.07);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.classCard:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+}
+
+.cardHeader {
+  background-color: #34495e;
+  color: white;
+  padding: 15px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.headerTitle {
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+}
+
+.cardHeader .headerIcon {
+  margin-right: 12px;
+  font-size: 1.2em;
+  text-overflow: ellipsis;
+}
+
+.cardHeader h3 {
+  margin: 0;
+  font-size: 1.2em;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.cardBody {
+  padding: 20px;
+  flex-grow: 1;
+}
+
+.cardBody p {
+  margin: 0 0 12px 0;
+  color: #34495e;
+  display: flex;
+  align-items: center;
+  font-size: 0.95em;
+}
+
+.cardBody p:last-child {
+  margin-bottom: 0;
+}
+
+.cardBody p svg {
+  margin-right: 10px;
+  color: #95a5a6;
+  width: 16px;
+  text-align: center;
+}
+
+.cardBody p strong {
+  margin-right: 8px;
+}
+
+.cardFooter {
+  background-color: #f9f9f9;
+  padding: 15px 20px;
+  border-top: 1px solid #ecf0f1;
+  text-align: right;
+}
+
+.manageButton {
+  background-color: #3498db;
+  color: white;
+  border: none;
+  padding: 10px 18px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 0.9em;
+  font-weight: 500;
+  display: inline-flex;
+  align-items: center;
+  transition: background-color 0.2s ease;
+}
+
+.manageButton:hover {
+  background-color: #2980b9;
+}
+
+.manageButton .buttonIcon {
+  margin-left: 8px;
+  transition: transform 0.2s ease;
+}
+
+.manageButton:hover .buttonIcon {
+  transform: translateX(3px);
+}
+
+.loadingContainer, .errorContainer, .noClassesMessage {
+  text-align: center;
+  padding: 40px;
+  font-size: 1.2em;
+  color: #7f8c8d;
+}
+
+.loadingContainer svg, .errorContainer svg {
+  margin-bottom: 15px;
+}
+
+/* Estilos para el badge de estado */
+.statusBadge {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 10px;
+  border-radius: 12px;
+  font-size: 0.8em;
+  font-weight: 500;
+  white-space: nowrap;
+  margin-left: 10px;
+}
+
+.statusBadge svg {
+  margin-right: 5px;
+}
+
+.pending {
+  background-color: #f39c12;
+  color: #fff;
+}
+
+.active, .approved {
+  background-color: #2ecc71;
+  color: #fff;
+}
+
+.rejected, .cancelled {
+  background-color: #e74c3c;
+  color: #fff;
+} 

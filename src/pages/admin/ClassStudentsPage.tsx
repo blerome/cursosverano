@@ -65,6 +65,12 @@ const ClassStudentsPage: React.FC = () => {
   const deleteStudentMutation = useDeleteClassesIdStudentStudentId();
   const enrollStudentMutation = usePostClassesEnrollStudent();
 
+  // Determinar si las acciones de gestión están permitidas
+  const areActionsDisabled = useMemo(() => {
+    if (!classDetails) return true; // Si no hay detalles, deshabilitar por seguridad
+    return classDetails.status === 'aprobado' || classDetails.status === 'rechazado' || classDetails.status === 'cancelled';
+  }, [classDetails]);
+
   const handleGoBack = () => {
     navigate(-1); // Vuelve a la página anterior (debería ser la de aprobación)
   };
@@ -184,55 +190,62 @@ const ClassStudentsPage: React.FC = () => {
          </section>
       )}
 
-      {/* Sección para Inscribir Nuevo Estudiante */}
-      <section className={styles.enrollStudentSection}>
-        <h3><FontAwesomeIcon icon={faUserPlus} /> Inscribir Nuevo Estudiante</h3>
-        {isLoadingAllStudents && <p>Cargando estudiantes disponibles...</p>}
-        {Boolean(allStudentsError) && <p className={styles.errorMessage}>Error al cargar estudiantes disponibles.</p>}
-        {!isLoadingAllStudents && !Boolean(allStudentsError) && (
-          <>
-            <div className={styles.enrollSearchContainer}>
-              <FontAwesomeIcon icon={faSearch} className={styles.enrollSearchIcon} />
-              <input 
-                type="text"
-                placeholder="Buscar por nombre o N.C..."
-                value={enrollSearchTerm}
-                onChange={(e) => setEnrollSearchTerm(e.target.value)}
-                className={styles.enrollSearchInput}
-              />
-            </div>
-            <div className={styles.enrollFormContainer}>
-              <select 
-                value={selectedStudentToEnrollId}
-                onChange={(e) => setSelectedStudentToEnrollId(e.target.value)}
-                className={styles.enrollSelect}
-                disabled={enrollableStudents.length === 0 && !enrollSearchTerm}
-              >
-                <option value="">
-                  {enrollSearchTerm && enrollableStudents.length === 0 
-                    ? 'No hay coincidencias' 
-                    : enrollableStudents.length === 0 
-                      ? 'No hay estudiantes para inscribir' 
-                      : '-- Selecciona un estudiante --'
-                  }
-                </option>
-                {enrollableStudents.map((student: StudentResponseDto) => (
-                  <option key={student.id_student} value={student.id_student}>
-                    {`${student.user.name} ${student.user.paternal_surname} ${student.user.maternal_surname || ''} (NC: ${student.control_number || 'N/A'})`}
+      {/* Sección para Inscribir Nuevo Estudiante (condicional) */}
+      {!areActionsDisabled && (
+        <section className={styles.enrollStudentSection}>
+          <h3><FontAwesomeIcon icon={faUserPlus} /> Inscribir Nuevo Estudiante</h3>
+          {isLoadingAllStudents && <p>Cargando estudiantes disponibles...</p>}
+          {Boolean(allStudentsError) && <p className={styles.errorMessage}>Error al cargar estudiantes disponibles.</p>}
+          {!isLoadingAllStudents && !Boolean(allStudentsError) && (
+            <>
+              <div className={styles.enrollSearchContainer}>
+                <FontAwesomeIcon icon={faSearch} className={styles.enrollSearchIcon} />
+                <input 
+                  type="text"
+                  placeholder="Buscar por nombre o N.C..."
+                  value={enrollSearchTerm}
+                  onChange={(e) => setEnrollSearchTerm(e.target.value)}
+                  className={styles.enrollSearchInput}
+                />
+              </div>
+              <div className={styles.enrollFormContainer}>
+                <select 
+                  value={selectedStudentToEnrollId}
+                  onChange={(e) => setSelectedStudentToEnrollId(e.target.value)}
+                  className={styles.enrollSelect}
+                  disabled={enrollableStudents.length === 0 && !enrollSearchTerm}
+                >
+                  <option value="">
+                    {enrollSearchTerm && enrollableStudents.length === 0 
+                      ? 'No hay coincidencias' 
+                      : enrollableStudents.length === 0 
+                        ? 'No hay estudiantes para inscribir' 
+                        : '-- Selecciona un estudiante --'
+                    }
                   </option>
-                ))}
-              </select>
-              <button 
-                onClick={handleEnrollStudent} 
-                className={styles.enrollButton}
-                disabled={!selectedStudentToEnrollId || enrollStudentMutation.isPending || (enrollableStudents.length === 0 && !enrollSearchTerm)}
-              >
-                {enrollStudentMutation.isPending ? 'Inscribiendo...' : 'Inscribir Estudiante'}
-              </button>
-            </div>
-          </>
-        )}
-      </section>
+                  {enrollableStudents.map((student: StudentResponseDto) => (
+                    <option key={student.id_student} value={student.id_student}>
+                      {`${student.user.name} ${student.user.paternal_surname} ${student.user.maternal_surname || ''} (NC: ${student.control_number || 'N/A'})`}
+                    </option>
+                  ))}
+                </select>
+                <button 
+                  onClick={handleEnrollStudent} 
+                  className={styles.enrollButton}
+                  disabled={!selectedStudentToEnrollId || enrollStudentMutation.isPending || (enrollableStudents.length === 0 && !enrollSearchTerm)}
+                >
+                  {enrollStudentMutation.isPending ? 'Inscribiendo...' : 'Inscribir Estudiante'}
+                </button>
+              </div>
+            </>
+          )}
+        </section>
+      )}
+      {areActionsDisabled && classDetails && (
+        <div className={styles.actionsDisabledMessage}>
+          <p>La inscripción y eliminación de estudiantes no está permitida para clases en estado "{classDetails.status}".</p>
+        </div>
+      )}
 
       <section className={styles.studentsListSection}>
         <h3>Lista de Estudiantes Inscritos ({enrolledStudents?.length || 0})</h3>
@@ -265,14 +278,16 @@ const ClassStudentsPage: React.FC = () => {
                 </div>
                 <div className={styles.studentActions}>
                   {studentItem.group_leader && <span className={styles.leaderBadge}>Líder</span>}
-                  <button 
-                    className={styles.deleteStudentButton}
-                    onClick={() => studentItem.student?.id_student && handleDeleteStudent(studentItem.student.id_student)}
-                    disabled={deleteStudentMutation.isPending || enrollStudentMutation.isPending}
-                    title="Eliminar estudiante de la clase"
-                  >
-                    <FontAwesomeIcon icon={faTrash} />
-                  </button>
+                  {!areActionsDisabled && (
+                    <button 
+                      className={styles.deleteStudentButton}
+                      onClick={() => studentItem.student?.id_student && handleDeleteStudent(studentItem.student.id_student)}
+                      disabled={deleteStudentMutation.isPending || enrollStudentMutation.isPending}
+                      title="Eliminar estudiante de la clase"
+                    >
+                      <FontAwesomeIcon icon={faTrash} />
+                    </button>
+                  )}
                 </div>
               </li>
             ))}

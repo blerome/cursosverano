@@ -13,7 +13,6 @@ import { PrivateRoute } from './components/privateroutes/PrivateRoute';
 import { AdminRoute } from './components/privateroutes/AdminRoute';
 import { PublicRoute } from './components/privateroutes/PublicRoute';
 import { AuthProvider } from './contexts/AuthContext';
-import NewProject from './pages/admin/NewProjectPage/NewProjectPage';
 import CreateClassPage from './pages/admin/CreateClassPage';
 import AdminDashboard from './pages/admin/AdminDashboard';
 import Profile from './pages/users/Profile';
@@ -64,7 +63,6 @@ const App: React.FC = () => {
             <Route path="/admin">
               <Route index element={<Navigate to="/admin/dashboard" replace />} />
               <Route path="dashboard" element={<AdminDashboard />} />
-              <Route path="new-project" element={<NewProject />} />
               <Route path="class-students/:classId" element={<AdminClassStudentsPage />} />
             </Route>
           </Route>
