@@ -7,7 +7,7 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 // Registramos los plugins de GSAP
 gsap.registerPlugin(ScrollTrigger);
 
-const ReglamentoGeneral: React.FC = () => {
+const ReglamentoResponsable: React.FC = () => {
   const tucanRef = useRef<SVGSVGElement>(null);
   const contentRef = useRef<HTMLDivElement>(null);
   const arrowRef = useRef<HTMLParagraphElement>(null);
@@ -152,9 +152,10 @@ const ReglamentoGeneral: React.FC = () => {
       <div className={styles.content} ref={contentRef}>
         <div className={styles.contentSection}>
           <div>
-            <h1>Aspirantes</h1>
+            <h1>Responsabilidades</h1>
             <p className={styles.justified}>
-            La duración del Curso de Verano será equivalente al mismo número de horas que se imparten en un período semestral: 60, 75 y 90 horas según los créditos de la asignatura.
+              Los responsables de los Cursos de Verano deberán garantizar que se cumplan los 
+              objetivos académicos y los contenidos programáticos en el tiempo establecido.
             </p>
             
             <p className={`${styles.arrowAnimated}`} ref={arrowRef}>↓</p>
@@ -162,49 +163,48 @@ const ReglamentoGeneral: React.FC = () => {
         </div>
         <div className={styles.contentSection}>
           <div>
-            <h1>Requisitos</h1>
-            <h2>Integrantes</h2>
+            <h1>Obligaciones</h1>
+            <h2>Docentes</h2>
             <p className={styles.justified}>
-            Los grupos en Curso de Verano podrán formarse con un máximo de 30 alumnos
-(as) y un mínimo de 15 por asignatura, considerando 5 lugares adicionales para los
-alumnos(as) en movilidad, provenientes de otros Institutos Tecnológicos. 
+              Los profesores responsables deberán presentar un plan de trabajo detallado, 
+              cumplir con el horario establecido y evaluar a los estudiantes según los criterios 
+              definidos por la institución.
             </p>
   
             <p className={styles.justified}>
-            ✳Los objetivos y contenidos de las asignaturas impartidas en Cursos de Verano,
-deberán ser cubiertos al 100% en un lapso de cuatro a seis semanas de clases
-efectivas, incluyendo las evaluaciones, por lo que los Cursos de Verano iniciarán el
-26 de Junio y finalizarán el 4 de Agosto del presente año.
+            ✳Es responsabilidad del docente mantener actualizada la plataforma educativa 
+            con los materiales y actividades programadas para cada sesión.
             </p>
           </div>
         </div>
         <div className={styles.contentSection}>
           <div>
-            <h1>Costos</h1>
+            <h1>Coordinación</h1>
             <p className={styles.justified}>
-            El costo por alumno para los Cursos de Verano, dependerá del número de horas de
-            la asignatura: 
+              La coordinación académica supervisará el desarrollo de los cursos y deberá:
             </p>
             <table>
-              <tr>
-                  <th>TOTAL DE HORAS</th>
-                  <th>COSTO x ALUMNO</th>
-              </tr>
-              <tr>
-                  <td>60 HORAS</td>
-                  <td>$1,000.00</td>
-              </tr>
-              <tr>
-                  <td>75 HORAS</td>
-                  <td>$1,125.00</td>
-              </tr>
-              <tr>
-                  <td>90 HORAS</td>
-                  <td>$1,250.00</td>
-              </tr>
+              <tbody>
+                <tr>
+                    <th>Función</th>
+                    <th>Periodicidad</th>
+                </tr>
+                <tr>
+                    <td>Revisión de avances</td>
+                    <td>Semanal</td>
+                </tr>
+                <tr>
+                    <td>Reporte de asistencia</td>
+                    <td>Quincenal</td>
+                </tr>
+                <tr>
+                    <td>Evaluación docente</td>
+                    <td>Final del curso</td>
+                </tr>
+              </tbody>
             </table>
             <p className={styles.justified}>
-            Cubrir la cuota correspondiente.
+              El incumplimiento de estas responsabilidades podrá ser motivo de cancelación del curso.
             </p>
           </div>
         </div>
@@ -226,7 +226,7 @@ efectivas, incluyendo las evaluaciones, por lo que los Cursos de Verano iniciar�
               <path className={styles.perch} d="M190.109,279.735c-0.366-1.787-1.946-3.131-3.842-3.131h-5.483c-2.166,0-3.921,1.756-3.921,3.92 c0,2.167,1.755,3.922,3.921,3.922h1.564v6.97c0,2.166,1.755,3.921,3.919,3.921c2.166,0,3.921-1.755,3.921-3.921v-10.892 C190.188,280.255,190.16,279.991,190.109,279.735z"></path>
             </g>
             <path 
-              ref={el => { wingsRef.current[0] = el; }}
+              ref={el => { if (el) wingsRef.current[0] = el; }}
               className={styles.wing} 
               d="M183.535,217.635c-19.753,0-35.763-16.01-35.763-35.764c0-19.751,16.011-35.762,35.763-35.761 h102.684c0,39.5-32.023,71.523-71.526,71.525L183.535,217.635L183.535,217.635z"
             ></path>
@@ -244,12 +244,12 @@ efectivas, incluyendo las evaluaciones, por lo que los Cursos de Verano iniciar�
               d="M77.149,340.034H0l77.149-77.148l0.001-106.491c0-71.611,58.052-129.663,129.662-129.663v183.64 C206.811,281.982,148.759,340.034,77.149,340.034"
             ></path>
             <path 
-              ref={el => { wingsRef.current[1] = el; }}
+              ref={el => { if (el) wingsRef.current[1] = el; }}
               className={styles.wing} 
               d="M140.582,106.708c0,24.53,13.344,45.928,33.16,57.374v48.189c0,19.131,9.347,36.069,23.714,46.528 l0,0c6.302-15.125,9.355-30.761,9.355-48.429V40.479C170.234,40.479,140.582,70.13,140.582,106.708z"
             ></path>
             <path 
-              ref={el => { wingsRef.current[2] = el; }}
+              ref={el => { if (el) wingsRef.current[2] = el; }}
               className={styles.wing} 
               d="M107.085,219.146c19.753,0,35.764-16.011,35.764-35.764c0-19.751-16.011-35.763-35.764-35.762H4.403 c0,39.501,32.022,71.523,71.525,71.525h31.157V219.146z"
             ></path>
@@ -292,4 +292,4 @@ efectivas, incluyendo las evaluaciones, por lo que los Cursos de Verano iniciar�
   );
 };
 
-export default ReglamentoGeneral;
+export default ReglamentoResponsable;

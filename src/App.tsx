@@ -26,6 +26,7 @@ import StaffProfile from './pages/staff/StaffProfile';
 import ApplyToTeachPage from './pages/home/ApplyToTeachPage';
 import TeacherApplicationsListPage from './pages/admin/TeacherApplicationsListPage';
 import TeacherApplicationDetailPage from './pages/admin/TeacherApplicationDetailPage';
+import ReglamentoResponsable from './pages/ReglamentoResponsable';
 import './App.css';
 
 const App: React.FC = () => {
@@ -42,6 +43,7 @@ const App: React.FC = () => {
               element={<ReglamentoEstudiante />}
             />
             <Route path="/Reglamento-General" element={<ReglamentoGeneral />} />
+            <Route path="/Reglamento-Responsable" element={<ReglamentoResponsable/>} />
             <Route path="/solicitud-impartir-clase/:classId?" element={<ApplyToTeachPage />} />
           </Route>
 
