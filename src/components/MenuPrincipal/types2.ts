@@ -1,10 +1,12 @@
+import React from 'react'; 
+
 export interface DropdownItem {
     title: string;
     description: string;
     linkText: string;
     imageSrc: string;
     altText: string;
-    path: String;
+    path: string;
   }
   
   export interface PlatformItem {
@@ -18,5 +20,5 @@ export interface DropdownItem {
   
   export interface TeacherItem {
     name: string;
-    icon: JSX.Element;
+    icon: React.JSX.Element;
   }

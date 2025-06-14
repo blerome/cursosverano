@@ -48,7 +48,6 @@ const DAYS_OF_WEEK = [
   { id: 3, name: 'Miércoles', shortName: 'X' },
   { id: 4, name: 'Jueves', shortName: 'J' },
   { id: 5, name: 'Viernes', shortName: 'V' },
-
 ];
 
 // Años académicos disponibles para cursos de verano
