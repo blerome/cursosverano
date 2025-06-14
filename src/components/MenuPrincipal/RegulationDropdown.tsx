@@ -12,7 +12,10 @@ interface RegulationDropdownProps {
   onCloseDropdown?: () => void; // Nueva prop para cerrar el dropdown
 }
 
-const RegulationDropdown: React.FC<RegulationDropdownProps> = ({ isMobile, onCloseDropdown }) => {
+const RegulationDropdown: React.FC<RegulationDropdownProps> = ({
+  isMobile,
+  onCloseDropdown,
+}) => {
   const navigate = useNavigate();
 
   const handleLinkClick = (path: string) => {
@@ -24,33 +27,38 @@ const RegulationDropdown: React.FC<RegulationDropdownProps> = ({ isMobile, onClo
 
   const regulations: DropdownItem[] = [
     {
-      title: "Al estudiante",
-      description: "Las obligaciones que tiene el estudiante que esté interesado en las convocatorias...",
-      linkText: "Ver más detalles",
+      title: 'Al estudiante',
+      description:
+        'Las obligaciones que tiene el estudiante que esté interesado en las convocatorias...',
+      linkText: 'Ver más detalles',
       imageSrc: Estudiante,
-      altText: "Al estudiante",
-      path: "/reglamento-estudiante" 
+      altText: 'Al estudiante',
+      path: '/reglamento-estudiante',
     },
     {
-      title: "Generales del curso",
-      description: "Infórmate acerca de los costos, trámites y fechas para llevar a cabo tu postulación...",
-      linkText: "Consultar requisitos",
+      title: 'Generales del curso',
+      description:
+        'Infórmate acerca de los costos, trámites y fechas para llevar a cabo tu postulación...',
+      linkText: 'Consultar requisitos',
       imageSrc: General,
-      altText: "Generales del curso",
-      path: "/reglamento-general" 
+      altText: 'Generales del curso',
+      path: '/reglamento-general',
     },
     {
-      title: "Responsables",
-      description: "Si quieres crear un grupo de verano, estas son las responsabilidades...",
-      linkText: "Conoce las responsabilidades",
+      title: 'Responsables',
+      description:
+        'Si quieres crear un grupo de verano, estas son las responsabilidades...',
+      linkText: 'Conoce las responsabilidades',
       imageSrc: Responsable,
-      altText: "Responsables",
-      path: "/reglamento-responsable" 
-    }
+      altText: 'Responsables',
+      path: '/reglamento-responsable',
+    },
   ];
 
   return (
-    <div className={`${styles.dropdown} ${isMobile ? styles.mobileDropdown : ''}`}>
+    <div
+      className={`${styles.dropdown} ${isMobile ? styles.mobileDropdown : ''}`}
+    >
       {regulations.map((regulation, index) => (
         <div key={index} className={styles.regulationContainer}>
           <div className={styles.regulationImage}>
@@ -59,7 +67,7 @@ const RegulationDropdown: React.FC<RegulationDropdownProps> = ({ isMobile, onClo
           <div className={styles.regulationContent}>
             <h3>{regulation.title}</h3>
             <p>{regulation.description}</p>
-            <button 
+            <button
               onClick={() => handleLinkClick(regulation.path)}
               className={styles.regulationLink}
             >

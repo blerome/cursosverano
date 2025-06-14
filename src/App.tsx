@@ -43,8 +43,14 @@ const App: React.FC = () => {
               element={<ReglamentoEstudiante />}
             />
             <Route path="/Reglamento-General" element={<ReglamentoGeneral />} />
-            <Route path="/Reglamento-Responsable" element={<ReglamentoResponsable/>} />
-            <Route path="/solicitud-impartir-clase/:classId?" element={<ApplyToTeachPage />} />
+            <Route
+              path="/Reglamento-Responsable"
+              element={<ReglamentoResponsable />}
+            />
+            <Route
+              path="/solicitud-impartir-clase/:classId?"
+              element={<ApplyToTeachPage />}
+            />
           </Route>
 
           {/* 👇 Ruta de login unificada (público, sin layout) */}
@@ -59,7 +65,10 @@ const App: React.FC = () => {
             <Route path="/classes" element={<ClassesPage />} />
             <Route path="/create-class" element={<CreateClassPage />} />
             <Route path="/my-courses" element={<MyCoursesPage />} />
-            <Route path="/my-courses/class/:classId/students" element={<CourseClassStudentsPage />} />
+            <Route
+              path="/my-courses/class/:classId/students"
+              element={<CourseClassStudentsPage />}
+            />
             <Route path="/diagnostic" element={<DiagnosticPage />} />
           </Route>
 
@@ -67,11 +76,23 @@ const App: React.FC = () => {
           <Route element={<AdminRoute />}>
             <Route path="/staff/profile" element={<StaffProfile />} />
             <Route path="/admin">
-              <Route index element={<Navigate to="/admin/dashboard" replace />} />
+              <Route
+                index
+                element={<Navigate to="/admin/dashboard" replace />}
+              />
               <Route path="dashboard" element={<AdminDashboard />} />
-              <Route path="class-students/:classId" element={<AdminClassStudentsPage />} />
-              <Route path="teacher-applications" element={<TeacherApplicationsListPage />} />
-              <Route path="teacher-applications/:id" element={<TeacherApplicationDetailPage />} />
+              <Route
+                path="class-students/:classId"
+                element={<AdminClassStudentsPage />}
+              />
+              <Route
+                path="teacher-applications"
+                element={<TeacherApplicationsListPage />}
+              />
+              <Route
+                path="teacher-applications/:id"
+                element={<TeacherApplicationDetailPage />}
+              />
             </Route>
           </Route>
 
